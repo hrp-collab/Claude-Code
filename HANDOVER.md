@@ -77,8 +77,11 @@ captions go on as a separate motion-graphics layer.
 
 Clip length caps: omni 3–10s, veo-3.1 4/6/8s, seedance 1–15s.
 
-**Higgsfield** (Plus $59/mo, 1,200 credits, ≈$0.049/credit — from public pricing pages,
-verify at higgsfield.ai/pricing):
+**Higgsfield** — ⚠️ **unverified and likely stale.** Third-party sources conflict and
+pricing has been restructured repeatedly; the first-party site was unreachable from the
+research environment. Figures below assume Plus $59/mo, 1,200 credits (≈$0.049/credit).
+Confirm at higgsfield.ai/pricing before relying on any of it. Note these are *subscription*
+rates — API/MCP bills a separate wallet (§7).
 
 | Model | $/sec |
 |---|---|
@@ -136,9 +139,18 @@ in, orbit, crash zoom — which is exactly the vocabulary this style needs. You 
 move as a parameter instead of begging a text prompt for it. It also has a real API
 (cloud.higgsfield.ai, 100+ models, image-to-video, webhooks), so it can be scripted.
 
-**Higgsfield billing — resolved, and it matters.** Standard Higgsfield **API and MCP calls
-do not draw from the website subscription credit pool.** They bill against a separate
-metered wallet / boost-or-trial balance. Consequences:
+**Higgsfield billing — resolved, and it matters.** Credit wallets are separated by access
+path:
+
+- **Website / Creator Hub UI** → subscription credits (Starter / Plus / Ultra allocation).
+- **API and MCP** → authenticate by API key or client config, mapping to a **separate
+  metered wallet or boost pool**. These do not automatically drain the subscription
+  balance.
+- **Trials and promos** → some specialised workflows and MCP promotional pools run on
+  standalone buckets. Worth hunting for: a promo pool would let you benchmark Higgsfield
+  against omni at no cost.
+
+Consequences:
 
 - The subscription's credits (Plus = 1,200) are for **web-app** generations. A subscription
   does **not** subsidise an API-driven pipeline.
@@ -151,12 +163,31 @@ metered wallet / boost-or-trial balance. Consequences:
   windows on select video models — aimed at a problem Flow already solves. Credits do not
   roll over.
 
-**Still unknown:** the metered per-generation rate on the API wallet. Get that number
-before choosing Higgsfield over vidIQ omni, which is verified at a known $0.10/sec.
+**Treat all Higgsfield pricing in this document as unreliable.** Third-party sources
+contradict each other (Starter $15 vs $19, Plus ~$49 vs $59) and the company has
+restructured pricing repeatedly since launch. higgsfield.ai is blocked by this
+environment's egress proxy, so nothing here was confirmed first-party. **Verify on
+higgsfield.ai/pricing before spending.**
 
-Higgsfield also exposes an **MCP server**, so it can be connected to Claude directly rather
-than through a custom script — worth checking, as it would remove most of the integration
-work.
+**Best available estimate of the metered rate:** top-up packs run ~$5 per 100 credits
+(≈$0.05/credit, expiring ~90 days) — near the Plus effective rate, so the metered wallet is
+probably priced similarly. At 6–10 credits per 5s Kling 3.0 clip that implies roughly
+**$0.06–0.10/sec**. This is an inference from top-up pricing, not a published API rate.
+
+**So the strategic picture has shifted.** Higgsfield is likely at rough *parity* with vidIQ
+omni ($0.10/sec, verified), not meaningfully cheaper. Its case now rests on two things
+only:
+
+1. **Camera-motion presets** — specify "dolly in" as a parameter instead of coaxing a text
+   prompt. A genuine fit for this style.
+2. **No monthly cap** — the metered wallet scales past one episode a month.
+
+It is not the cheaper option. Choose it for control and throughput, or stay on vidIQ omni.
+
+Higgsfield also exposes an **MCP server**, so it can connect to Claude directly rather than
+through a custom script — that would remove most of the integration work. Note that routing
+MCP usage onto subscription credits instead of the separate wallet is a known open question
+in the community; assume you cannot until proven otherwise.
 
 ## 8. A hard constraint worth knowing
 
@@ -169,10 +200,12 @@ in chat, and it is why this repo exists.
 
 ## 9. Open decisions
 
-1. **What does the Higgsfield metered API wallet actually cost per generation?** This is now
-   the deciding number. Higgsfield's camera-motion presets are a strong fit for this style,
-   but vidIQ omni is verified good at a known $0.10/sec — Higgsfield has to beat that on
-   the metered wallet, not on subscription pricing.
+1. **What does the Higgsfield metered API wallet actually cost per generation?** Estimated
+   at ~$0.06–0.10/sec from top-up pricing, which is roughly parity with verified vidIQ omni
+   — so Higgsfield probably wins on camera control and throughput rather than price. Get
+   the real number first-party; everything published third-party conflicts.
+   Check for an **MCP trial/promo pool** — a free benchmark against omni would settle this
+   without spending anything.
 2. Whether to use the **Higgsfield MCP** (direct Claude connection, little integration work)
    or a custom script against the REST API (more control, batching, webhooks).
 3. Where the Flow stills live and how they reach this repo (`stills/`).
