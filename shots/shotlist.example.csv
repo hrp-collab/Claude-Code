@@ -1,0 +1,6 @@
+shot,still,duration_s,method,move,motion_notes,est_credits,status
+s01,s01_stairwell.png,6,FFMPEG,push-in,"camera only — no AI needed",0,ready
+s02,s02_lamproom.png,5,FFMPEG,drift-up,"camera only",0,pending
+s03,s03_lantern_cu.png,4,AI,push-in,"lantern flame flickers, dust motes in beam",~6,pending
+s04,s04_seawall.png,6,AI,hold,"waves move, spray, drifting fog",~10,pending
+s05,s05_logbook.png,5,FFMPEG,pan-right,"camera only",0,pending
