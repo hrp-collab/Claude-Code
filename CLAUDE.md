@@ -18,6 +18,10 @@ Spend AI generation only where motion is the point — lantern flicker, moving w
 drifting fog, a character actually moving. Keep camera moves slow and simple; painterly
 styles fall apart under fast motion.
 
+**Default to the cheap model.** vidIQ `gemini-omni-flash` ($0.10/sec) is confirmed to hold
+this style. Escalate to a pricier model only for a shot that visibly fails on omni — never
+pre-emptively.
+
 Prefer image-to-video seeded from an approved still over text-to-video.
 
 **Never bake text into generation.** Titles and captions are a separate motion-graphics

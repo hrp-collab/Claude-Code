@@ -41,9 +41,11 @@ captions go on as a separate motion-graphics layer.
   still with ffmpeg. Verified on the test still: start and end frames show the zoom, and
   the ink linework and paper grain are pixel-faithful because it is a real crop, not a
   re-render.
-- **A 4s AI clip was generated** via vidIQ gemini-omni-flash (80 credits). Its quality was
-  never confirmed — the environment's egress proxy blocked the host, so nobody viewed it.
-  Treat it as unverified.
+- **AI animation of the style works, and the cheap model is good enough.** A 4s clip was
+  generated via vidIQ `gemini-omni-flash` (80 credits, $0.10/sec) and **confirmed by the
+  user to look great**. This is the single most useful result here: the budget tier holds
+  the ink-and-wash style. Do not assume veo-3.1 (4× the price) is required — start at omni
+  and only escalate on shots that visibly fail.
 
 ## 4. Animation rules (learned the hard way — do not relitigate)
 
@@ -93,12 +95,17 @@ verify at higgsfield.ai/pricing):
 
 - All-AI on vidIQ omni: ~5,400 credits — **2.7 months** of the $10 plan. Not viable.
 - All-AI on vidIQ veo-3.1: ~21,600 credits ≈ $108/episode.
-- All-AI on Higgsfield Kling 3.0: ~432 credits ≈ **$21**, about a third of a Plus month.
-- **Hybrid (~65% ffmpeg / 35% AI ≈ 95s generated): ~$7.50/episode on Higgsfield Kling —
-  roughly 8 episodes a month on Plus.** This is the recommended shape.
+- **Hybrid (~65% ffmpeg / 35% AI ≈ 95s generated) on vidIQ omni: ~1,890 credits — fits
+  inside a single $10/2000 month**, with ~110 credits spare for a thumbnail and voiceover.
+  Quality at omni is user-confirmed. **This is the recommended shape and the cheapest
+  verified path: roughly one 3-minute episode per month for $10.**
 
-The headline: vidIQ's *rate* is roughly market, but its monthly *cap* makes a 3-minute
-episode impossible inside one month. Higgsfield removes the cap and is cheaper on Kling.
+The headline: the hybrid split is what makes this affordable. All-AI is 3× the budget at
+the same runtime; ffmpeg does the majority of shots for free *and* renders them more
+faithfully.
+
+For more throughput than one episode a month, either buy additional vidIQ credits or move
+generation to a metered API (see §7 on Higgsfield billing).
 
 ## 6. Account state
 
@@ -115,7 +122,8 @@ episode impossible inside one month. Higgsfield removes the cap and is cheaper o
 |---|---|---|
 | Stills | Google Flow (already in use) | the expensive half, already solved |
 | Static-camera shots | `scripts/kenburns.py` | free, texture-safe, ~65% of shots |
-| Animated hero shots | Higgsfield API (Kling 3.0) | has camera-motion presets + webhooks |
+| Animated hero shots | vidIQ `gemini-omni-flash` | verified good, $0.10/sec — the default |
+| …at higher volume | Higgsfield metered API | camera presets + webhooks; price it first |
 | Assembly | ffmpeg | local |
 | Titles / captions | motion-graphics layer | never bake text into generation |
 | Voiceover / music | vidIQ, or ElevenLabs direct | cheap |
@@ -128,10 +136,27 @@ in, orbit, crash zoom — which is exactly the vocabulary this style needs. You 
 move as a parameter instead of begging a text prompt for it. It also has a real API
 (cloud.higgsfield.ai, 100+ models, image-to-video, webhooks), so it can be scripted.
 
-**Two caveats:** Higgsfield's "unlimited" is 365-day on *image* models (Plus and above) and
-only 7–33 day windows on select video models — it is aimed at a problem already solved by
-Flow. And the unlimited language specifies *web-app* generations, so **verify whether API
-calls draw from subscription credits** before committing. Credits do not roll over.
+**Higgsfield billing — resolved, and it matters.** Standard Higgsfield **API and MCP calls
+do not draw from the website subscription credit pool.** They bill against a separate
+metered wallet / boost-or-trial balance. Consequences:
+
+- The subscription's credits (Plus = 1,200) are for **web-app** generations. A subscription
+  does **not** subsidise an API-driven pipeline.
+- Any per-episode figure derived from subscription credits is wrong for automation. An
+  earlier estimate of "~8 episodes a month on Plus" assumed the API drew on those 1,200
+  credits — **it does not.** Disregard it.
+- Only buy a subscription if you also intend to work by hand in the web app. For a scripted
+  pipeline, price the metered API wallet on its own merits.
+- Higgsfield's "unlimited" is 365-day on *image* models (Plus and above) and only 7–33 day
+  windows on select video models — aimed at a problem Flow already solves. Credits do not
+  roll over.
+
+**Still unknown:** the metered per-generation rate on the API wallet. Get that number
+before choosing Higgsfield over vidIQ omni, which is verified at a known $0.10/sec.
+
+Higgsfield also exposes an **MCP server**, so it can be connected to Claude directly rather
+than through a custom script — worth checking, as it would remove most of the integration
+work.
 
 ## 8. A hard constraint worth knowing
 
@@ -144,11 +169,15 @@ in chat, and it is why this repo exists.
 
 ## 9. Open decisions
 
-1. Higgsfield vs. direct API (fal.ai / Replicate / Google Gemini) — leaning Higgsfield for
-   the camera controls.
-2. Whether Higgsfield API usage bills separately from the subscription. **Unverified.**
+1. **What does the Higgsfield metered API wallet actually cost per generation?** This is now
+   the deciding number. Higgsfield's camera-motion presets are a strong fit for this style,
+   but vidIQ omni is verified good at a known $0.10/sec — Higgsfield has to beat that on
+   the metered wallet, not on subscription pricing.
+2. Whether to use the **Higgsfield MCP** (direct Claude connection, little integration work)
+   or a custom script against the REST API (more control, batching, webhooks).
 3. Where the Flow stills live and how they reach this repo (`stills/`).
-4. Episode length and cadence.
+4. Episode length and cadence. At the verified hybrid rate, $10/month ≈ one 3-minute
+   episode; a weekly cadence needs roughly 4× that budget.
 
 ## 10. Repo layout
 
