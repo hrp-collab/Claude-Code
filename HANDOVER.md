@@ -75,6 +75,10 @@ captions go on as a separate motion-graphics layer.
 | seedance-2-fast | ~29 | $0.147 |
 | veo-3.1 | 80 | $0.40 |
 
+**Google Flow / Veo — cheapest route, see §7a.** Veo 3.1 Lite ~$0.03/sec on the API; Flow
+AI Pro $19.99/mo (1,000 credits ≈ 100 Lite videos) ≈ $0.025/sec effective. Free tier: 50
+daily credits on Veo 3.1. Flow credits and Gemini API billing are separate wallets.
+
 Clip length caps: omni 3–10s, veo-3.1 4/6/8s, seedance 1–15s.
 
 **Higgsfield** — ⚠️ **unverified and likely stale.** Third-party sources conflict and
@@ -123,16 +127,46 @@ generation to a metered API (see §7 on Higgsfield billing).
 
 | Stage | Tool | Notes |
 |---|---|---|
-| Stills | Google Flow (already in use) | the expensive half, already solved |
+| Characters / props / locations | Google Flow **Ingredients** | the consistency system — see §7a |
+| Stills / storyboard | Google Flow | the expensive half, already solved |
 | Static-camera shots | `scripts/kenburns.py` | free, texture-safe, ~65% of shots |
-| Animated hero shots | vidIQ `gemini-omni-flash` | verified good, $0.10/sec — the default |
-| …at higher volume | Higgsfield metered API | camera presets + webhooks; price it first |
+| Animated hero shots | Flow **Ingredients to Video** (Veo 3.1) | ~$0.03/sec — cheapest, keeps consistency |
+| Fallback if Lite fails on style | vidIQ `gemini-omni-flash` | verified good, $0.10/sec |
+| Only if camera presets needed | Higgsfield metered API | costs consistency + a second bill |
 | Assembly | ffmpeg | local |
 | Titles / captions | motion-graphics layer | never bake text into generation |
 | Voiceover / music | vidIQ, or ElevenLabs direct | cheap |
 | Titles, thumbnails, SEO | vidIQ | cheap, genuinely good |
 | YouTube + Reels publishing | vidIQ | **0 credits** |
 | TikTok | Zapier | no native tool |
+
+### 7a. Stay inside Flow for animation — it is not just a stills tool
+
+Veo 3.1 **Ingredients to Video** takes up to three reference images (character, object,
+style reference) and generates video from them, with identity consistency across scenes,
+**native 9:16** for TikTok/Shorts, and 1080p/4K upscaling. The Ingredients built for the
+storyboard feed straight into video generation in the same tool.
+
+**This is why exporting stills to another platform is usually a mistake.** The moment a
+flat PNG is handed to Higgsfield (or anything else), the Ingredients system no longer
+applies — and keeping the same keeper, lighthouse and lantern consistent across a whole
+series is the hardest problem here and the thing Flow is uniquely good at. Leaving also
+means a second video bill, manual round-trip friction per shot, and a fresh style-drift
+risk at the handoff.
+
+**Flow is also the cheapest option by a wide margin:** Veo 3.1 Lite is ~$0.03/sec on the
+API, and AI Pro at $19.99/mo (1,000 credits ≈ 100 Lite videos) works out to ~$0.025/sec
+effective. That is 3–4× cheaper than vidIQ omni. A free tier exists at 50 daily credits
+running Veo 3.1 — benchmark there before paying.
+
+Caveats: **Veo 3.1 Lite is the budget tier** and may not hold ink-and-wash the way full Veo
+does — test it against the style the same way omni was tested, do not assume. **Flow credits
+and Gemini API billing are not interchangeable** (a Flow subscription does not convert into
+API seconds, and API spend does not top up Flow credits — the same wallet-separation trap as
+Higgsfield). The free tier's daily cap prevents bursting a full episode in one sitting.
+
+**None of this changes the ffmpeg rule.** ~65% of shots are camera-only and should never
+touch Flow *or* Higgsfield.
 
 **Why Higgsfield over raw APIs:** its identity is cinematic camera-motion presets — dolly
 in, orbit, crash zoom — which is exactly the vocabulary this style needs. You specify the

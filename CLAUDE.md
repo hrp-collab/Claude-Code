@@ -18,9 +18,15 @@ Spend AI generation only where motion is the point — lantern flicker, moving w
 drifting fog, a character actually moving. Keep camera moves slow and simple; painterly
 styles fall apart under fast motion.
 
-**Default to the cheap model.** vidIQ `gemini-omni-flash` ($0.10/sec) is confirmed to hold
-this style. Escalate to a pricier model only for a shot that visibly fails on omni — never
-pre-emptively.
+**Animate inside Google Flow where possible.** Veo 3.1 Ingredients to Video is the cheapest
+route (~$0.03/sec) *and* the only one that keeps the Ingredients consistency system — the
+same character and locations across episodes. Exporting stills to another platform throws
+that away and adds a second bill. See `HANDOVER.md` §7a.
+
+**Default to the cheap tier.** vidIQ `gemini-omni-flash` ($0.10/sec) is confirmed to hold
+this style and is the verified fallback. Escalate to a pricier model only for a shot that
+visibly fails — never pre-emptively. Veo 3.1 Lite is cheaper still but unverified against
+this style; test before relying on it.
 
 Prefer image-to-video seeded from an approved still over text-to-video.
 
