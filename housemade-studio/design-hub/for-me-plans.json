@@ -1,0 +1,435 @@
+[
+  {
+    "id": "c-20261023-fluvanna-roundup",
+    "at": "2026-10-23T12:00:00Z",
+    "text": "Fluvanna Events Roundup: weekly civic newsletter that warms local owners up for the $750 Watchdog Intake Engine.",
+    "ans": {
+      "who": "me",
+      "goal": "customers",
+      "where": [
+        "send",
+        "social"
+      ],
+      "has": [
+        "content"
+      ]
+    },
+    "rec": {
+      "title": "Fluvanna Events Roundup + consulting funnel",
+      "make": [
+        {
+          "item": "Name + masthead",
+          "why": "A standalone civic name keeps the roundup separate from your studio and consulting brands."
+        },
+        {
+          "item": "Weekly issue template (8 sections)",
+          "why": "The locked sequence, from hero through Featured, Weekend, daily listings, filters, Spotlight, Coming Up and submit, built once and refilled every Thursday."
+        },
+        {
+          "item": "Spotlight + Featured one-pager (2 sides)",
+          "why": "Front: free Spotlight invite. Back: Featured slot rates. It's your opener with Alliance contacts."
+        },
+        {
+          "item": "Facebook share card template",
+          "why": "One reusable weekly graphic, since Facebook is only for distribution links."
+        },
+        {
+          "item": "Not built here",
+          "why": "The Google Form, Sheet tab, RoundupEngine.gs and Gemini prompt are Workspace work, so build them in your Gemini or Claude Code chat."
+        }
+      ],
+      "deliver": [
+        {
+          "format": "Send-ready HTML email + layout spec",
+          "why": "Beehiiv builds issues in its own editor, so the design is the master copy and any other sender can use the file as is."
+        },
+        {
+          "format": "PDF (one-pager)",
+          "why": "Easy to email or leave behind after a Spotlight interview."
+        },
+        {
+          "format": "PNG (1200×630 and 1080×1350)",
+          "why": "Sizes for a Facebook link preview and a feed post."
+        }
+      ],
+      "build": {
+        "starter": "Design project: HTML email for the issue, Flier for the one-pager, a fixed-size component for the share card",
+        "skills": [
+          "HTML email",
+          "Flier",
+          "Save as PDF"
+        ],
+        "order": [
+          "Lock the name, then the masthead",
+          "Issue template filled with one real week (15 to 20 events + 1 Spotlight)",
+          "Spotlight + Featured one-pager",
+          "Share card, last, taken from the issue's look"
+        ],
+        "count": "1 email template (8 sections), 1 two-sided one-pager, 1 share card in 2 sizes"
+      },
+      "look": {
+        "top": {
+          "name": "Organic",
+          "why": "Warm and neighborly, which suits Lake Monticello families, events and local services."
+        },
+        "backup": {
+          "name": "Classical",
+          "why": "A weekly-paper feel that sponsors take seriously, though stiffer for festivals and kids' events."
+        },
+        "custom": "Leave Industry for the consulting practice. Email clients often drop Caprasimo, so set a safe fallback headline font in the issue."
+      },
+      "full": {
+        "scope": [
+          "Name, masthead and Organic system",
+          "Issue template with the first real issue",
+          "Spotlight + Featured one-pager (PDF)",
+          "Weekly share card (2 sizes)",
+          "Beehiiv rebuild spec",
+          "One revision round"
+        ],
+        "turnaround": "3 to 5 days once the name, the Featured price and the first week's events are in"
+      },
+      "setup": {
+        "homepage": "Design System, then Design",
+        "why": "Organic doesn't exist as a system yet. Build it first, then attach it to a Design project for the three pieces.",
+        "steps": [
+          "Create the Organic design system, using the roundup's name as its brand",
+          "Open a Design project and attach Organic",
+          "Gather 15 to 20 verified events for one real week",
+          "Gather one Spotlight business (e.g. Reliable Rides): blurb, photo, link",
+          "Set the Featured slot price and what it includes",
+          "Paste the first prompt, then invoke HTML email"
+        ],
+        "firstPrompt": "Build the weekly issue template for [Name], a free Thursday 7 AM events email for Fluvanna County and Lake Monticello (Palmyra, Troy, Fork Union, Zion Crossroads). Use HTML email, single column, mobile first. Sections in this order: hero with free-weekly promise; Calendar at a Glance with daily counts and a verified-on stamp; Featured This Week (paid slot); This Weekend, then Mon to Wed daily listings; intent filters (Today, This Weekend, Free, Live Music, Family, Business/Networking); Local Business Spotlight with a 'Want your business featured?' button; Coming Up; and a submit-your-event close linking to [form URL]. Each event is one line: emoji, title, time at linked venue, one sentence, and a Free or Registration required tag. Footer credit to House Pomare. Fill it with the attached real events and spotlight."
+      },
+      "gaps": [
+        "Which name: The Fluvanna Loop, Lake & County Weekly, or another?",
+        "Featured slot price, and what does a sponsor get (logo, link, length)?",
+        "Is Beehiiv final, and does your plan allow custom HTML blocks?",
+        "Do you have one real week of events and a first Spotlight ready?",
+        "Do you want the weekly share card, or links only?"
+      ],
+      "next": "Pick the name and Featured price, send the first week's events, and say go.",
+      "version": 1,
+      "answered": [],
+      "changes": []
+    }
+  },
+  {
+    "id": "c-20261014-workbook",
+    "at": "2026-10-14T12:00:00Z",
+    "text": "Client workbook, formatted to print and look good.",
+    "ans": {
+      "who": "client",
+      "where": [
+        "print"
+      ]
+    },
+    "rec": {
+      "title": "Client printable workbook",
+      "make": [
+        {
+          "item": "Workbook document",
+          "why": "The full workbook: cover, contents, sections, exercises and writing space."
+        },
+        {
+          "item": "Page kit (built into the workbook)",
+          "why": "A fixed set of page types (section opener, lesson, exercise with lines/boxes, checklist, reflection) so every page looks consistent and she can add more later."
+        },
+        {
+          "item": "Optional fillable version",
+          "why": "Only if buyers will type into it on screen instead of printing."
+        }
+      ],
+      "deliver": [
+        {
+          "format": "Print-ready PDF (Letter or A4)",
+          "why": "Prints cleanly at home or at a print shop, and is easy to sell or email."
+        },
+        {
+          "format": "Live HTML source",
+          "why": "Lets you edit copy and add pages later without rebuilding."
+        }
+      ],
+      "build": {
+        "starter": "Design project with the paged-document starter, one explicit page per sheet so writing space and exercises land exactly where intended",
+        "skills": [
+          "Make a doc",
+          "Save as PDF"
+        ],
+        "order": [
+          "Get her content as a doc: sections, exercises, prompts",
+          "Design 4 to 5 page types plus the cover",
+          "Pour in the content section by section",
+          "Proof a test print, check margins and line spacing for handwriting",
+          "Export the final PDF"
+        ],
+        "count": "About 20 to 40 pages, depending on her content (cover + contents + 4 to 5 page types repeated)"
+      },
+      "look": {
+        "top": {
+          "name": "Their own brand",
+          "why": "A workbook she sells or hands to clients should match her logo, colors and fonts."
+        },
+        "backup": {
+          "name": "Organic",
+          "why": "Warm, friendly and print-friendly, which suits coaches, wellness and personal-growth workbooks."
+        },
+        "custom": "Keep print in mind: light pages, ink-friendly color, generous writing lines, 11 to 12pt body text."
+      },
+      "full": {
+        "scope": [
+          "Cover + contents",
+          "4 to 5 page types",
+          "Full workbook with all her content",
+          "One revision round after a test print",
+          "Print-ready PDF + editable source"
+        ],
+        "turnaround": "4 to 7 days once content is final"
+      },
+      "setup": {
+        "homepage": "Design",
+        "why": "A printable document, not slides. Build the look as a Design System first if she has a brand and it's not set up yet.",
+        "steps": [
+          "Get her full workbook content in one doc (Google Doc, Word or plain text)",
+          "Collect her logo, colors, fonts and any photos",
+          "Confirm page size (Letter or A4) and whether it's home-printed or print-shop",
+          "If she has a brand: create her Design System first, then attach it",
+          "Start a Design project and paste the first prompt"
+        ],
+        "firstPrompt": "Build a printable workbook for my client using the paged-document starter, [Letter/A4], one page per sheet. Topic: [topic]. Audience: [who]. Make a cover, a contents page, and these page types: section opener, lesson page, exercise page with writing lines and boxes, checklist, reflection page. Use generous writing space and 11 to 12pt body text. Her content is attached. Lay out section 1 first so I can approve the look."
+      },
+      "gaps": [
+        "What's the workbook about, and who uses it?",
+        "Is her content written already, or does it need writing?",
+        "Roughly how many pages or sections?",
+        "Will it be printed at home or at a print shop, and does she want it fillable on screen too?",
+        "Does she have a logo, colors and fonts?"
+      ],
+      "next": "Answer the gaps, or send her content and say go.",
+      "version": 1,
+      "answered": [],
+      "changes": []
+    }
+  },
+  {
+    "id": "c-20261013-shirt",
+    "at": "2026-10-13T12:00:00Z",
+    "text": "Client shirt: one design on the front, one on the back.",
+    "ans": {
+      "who": "client",
+      "where": [
+        "print"
+      ]
+    },
+    "rec": {
+      "title": "Client shirt: front and back",
+      "make": [
+        {
+          "item": "Front artwork",
+          "why": "The main graphic, sized to the printer's front print area."
+        },
+        {
+          "item": "Back artwork",
+          "why": "The second graphic, sized to the back print area."
+        },
+        {
+          "item": "Mockup sheet",
+          "why": "Both sides on a shirt photo so the client approves before anything prints."
+        }
+      ],
+      "deliver": [
+        {
+          "format": "Print PDF, one page per side",
+          "why": "Type and shapes stay sharp, and most printers accept PDF."
+        },
+        {
+          "format": "Transparent PNG, high resolution",
+          "why": "Backup for DTG/DTF printers that ask for raster files."
+        },
+        {
+          "format": "Mockup as PNG or PDF",
+          "why": "Easy to text or email the client for sign-off."
+        }
+      ],
+      "build": {
+        "starter": "Design project, canvas mode: two artboards at print size plus a mockup sheet with image slots",
+        "skills": [
+          "Frontend design",
+          "Save as PDF"
+        ],
+        "order": [
+          "Get the printer's specs: method, ink colors, print area, file type",
+          "2 to 3 front/back concept pairs side by side",
+          "Client picks one, then one round of revisions",
+          "Mockup sheet on their shirt color",
+          "Export print files"
+        ],
+        "count": "2 artboards + 1 mockup sheet (concepts: 2 to 3 pairs)"
+      },
+      "look": {
+        "top": {
+          "name": "Their own brand",
+          "why": "Merch should carry the client's logo, colors and fonts."
+        },
+        "backup": {
+          "name": "Custom shirt direction",
+          "why": "If there's no brand: set it per shirt (mood, 1 to 3 ink colors, one display font), not a full system."
+        },
+        "custom": "No UI system needed. Shirt art lives on its own: bold type, limited inks, contrast that works on the shirt color."
+      },
+      "full": {
+        "scope": [
+          "2 to 3 front/back concept pairs",
+          "1 revision round",
+          "Mockup sheet on the chosen shirt color",
+          "Print PDF + transparent PNG per side"
+        ],
+        "turnaround": "2 to 4 days, plus printer proof time"
+      },
+      "setup": {
+        "homepage": "Design",
+        "why": "Artwork and mockups, not slides. No design system unless the client has a brand.",
+        "steps": [
+          "Ask the printer for specs: print method, max ink colors, print area size, file format",
+          "Collect the client's logo, colors, fonts, and any art or photos to use",
+          "Get the shirt color and a blank shirt photo (front and back) for the mockup",
+          "Gather the exact copy for each side",
+          "Start a Design project and paste the first prompt"
+        ],
+        "firstPrompt": "Design a two-sided shirt for my client. Front: [copy/idea]. Back: [copy/idea]. Shirt color: [color]. Printing: [screen print, N ink colors / DTG], print area [WxH in]. Show 2 to 3 front/back concept pairs side by side on a canvas, each side as an artboard at print size. Then add a mockup sheet with image slots for blank shirt photos. Brand files are attached."
+      },
+      "gaps": [
+        "What's the shirt for: event, business merch, team, band?",
+        "Do they have a logo or brand files, or art to use?",
+        "How is it printed: screen print (how many ink colors) or DTG/DTF? Who's the printer?",
+        "What shirt color(s)?",
+        "Type-led, or illustration? Illustration needs supplied art or an artist."
+      ],
+      "next": "Answer the gaps, or say go.",
+      "version": 1,
+      "answered": [],
+      "changes": []
+    }
+  },
+  {
+    "id": "c-20261012-calibration",
+    "at": "2026-10-12T15:00:00Z",
+    "text": "Universal AI Calibration and Audit Skill: an on-call audit skill for Claude.ai chats and projects. Checks Claude's work for gaps, finds a better flow, learns rules from critique. Personal use first, sell later.",
+    "ans": {
+      "who": "me",
+      "goal": "creative",
+      "where": [
+        "screen"
+      ],
+      "has": [
+        "content"
+      ]
+    },
+    "rec": {
+      "title": "AI Calibration and Audit Skill",
+      "make": [
+        {
+          "item": "Audit skill (on call)",
+          "why": "Runs only when you say \"check your work\". Stress test, better flow, then one rule learned."
+        },
+        {
+          "item": "Baseline rules (always on)",
+          "why": "Tone, punctuation and formatting apply to every reply, so they belong in instructions, not the skill."
+        },
+        {
+          "item": "Calibration log",
+          "why": "Where learned rules are kept. A skill can't save its own memory."
+        }
+      ],
+      "deliver": [
+        {
+          "format": "Claude.ai custom skill",
+          "why": "A folder with a SKILL.md, uploaded once and available in every chat and project."
+        },
+        {
+          "format": "Profile preferences or project instructions",
+          "why": "The baseline rules: profile for every chat, project instructions for one project."
+        },
+        {
+          "format": "Markdown file in project knowledge",
+          "why": "The log. You paste each learned rule in, and every chat in the project reads it."
+        }
+      ],
+      "build": {
+        "starter": "No design starter. Write it in chat.",
+        "skills": [],
+        "order": [
+          "Split the text into baseline rules and the audit loop",
+          "Write SKILL.md: trigger phrases, audit steps, output shape",
+          "Audit output: Gaps found, Better flow, Rule learned (one line to paste into the log)",
+          "Drop \"acknowledge and confirm readiness\", and add a fallback when web search is off",
+          "Log template: date, rule, why"
+        ],
+        "count": "1 skill file, 1 rules block, 1 log"
+      },
+      "look": {
+        "top": {
+          "name": "None needed",
+          "why": "Text only. Pick a look when you build the sales kit."
+        },
+        "backup": {
+          "name": "Industry (later)",
+          "why": "Blueprint grid suits an audit method, for the sales one-pager."
+        },
+        "custom": ""
+      },
+      "full": {
+        "scope": [
+          "SKILL.md, zipped for upload",
+          "Baseline rules block",
+          "Calibration log template",
+          "Test script: 3 audit runs to try it on"
+        ],
+        "turnaround": "About 2 hours, then a few weeks of real use"
+      },
+      "setup": {
+        "homepage": "None: this is built in Claude.ai",
+        "why": "Not a Claude Design project. Come back to Design when you package it to sell.",
+        "steps": [
+          "Claude.ai: Settings → Capabilities, then upload the skill zip",
+          "Paste the baseline rules into profile preferences, or into a project's instructions",
+          "Create a project and add calibration-log.md to its knowledge",
+          "Test: ask for work, then say \"check your work\"",
+          "After each audit, paste the Rule learned line into the log"
+        ],
+        "firstPrompt": "Here is my calibration and audit skill. Turn it into a Claude.ai custom skill: a SKILL.md that runs only when I say \"check your work\" or \"audit this\". Split out the always-on baseline rules as a separate block for my instructions. Each audit ends with Gaps found, Better flow and one Rule learned line I can paste into my calibration log."
+      },
+      "gaps": [
+        "Selling the skill file itself, or selling audits as a service?",
+        "Any trigger phrases besides \"check your work\" and \"audit this\"?"
+      ],
+      "next": "Say go, and the skill, rules block and log get written here in chat.",
+      "version": 2,
+      "answered": [
+        {
+          "q": "Is this for your own use, or something you'll sell or give to clients?",
+          "a": "For me to try long enough to sell."
+        },
+        {
+          "q": "Where will it run: Claude Design, Claude.ai projects, or other AI tools too?",
+          "a": "Claude.ai chats and projects."
+        },
+        {
+          "q": "Should the Redesign Pitch run on every task, or only on design and structure tasks?",
+          "a": "Only when I call for it, to check the work for anything missing or a better flow."
+        },
+        {
+          "q": "Do you want the card at all, or only the skill?",
+          "a": "Not sure what the card does. I want it as a skill."
+        }
+      ],
+      "changes": [
+        "Audit runs only on call (\"check your work\"), not on every reply",
+        "Baseline rules moved to always-on instructions, separate from the skill",
+        "Built and installed in Claude.ai, not Claude Design",
+        "Card dropped for now. It returns as a sales one-pager when you sell"
+      ]
+    }
+  }
+]
