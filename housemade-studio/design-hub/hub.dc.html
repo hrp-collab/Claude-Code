@@ -1315,9 +1315,9 @@ class Component extends DCLogic {
     const lines = ids.map(id => { const t = tierOf(id), list = cf.prices[id][T[t]], has = custom[id] !== undefined && custom[id] !== null; return { id, t, list, isCustom: has, amount: has ? this.num(custom[id]) : list }; });
     const work = lines.reduce((x, l) => x + l.amount, 0), extras = [];
     if (lines.length) {
-      const d = this.DL[a.when], hi = sp.hi || 0;
-      const rushPct = !a.when || a.when === 'flex' || !hi ? 0 : d < hi / 2 ? cf.rushHard : d < hi ? cf.rush : 0;
-      if (rushPct) extras.push({ key: 'noRush', label: 'Rush (+' + rushPct + '%)', note: 'They need it ' + this.lab('when', a.when).toLowerCase() + '; this usually takes ' + sp.turn.toLowerCase() + '.', amount: a.noRush ? 0 : Math.round(work * rushPct / 100), off: !!a.noRush, toggle: 'Waive it' });
+      const d = this.DL[a.when], lo = sp.lo || 0;
+      const rushPct = !a.when || a.when === 'flex' || !lo ? 0 : d < lo / 2 ? cf.rushHard : d < lo ? cf.rush : 0;
+      if (rushPct) extras.push({ key: 'noRush', label: 'Rush (+' + rushPct + '%)', note: 'They need it ' + this.lab('when', a.when).toLowerCase() + '; even a fast run of this takes ' + sp.turn.toLowerCase() + '.', amount: a.noRush ? 0 : Math.round(work * rushPct / 100), off: !!a.noRush, toggle: 'Waive it' });
       if (r.pkgSel === 'full' && lines.length >= 2 && cf.bundle > 0) extras.push({ key: 'noBundle', label: 'Full package (−' + cf.bundle + '%)', note: 'For taking the whole recommended path together.', amount: a.noBundle ? 0 : -Math.round(work * cf.bundle / 100), off: !!a.noBundle, toggle: 'Remove it' });
       const perRound = Math.max(cf.roundMin, Math.round(work * cf.roundPct / 100));
       extras.push({ key: 'extraRounds', step: true, count: a.extraRounds || 0, label: 'Extra revision rounds', note: cf.rounds + ' rounds are included. Each extra round is ' + this.money(perRound) + '.', amount: (a.extraRounds || 0) * perRound });
@@ -2011,10 +2011,10 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const briefEmail = mailText('Project brief: ' + b.business, [hi, '', 'Thanks for the call. Here is a summary of the brief.', '',
       'Goal: ' + b.facts[0].value, 'Recommended path: ' + pkItems(sp).join(' → '), 'Look: ' + r.look.name, 'Turnaround: ' + sp.turn + ', after kickoff', '',
       'What we need from you:', ...r.supplies.map(x => '- ' + x), '', r.nextLine, ...sign]);
-    const q = this.quote(a, r, sp, cf), T = this.TIER_IDX, tierName = t => this.TIERS.find(x => x[0] === t)[1];
+    const qt = this.quote(a, r, sp, cf), T = this.TIER_IDX, tierName = t => this.TIERS.find(x => x[0] === t)[1];
     const setA2 = (k, v) => this.setState(s2 => ({ a: { ...s2.a, [k]: v } }));
     const setMap = (k, id, v) => this.setState(s2 => ({ a: { ...s2.a, [k]: { ...(s2.a[k] || {}), [id]: v } } }));
-    const items = q.lines.map(ln => {
+    const items = qt.lines.map(ln => {
       const f = F[ln.id], sh = (f.ship || []).filter(x => sp.ship.includes(x)).map(x => F[x].name);
       return { name: f.name, desc: f.what + (sh.length ? ' Delivered as ' + sh.join(', ') + '.' : ''), tierName: tierName(ln.t), tierWhat: this.PRICES[ln.id][T[ln.t]][1],
         tiers: this.TIERS.map(([k, label]) => ({ label, price: this.money(cf.prices[ln.id][T[k]]), pressed: k === ln.t ? 'true' : 'false',
@@ -2023,32 +2023,32 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
         onPrice: e => setMap('prices', ln.id, e.target.value), resetPrice: () => setMap('prices', ln.id, undefined),
         hasMarket: showMarket && !!f.market, market: f.market || '' };
     });
-    const extras = q.extras.map(ex => ({ label: ex.label, note: ex.note, amount: (ex.amount < 0 ? '−' : '') + this.money(Math.abs(ex.amount)), op: ex.off ? 0.55 : 1, np: ex.amount === 0 ? '' : undefined,
+    const extras = qt.extras.map(ex => ({ label: ex.label, note: ex.note, amount: (ex.amount < 0 ? '−' : '') + this.money(Math.abs(ex.amount)), op: ex.off ? 0.55 : 1, np: ex.amount === 0 ? '' : undefined,
       isStep: !!ex.step, count: String(ex.count || 0), inc: () => setA2(ex.key, Math.min(30, (a[ex.key] || 0) + 1)), dec: () => setA2(ex.key, Math.max(0, (a[ex.key] || 0) - 1)),
       isToggle: !!ex.toggle, toggleLabel: ex.off ? 'Add it back' : ex.toggle, toggle: () => setA2(ex.key, !ex.off) }));
     const bandName = this.lab('budget', a.budget), canEss = showPkgs && r.pkgSel === 'full';
-    const budget = { show: !!q.fit, canEssential: q.fit === 'over' && canEss, useEssential: () => this.setA('pkg', 'essential'),
-      label: q.fit === 'over' ? 'Over budget' : q.fit === 'under' ? 'Under budget' : 'Fits budget',
-      text: q.fit === 'over' ? 'Their budget is ' + bandName + ' and this comes to ' + this.money(q.total) + '. ' + (canEss ? 'Try the Essential package or Simple levels.' : 'Try Simple levels, or move a piece to later.')
-        : q.fit === 'under' ? 'Their budget is ' + bandName + '. There is room for a higher level or an add-on.' : 'Their budget is ' + bandName + '. Only you see this.',
-      bg: q.fit === 'over' ? 'var(--color-warn-bg)' : q.fit === 'under' ? 'var(--color-accent-2-100)' : 'var(--color-accent-100)',
-      col: q.fit === 'over' ? 'var(--color-warn-text)' : q.fit === 'under' ? 'var(--color-accent-2-800)' : 'var(--color-accent-800)' };
-    const rt = q.retainer;
+    const budget = { show: !!qt.fit, canEssential: qt.fit === 'over' && canEss, useEssential: () => this.setA('pkg', 'essential'),
+      label: qt.fit === 'over' ? 'Over budget' : qt.fit === 'under' ? 'Under budget' : 'Fits budget',
+      text: qt.fit === 'over' ? 'Their budget is ' + bandName + ' and this comes to ' + this.money(qt.total) + '. ' + (canEss ? 'Try the Essential package or Simple levels.' : 'Try Simple levels, or move a piece to later.')
+        : qt.fit === 'under' ? 'Their budget is ' + bandName + '. There is room for a higher level or an add-on.' : 'Their budget is ' + bandName + '. Only you see this.',
+      bg: qt.fit === 'over' ? 'var(--color-warn-bg)' : qt.fit === 'under' ? 'var(--color-accent-2-100)' : 'var(--color-accent-100)',
+      col: qt.fit === 'over' ? 'var(--color-warn-text)' : qt.fit === 'under' ? 'var(--color-accent-2-800)' : 'var(--color-accent-800)' };
+    const rt = qt.retainer;
     const ret = rt ? { price: this.money(rt.amount), tierName: tierName(rt.t), what: this.PRICES.retainer[T[rt.t]][1], tiers: this.TIERS.map(([k, label]) => ({ label: label + ' · ' + this.money(cf.prices.retainer[T[k]]), pressed: k === rt.t ? 'true' : 'false', go: () => setMap('tiers', 'retainer', k) })) } : { price: '', tierName: '', what: '', tiers: [] };
     const addons = [...r.addons];
     if (sp.make.some(f => ['website', 'flier', 'deck', 'email', 'doc'].includes(f))) addons.push('Brand photos by Pomare Portraits, quoted separately');
-    const lineText = [...items.map(x => '- ' + x.name + ' (' + x.tierName + '): ' + x.amountLabel), ...q.extras.filter(x => x.amount).map(x => '- ' + x.label + ': ' + (x.amount < 0 ? '−' : '') + this.money(Math.abs(x.amount)))];
+    const lineText = [...items.map(x => '- ' + x.name + ' (' + x.tierName + '): ' + x.amountLabel), ...qt.extras.filter(x => x.amount).map(x => '- ' + x.label + ': ' + (x.amount < 0 ? '−' : '') + this.money(Math.abs(x.amount)))];
     const proposalEmail = mailText('Proposal: ' + b.business, [hi, '', 'Here is the proposal for ' + pkItems(sp).join(', ') + '.', '', ...lineText, '',
-      'Total: ' + this.money(q.total), 'Deposit (' + o.dep + '%) to start: ' + this.money(q.dep), 'Balance on delivery: ' + this.money(q.total - q.dep), ...(rt ? ['Then monthly: ' + ret.price + ' a month (' + ret.what + ')'] : []), '',
+      'Total: ' + this.money(qt.total), 'Deposit (' + o.dep + '%) to start: ' + this.money(qt.dep), 'Balance on delivery: ' + this.money(qt.total - qt.dep), ...(rt ? ['Then monthly: ' + ret.price + ' a month (' + ret.what + ')'] : []), '',
       'Turnaround: ' + sp.turn + ' after kickoff. Valid for ' + validDays + ' days.', cf.payUrl ? 'Pay the deposit here to book the kickoff: ' + cf.payUrl : 'Reply to accept and I will send the deposit details.', ...sign]);
     const pr = {
       pkgName: (showPkgs ? PK[r.pkgSel][0] : 'Recommended') + ' package', pkgLine: sp.make.length ? pkItems(sp).join(' → ') + ' · ' + sp.turn + ' after kickoff' : '',
-      items, extras, noItems: !items.length, subtotal: this.money(q.total), deposit: this.money(q.dep), balance: this.money(q.total - q.dep), depLabel: 'Deposit (' + o.dep + '%) to start',
+      items, extras, noItems: !items.length, subtotal: this.money(qt.total), deposit: this.money(qt.dep), balance: this.money(qt.total - qt.dep), depLabel: 'Deposit (' + o.dep + '%) to start',
       retainer: !!rt, ret, addons: addons.length ? addons : ['None suggested'], valid: 'Valid for ' + validDays + ' days', signs: ['Client signature', 'Name', 'Date'],
       hasPay: !!cf.payUrl, payUrl: cf.payUrl, budget,
       copyEmail: () => this.copyText(proposalEmail, 'Proposal email copied. Paste it into a new email.'), copyLabel: 'Copy email', save: () => this.saveDoc('proposal')
     };
-    const est = { has: q.lines.length > 0, total: this.money(q.total), fit: q.fit === 'over' ? 'Over budget' : q.fit === 'under' ? 'Under budget' : q.fit === 'fits' ? 'Fits budget' : 'No budget given', fitTag: q.fit === 'over' ? 'tag-warn' : q.fit ? 'tag-accent' : 'tag-neutral' };
+    const est = { has: qt.lines.length > 0, total: this.money(qt.total), fit: qt.fit === 'over' ? 'Over budget' : qt.fit === 'under' ? 'Under budget' : qt.fit === 'fits' ? 'Fits budget' : 'No budget given', fitTag: qt.fit === 'over' ? 'tag-warn' : qt.fit ? 'tag-accent' : 'tag-neutral' };
 
     const sel = F[this.state.sel] ? this.state.sel : 'website', n = F[sel], rowsDef = this.ROWS[n.lane];
     const linkList = key => key === 'ship' ? (n.ship || []).map(id => [id, F[id].use]) : key === 'from' ? Object.keys(F).filter(id => (F[id].ship || []).includes(sel)).map(id => [id, '']) : (n[key] || []);
@@ -2085,7 +2085,7 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
 
     const briefRefs = [...r.prepIds, ...r.makeIds].map(id => ({ name: F[id].name, links: this.refsFor([id]) })).filter(x => x.links.length);
     const askList = guide.objections.map((ob, i) => { const op = this.state.ask === i; return { q: ob.q, a: ob.a, open: op, sign: op ? '−' : '+', toggle: () => this.setState({ ask: op ? -1 : i }) }; });
-    const doneT = { intake: r.make.length > 0, brief: !!this.state.seenBrief, proposal: !!this.state.seenProp && q.total > 0 };
+    const doneT = { intake: r.make.length > 0, brief: !!this.state.seenBrief, proposal: !!this.state.seenProp && qt.total > 0 };
     const goTab = id => { this.setState({ tab: id, navMore: false }); window.scrollTo({ top: 0 }); };
     const savedList = (this.state.saved || []).map(e => {
       const ea = e.a || {}, ci = ea.client || {}, isCur = e.id === this.state.cur;
@@ -2130,8 +2130,8 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
         numField('fix', 'Free fixes after delivery', 'days', 'Fixes to delivered work cost nothing for this long.'),
         numField('hourly', 'Small changes after that', '$ an hour', 'Quoted in "How we work".'),
         numField('valid', 'Proposals valid for', 'days', ''),
-        numField('rush', 'Rush fee', '%', 'When their deadline is shorter than the usual turnaround.'),
-        numField('rushHard', 'Big rush fee', '%', 'When their deadline is under half the usual turnaround.'),
+        numField('rush', 'Rush fee', '%', 'When their deadline is shorter than the fastest estimate.'),
+        numField('rushHard', 'Big rush fee', '%', 'When their deadline is under half the fastest estimate.'),
         numField('bundle', 'Full package discount', '%', 'When they take the whole recommended path.'),
         numField('roundPct', 'Extra revision round', '% of the work', ''),
         numField('roundMin', 'Extra round minimum', '$', ''),

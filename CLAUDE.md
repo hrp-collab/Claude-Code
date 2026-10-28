@@ -57,4 +57,5 @@ shots/    shot lists / episode breakdowns
 scripts/  tooling (kenburns.py)
 out/      rendered clips and assembled episodes  (git-ignored)
 docs/     style-prompt.md
+housemade-studio/  separate project: Housemade Studio brand and Design Hub (own CLAUDE.md)
 ```
