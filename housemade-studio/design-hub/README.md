@@ -1,7 +1,9 @@
 # Housemade Design Hub
 
-The client-call tool for Housemade Studio: intake → brief → proposal, plus a call
-guide, playbooks, formats & looks, "For me" plans and Settings. It started as the
+The client-call tool for Housemade Studio: intake → brief → proposal, a Clients
+board that tracks every client from lead to paid, plus a call guide, playbooks,
+formats & looks, "For me" plans and Settings. Briefs and proposals download as PDFs
+and send from Gmail; project dates go to Google Calendar. It started as the
 Claude Design project "Design Hub v7" (standalone Claude Design closes December 14, 2026).
 
 ## Files
@@ -23,8 +25,9 @@ python3 -m http.server 8000
 # open http://localhost:8000/hub.dc.html
 ```
 
-A local copy saves to the browser. "Ask Claude" in For me and saving to the account
-only work in the published version.
+A local copy saves to the browser. "Ask Claude" in For me, saving to the account,
+Gmail and Google Calendar only work in the published version. PDF downloads work
+locally when the page can reach cdn.jsdelivr.net (html2pdf.js is loaded on first use).
 
 ## Publish
 
@@ -35,23 +38,44 @@ python3 build.py
 Then publish `dist/housemade-hub.html` as an artifact with these capabilities:
 
 ```json
-{"db": {"rules": [{"path": "", "read": "admin", "write": "admin"}]}, "sample": {}, "downloads": true}
+{"db": {"rules": [{"path": "", "read": "admin", "write": "admin"}]}, "sample": {}, "downloads": true,
+ "mcp": {"servers": [{"server": "Gmail", "tools": ["send_message", "create_draft"]},
+                     {"server": "Google Calendar", "tools": ["create_event"]}]}}
 ```
 
 `db` stores everything so phone and computer match; the rule keeps client data to
 the owner and editors. `sample` powers "Ask Claude" in For me. `downloads` saves
-briefs and proposals as HTML files.
+briefs and proposals as PDFs. `mcp` sends email and adds calendar events through
+the viewer's own claude.ai connectors; each asks once before its first use. Every
+publish must restate the whole set: anything left out is switched off.
 
 ## Where things are saved (db)
 
 | Path | What |
 | --- | --- |
 | `hub/settings` | Studio details, terms, price rules and price list overrides |
-| `intakes/<id>` | One intake: `{ id, a, mode, pos, at }` |
+| `intakes/<id>` | One intake: `{ id, a, mode, pos, at, created, sum }` |
 | `plans/<id>` | One For me plan: `{ id, at, text, ans, rec, fromChat? }` |
 
 Plans made in chat are written to `plans/` with `fromChat: true`; the hub shows them
 under For me without any copy and paste.
+
+An intake's client tracking lives in `a.track`:
+`{ stage, dates: { brief, proposal, booked, active, delivered, paid, lost }, kickoff,
+rounds, note, quote: { total, dep }, mailed, cal }`. Stages run lead → brief →
+proposal → booked → active → delivered → paid, or lost. Dates are `YYYY-MM-DD`.
+`sum` repeats the useful parts in plain fields (name, business, email, stage, total,
+deposit, turnaround, rounds, kickoff, note, and `due` dates for the proposal expiry,
+final files and the end of free fixes). The Monday summary reads `sum`; it's
+refreshed every time the intake saves.
+
+## Monday summary
+
+A scheduled task, "Housemade Monday summary", runs every Monday at 7:35 AM Eastern.
+It reads `intakes/` and `hub/settings` from the hub's storage and sends House what
+needs attention this week: always as a push notification, and by email once Gmail
+is added to the task in claude.ai (scheduled tasks can't be given connectors from a
+Claude Code session in this organization). It never writes to the hub.
 
 ## Prices
 

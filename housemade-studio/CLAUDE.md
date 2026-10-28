@@ -20,9 +20,10 @@ don't apply here.
 
 See `design-hub/README.md`. Edit `hub.dc.html`, run `python3 design-hub/build.py`,
 publish `design-hub/dist/housemade-hub.html` to the same artifact URL.
-Published hub: https://claude.ai/artifact/58JiLBgbLriq1QhdyoRLyt (private; db, sample and downloads
-capabilities as listed in the README). Plans made in chat go to its `plans` collection with
-`fromChat: true` via ArtifactData.
+Published hub: https://claude.ai/artifact/58JiLBgbLriq1QhdyoRLyt (private; db, sample,
+downloads and mcp capabilities as listed in the README; restate all of them on every
+publish). Plans made in chat go to its `plans` collection with `fromChat: true` via
+ArtifactData. Client status lives on each intake in `intakes/<id>` (`a.track`, `sum`).
 
 ## Voice
 

@@ -81,6 +81,7 @@
       </sc-for>
     </div>
     <div style="flex:none;display:flex;align-items:center;margin-left:auto;padding-left:14px;border-left:1px solid var(--color-divider)">
+      <button onClick="{{ clientsTab.go }}" style="font:inherit;font-size:15px;font-weight:500;padding:10px 10px;min-height:44px;display:flex;align-items:center;gap:8px;white-space:nowrap;background:transparent;border:0;border-bottom:3px solid {{ clientsTab.bd }};color:{{ clientsTab.col }};cursor:pointer" style-hover="color:var(--color-accent-700)">Clients<sc-if value="{{ clientsTab.hasDue }}" hint-placeholder-val="{{ false }}"><span aria-label="{{ clientsTab.dueAria }}" style="min-width:20px;height:20px;padding:0 5px;display:grid;place-items:center;box-sizing:border-box;font-size:11px;font-weight:600;background:var(--color-warn-text);color:var(--color-bg)">{{ clientsTab.dueN }}</span></sc-if></button>
       <button onClick="{{ meTab.go }}" style="font:inherit;font-size:15px;font-weight:500;padding:10px 10px;min-height:44px;display:flex;align-items:center;gap:8px;white-space:nowrap;background:transparent;border:0;border-bottom:3px solid {{ meTab.bd }};color:{{ meTab.col }};cursor:pointer" style-hover="color:var(--color-accent-700)">For me<sc-if value="{{ meTab.hasNew }}" hint-placeholder-val="{{ false }}"><span style="min-width:20px;height:20px;padding:0 5px;display:grid;place-items:center;box-sizing:border-box;font-size:11px;font-weight:600;background:var(--color-accent-700);color:var(--color-bg)">{{ meTab.newN }}</span></sc-if></button>
     </div>
   </nav>
@@ -94,12 +95,48 @@
 <sc-if value="{{ moreSheet.open }}" hint-placeholder-val="{{ false }}">
   <div class="sheet-backdrop" data-noprint="" onClick="{{ moreSheet.close }}"></div>
   <div class="more-sheet" data-noprint="" role="dialog" aria-label="More sections">
-    <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:var(--color-gold-text);padding:0 0 6px">Reference</span>
-    <sc-for list="{{ moreSheet.items }}" as="mi" hint-placeholder-count="4"><button class="btn btn-secondary" onClick="{{ mi.go }}">{{ mi.label }}</button></sc-for>
+    <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:var(--color-gold-text);padding:0 0 6px">More</span>
+    <sc-for list="{{ moreSheet.items }}" as="mi" hint-placeholder-count="5"><button class="btn btn-secondary" onClick="{{ mi.go }}">{{ mi.label }}</button></sc-for>
+  </div>
+</sc-if>
+<sc-if value="{{ mail.open }}" hint-placeholder-val="{{ false }}">
+  <div class="modal-backdrop" data-noprint="" onClick="{{ mail.close }}"></div>
+  <div class="modal blueprint" data-noprint="" role="dialog" aria-modal="true" aria-label="{{ mail.title }}">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h3 style="margin:0;font-size:28px">{{ mail.title }}</h3><button class="btn btn-ghost" onClick="{{ mail.close }}" style="min-height:40px">Close</button></div>
+    <sc-if value="{{ mail.hasNote }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14px;padding:10px 12px;background:var(--color-accent-100);color:var(--color-accent-800);text-wrap:pretty">{{ mail.note }}</p></sc-if>
+    <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">To</span><input class="input" type="email" value="{{ mail.to }}" onChange="{{ mail.onTo }}" placeholder="client@example.com" style="min-height:44px;font-size:16px"></label>
+    <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">Subject</span><input class="input" value="{{ mail.subject }}" onChange="{{ mail.onSubject }}" style="min-height:44px;font-size:16px"></label>
+    <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">Message</span><textarea class="input" value="{{ mail.body }}" onChange="{{ mail.onBody }}" style="min-height:240px;resize:vertical;font-size:15px;line-height:1.5"></textarea></label>
+    <label style="display:flex;gap:12px;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" checked="{{ mail.attach }}" onChange="{{ mail.onAttach }}" style="width:20px;height:20px;accent-color:var(--color-accent)"><span style="display:flex;flex-direction:column"><span style="font-weight:500">Attach the PDF</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ mail.fileName }}</span></span></label>
+    <sc-if value="{{ mail.hasErr }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:0;font-size:14px;padding:10px 12px;background:var(--color-warn-bg);color:var(--color-warn-text);text-wrap:pretty">{{ mail.err }}</p></sc-if>
+    <sc-if value="{{ mail.isDone }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 14px;border:1px dashed var(--color-accent)"><span style="flex:1 1 260px;font-size:14px;text-wrap:pretty">{{ mail.doneMsg }}</span><button class="btn btn-secondary" onClick="{{ mail.markSent }}" style="min-height:40px;white-space:nowrap">{{ mail.markLabel }}</button></div>
+    </sc-if>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;border-top:1px solid var(--color-divider);padding-top:14px">
+      <button class="btn btn-ghost" onClick="{{ mail.copy }}" style="min-height:44px">Copy instead</button>
+      <sc-if value="{{ mail.canSend }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn btn-secondary" onClick="{{ mail.draft }}" disabled="{{ mail.busy }}" style="min-height:44px">{{ mail.draftLabel }}</button><button class="btn btn-primary" onClick="{{ mail.send }}" disabled="{{ mail.busy }}" style="min-height:44px;padding-inline:22px">{{ mail.sendLabel }}</button></div></sc-if>
+    </div>
+  </div>
+</sc-if>
+<sc-if value="{{ cal.open }}" hint-placeholder-val="{{ false }}">
+  <div class="modal-backdrop" data-noprint="" onClick="{{ cal.close }}"></div>
+  <div class="modal blueprint" data-noprint="" role="dialog" aria-modal="true" aria-label="Add to Google Calendar">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h3 style="margin:0;font-size:28px">Add to Google Calendar</h3><button class="btn btn-ghost" onClick="{{ cal.close }}" style="min-height:40px">Close</button></div>
+    <p style="margin:0;font-size:14px;color:var(--color-neutral-700);text-wrap:pretty">{{ cal.sub }}</p>
+    <ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+      <sc-for list="{{ cal.events }}" as="ev" hint-placeholder-count="4"><li style="display:grid;grid-template-columns:max-content minmax(0,1fr);gap:16px;align-items:baseline;padding:9px 0;border-top:1px solid var(--color-divider)"><span style="font-family:var(--font-heading);font-weight:600;font-size:16px;color:var(--color-accent-700);white-space:nowrap">{{ ev.when }}</span><span style="font-size:15px;text-wrap:pretty">{{ ev.what }}</span></li></sc-for>
+    </ol>
+    <sc-if value="{{ cal.hasErr }}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin:0;font-size:14px;padding:10px 12px;background:var(--color-warn-bg);color:var(--color-warn-text);text-wrap:pretty">{{ cal.err }}</p></sc-if>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;border-top:1px solid var(--color-divider);padding-top:14px">
+      <button class="btn btn-ghost" onClick="{{ cal.close }}" style="min-height:44px">Cancel</button>
+      <button class="btn btn-primary" onClick="{{ cal.add }}" disabled="{{ cal.busy }}" style="min-height:44px;padding-inline:22px">{{ cal.addLabel }}</button>
+    </div>
   </div>
 </sc-if>
 <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
-  <div data-noprint="" role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom, 0px));z-index:70;width:max-content;max-width:min(92vw,520px);padding:12px 18px;background:var(--color-accent);color:var(--color-bg);font-size:15px;font-weight:500;box-shadow:var(--shadow-md);text-wrap:pretty">{{ toast }}</div>
+  <div data-noprint="" role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom, 0px));z-index:90;width:max-content;max-width:min(92vw,520px);padding:12px 18px;background:var(--color-accent);color:var(--color-bg);font-size:15px;font-weight:500;box-shadow:var(--shadow-md);text-wrap:pretty">{{ toast }}</div>
 </sc-if>
 <sc-if value="{{ copyBox.open }}" hint-placeholder-val="{{ false }}">
   <div data-noprint="" class="blueprint" style="padding:16px;display:flex;flex-direction:column;gap:10px">
@@ -521,7 +558,7 @@
 <section data-screen-label="Brief" style="display:flex;flex-direction:column;gap:18px">
   <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center">
     <span style="font-size:14px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">Remove steps with × or add with + Add. Pick a package, then print, email, or turn it into a proposal. Budget and market prices stay off.</span>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ editAnswers }}" style="min-height:44px">Edit answers</button><button class="btn btn-secondary" onClick="{{ copyBriefEmail }}" style="min-height:44px">{{ copyBriefLabel }}</button><button class="btn btn-secondary" onClick="{{ saveBrief }}" style="min-height:44px">Download</button><button class="btn btn-primary" onClick="{{ toProposal }}" style="min-height:44px">Make proposal →</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ editAnswers }}" style="min-height:44px">Edit answers</button><button class="btn btn-secondary" onClick="{{ emailBrief }}" style="min-height:44px">Email</button><button class="btn btn-secondary" onClick="{{ saveBrief }}" disabled="{{ pdfBusy.brief }}" style="min-height:44px">{{ pdfLabel.brief }}</button><button class="btn btn-primary" onClick="{{ toProposal }}" style="min-height:44px">Make proposal →</button></div>
   </div>
   <sc-if value="{{ hasBriefRefs }}" hint-placeholder-val="{{ false }}">
   <div data-noprint="" style="display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:1px dashed var(--color-accent-400)">
@@ -683,7 +720,7 @@
 <section data-screen-label="Proposal" style="display:flex;flex-direction:column;gap:18px">
   <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center">
     <span style="font-size:14px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">Pick Simple, Standard or Complex for each line. Prices come from your price list in Settings; type over one to change it for this client.</span>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ toBrief }}" style="min-height:44px">← Brief</button><button class="btn btn-secondary" onClick="{{ pr.copyEmail }}" style="min-height:44px">{{ pr.copyLabel }}</button><button class="btn btn-primary" onClick="{{ pr.save }}" style="min-height:44px">Download proposal</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ toBrief }}" style="min-height:44px">← Brief</button><button class="btn btn-secondary" onClick="{{ pr.email }}" style="min-height:44px">Email</button><button class="btn btn-primary" onClick="{{ pr.save }}" disabled="{{ pdfBusy.proposal }}" style="min-height:44px">{{ pdfLabel.proposal }}</button></div>
   </div>
   <sc-if value="{{ pr.budget.show }}" hint-placeholder-val="{{ false }}">
     <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:12px 16px;background:{{ pr.budget.bg }};color:{{ pr.budget.col }}">
@@ -1070,6 +1107,84 @@
 </section>
 </sc-if>
 
+<sc-if value="{{ tabIs.clients }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Clients" style="display:flex;flex-direction:column;gap:28px">
+  <div style="display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-end">
+    <div style="display:flex;flex-direction:column;gap:6px;max-width:66ch">
+      <h6 style="margin:0;color:var(--color-gold-text)">Clients</h6>
+      <h2 style="margin:0;font-size:clamp(34px,4.5vw,52px)">Where every client stands</h2>
+      <p style="margin:0;font-size:16px;color:var(--color-neutral-700);text-wrap:pretty">Every intake with a name or a goal shows here. Sending the brief or the proposal moves a client along; change the status any time.</p>
+    </div>
+    <button class="btn btn-primary" onClick="{{ reset }}" style="min-height:44px;white-space:nowrap">New intake</button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:22px">
+    <sc-for list="{{ cl.tiles }}" as="tl" hint-placeholder-count="4">
+      <div class="blueprint" style="padding:14px 16px;display:flex;flex-direction:column;gap:2px">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <span style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:var(--color-gold-text)">{{ tl.label }}</span>
+        <span class="money" style="font-family:var(--font-heading);font-weight:700;font-size:clamp(28px,4vw,34px);line-height:1.05;color:var(--color-accent-700)">{{ tl.value }}</span>
+        <span style="font-size:13px;color:var(--color-neutral-700)">{{ tl.sub }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ cl.hasDue }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column">
+      <span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-text);padding-bottom:8px">Needs you</span>
+      <sc-for list="{{ cl.due }}" as="du" hint-placeholder-count="2">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--color-divider)">
+          <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+            <div style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center"><span class="tag {{ du.tag }}">{{ du.label }}</span><span style="font-weight:600;font-size:15px">{{ du.who }}</span></div>
+            <span style="font-size:14px;text-wrap:pretty">{{ du.text }}</span>
+          </div>
+          <button class="btn btn-secondary" onClick="{{ du.go }}" style="min-height:40px;white-space:nowrap">{{ du.goLabel }}</button>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    <sc-for list="{{ cl.filters }}" as="cf" hint-placeholder-count="4">
+      <button onClick="{{ cf.go }}" aria-pressed="{{ cf.pressed }}" style="font:inherit;font-size:13px;padding:8px 12px;min-height:40px;border:1px solid {{ cf.bd }};background:{{ cf.bg }};color:{{ cf.col }};cursor:pointer" style-hover="border-color:var(--color-accent)">{{ cf.label }}</button>
+    </sc-for>
+  </div>
+  <sc-if value="{{ cl.isEmpty }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:15px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">{{ cl.emptyNote }}</p></sc-if>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:20px;align-items:start">
+    <sc-for list="{{ cl.list }}" as="c" hint-placeholder-count="3">
+      <article id="{{ c.domId }}" class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><h3 style="margin:0;font-size:26px;line-height:1.05;overflow-wrap:anywhere">{{ c.name }}</h3><span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty;overflow-wrap:anywhere">{{ c.sub }}</span></div>
+          <span class="tag {{ c.stageTag }}" style="flex:none">{{ c.stageName }}</span>
+        </div>
+        <div style="display:flex;gap:3px" aria-hidden="true"><sc-for list="{{ c.bar }}" as="sg" hint-placeholder-count="7"><span style="flex:1;height:4px;background:{{ sg.bg }}"></span></sc-for></div>
+        <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;font-size:14px;align-items:baseline">
+          <sc-for list="{{ c.facts }}" as="fx" hint-placeholder-count="3"><span style="color:var(--color-neutral-700)">{{ fx.k }}</span><span class="money" style="text-wrap:pretty">{{ fx.v }}</span></sc-for>
+        </div>
+        <sc-if value="{{ c.hasRem }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--color-divider);padding-top:10px">
+            <sc-for list="{{ c.rem }}" as="rm" hint-placeholder-count="1"><div style="display:flex;gap:8px;align-items:baseline;font-size:14px"><span class="tag {{ rm.tag }}" style="flex:none">{{ rm.label }}</span><span style="text-wrap:pretty">{{ rm.text }}</span></div></sc-for>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 12px;border-top:1px solid var(--color-divider);padding-top:10px">
+          <label style="display:flex;flex-direction:column;gap:5px;min-width:0"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">Status</span><select class="input" value="{{ c.stage }}" onChange="{{ c.onStage }}" style="min-height:44px;font-size:15px;cursor:pointer"><sc-for list="{{ c.stageOpts }}" as="so" hint-placeholder-count="8"><option value="{{ so.id }}">{{ so.label }}</option></sc-for></select></label>
+          <sc-if value="{{ c.showKick }}" hint-placeholder-val="{{ false }}"><label style="display:flex;flex-direction:column;gap:5px;min-width:0"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">Kickoff</span><input class="input" type="date" value="{{ c.kickoff }}" onChange="{{ c.onKickoff }}" style="min-height:44px;font-size:15px"></label></sc-if>
+          <sc-if value="{{ c.showRounds }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:5px;min-width:0"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">{{ c.roundsLabel }}</span><div class="stepper" style="align-self:flex-start"><button onClick="{{ c.roundDec }}" aria-label="One fewer round used">−</button><span>{{ c.rounds }}</span><button onClick="{{ c.roundInc }}" aria-label="One more round used">+</button></div></div></sc-if>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">Note</span><input class="input" value="{{ c.note }}" onChange="{{ c.onNote }}" onBlur="{{ c.saveNote }}" placeholder="Next step, or anything to remember" style="min-height:44px;font-size:15px"></label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--color-divider);padding-top:12px">
+          <sc-if value="{{ c.hasNext }}" hint-placeholder-val="{{ true }}"><button class="btn btn-primary" onClick="{{ c.next }}" style="min-height:44px">{{ c.nextLabel }}</button></sc-if>
+          <button class="btn btn-secondary" onClick="{{ c.open }}" style="min-height:44px">Open</button>
+          <sc-if value="{{ c.canCal }}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary" onClick="{{ c.cal }}" disabled="{{ c.calDone }}" style="min-height:44px">{{ c.calLabel }}</button></sc-if>
+          <sc-if value="{{ c.canLose }}" hint-placeholder-val="{{ false }}"><button class="btn btn-ghost" onClick="{{ c.lose }}" style="min-height:44px;margin-left:auto">{{ c.loseLabel }}</button></sc-if>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+</section>
+</sc-if>
+
 <sc-if value="{{ tabIs.settings }}" hint-placeholder-val="{{ false }}">
 <section data-screen-label="Settings" style="display:flex;flex-direction:column;gap:28px">
   <div style="display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-end">
@@ -1089,6 +1204,17 @@
         <label style="display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">{{ sf.label }}</span><input class="input" id="{{ sf.id }}" type="{{ sf.type }}" value="{{ sf.value }}" onChange="{{ sf.onChange }}" placeholder="{{ sf.ph }}" style="min-height:44px;font-size:16px"><span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ sf.help }}</span></label>
       </sc-for>
     </div>
+  </div>
+
+  <div class="blueprint" style="padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:14px">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:flex-end">
+      <div style="display:flex;flex-direction:column;gap:4px;max-width:62ch"><h3 style="margin:0;font-size:30px">Gmail and Google Calendar</h3><span style="font-size:14px;color:var(--color-neutral-700);text-wrap:pretty">Send briefs and proposals from your Gmail and put project dates on your calendar. The hub uses the connectors on your claude.ai account and asks before it uses each one the first time.</span></div>
+      <sc-if value="{{ conn.canManage }}" hint-placeholder-val="{{ false }}"><button class="btn btn-ghost" onClick="{{ conn.manage }}" style="min-height:40px">Permissions</button></sc-if>
+    </div>
+    <sc-for list="{{ conn.rows }}" as="cn" hint-placeholder-count="2">
+      <div style="display:grid;grid-template-columns:minmax(120px,auto) minmax(0,1fr);gap:4px 16px;align-items:baseline;padding:10px 0;border-top:1px solid var(--color-divider)"><span style="font-family:var(--font-heading);font-weight:600;font-size:19px">{{ cn.name }}</span><span style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline"><span class="tag {{ cn.tag }}">{{ cn.status }}</span><span style="font-size:14px;color:var(--color-neutral-700);text-wrap:pretty">{{ cn.help }}</span></span></div>
+    </sc-for>
   </div>
 
   <div class="blueprint" style="padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:18px">
@@ -1139,7 +1265,7 @@ class Component extends DCLogic {
   jumpTo = ref => { const el = ref.current; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' }); };
   load() {
     const def = { a: {}, pos: 'start', mode: 'quick', tab: 'intake', sel: 'website', pbFilter: 'all', open: {}, more: {}, startMore: false, ask: -1, seenBrief: false, seenProp: false, term: -1, showSaved: false, cur: 'i' + Date.now().toString(36), saved: [], meText: '', meRec: null, meHist: [], meCur: '', meErr: '', meA: {}, meStep: 'sum', meTicks: {}, settings: {} };
-    const fresh = { store: 'local', toast: '', copyBox: null, confirmDel: '', navMore: false, setDraft: null, meErr: '' };
+    const fresh = { store: 'local', toast: '', copyBox: null, confirmDel: '', navMore: false, setDraft: null, meErr: '', mail: null, cal: null, conn: undefined, trackOver: {}, noteDraft: {}, pendingMail: null, pdfBusy: '' };
     const read = k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
     const saved = read(this.KEY_SAVED) || read('designHub.saved');
     def.saved = Array.isArray(saved) ? saved : [];
@@ -1171,7 +1297,13 @@ class Component extends DCLogic {
       this.unsubs.push(db.doc('hub/settings').onSnapshot(d => this.setState({ settings: (d.exists && d.data()) || {}, store: 'account' }), lost));
     } catch (e) { lost(); return; }
     const st = this.state;
-    if (this.hasContent(st.a)) this.put('intakes/' + st.cur, this.clean({ id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() }));
+    if (this.hasContent(st.a)) this.put('intakes/' + st.cur, this.clean(this.entryOf(st)));
+  }
+  // The saved form of the open intake. `sum` repeats the price, status and
+  // key dates in plain fields so the Monday summary can read them.
+  entryOf(st) {
+    const prev = (st.saved || []).find(x => x.id === st.cur) || {};
+    return { id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now(), created: prev.created || Date.now(), sum: this.sumOf(st.a) };
   }
   put(path, data, wait) {
     if (!this.db) return;
@@ -1252,6 +1384,306 @@ class Component extends DCLogic {
     return "Couldn't " + what + '. Try again in a moment.';
   };
 
+  // Dates are local calendar days as 'YYYY-MM-DD'.
+  ymd = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  today = () => this.ymd(new Date());
+  parseYmd = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], m[2] - 1, +m[3]) : null; };
+  addDays = (s, n) => { const d = this.parseYmd(s); if (!d) return ''; d.setDate(d.getDate() + n); return this.ymd(d); };
+  addWorkdays = (s, n) => {
+    const d = this.parseYmd(s), wkend = () => d.getDay() === 0 || d.getDay() === 6;
+    if (!d) return '';
+    while (wkend()) d.setDate(d.getDate() + 1);
+    for (let k = n; k > 0;) { d.setDate(d.getDate() + 1); if (!wkend()) k--; }
+    return this.ymd(d);
+  };
+  daysBetween = (s, e) => { const x = this.parseYmd(s), y = this.parseYmd(e); return x && y ? Math.round((y - x) / 864e5) : 0; };
+  fmtDate = (s, day) => { const d = this.parseYmd(s); return d ? d.toLocaleDateString('en-US', { ...(day ? { weekday: 'short' } : {}), month: 'short', day: 'numeric' }) : ''; };
+
+  // Client tracking. Each intake carries a.track: { stage, dates, kickoff,
+  // rounds, note, quote, cal }; it saves with the intake.
+  STAGES = [['lead', 'Lead'], ['brief', 'Brief sent'], ['proposal', 'Proposal sent'], ['booked', 'Booked'], ['active', 'In progress'], ['delivered', 'Delivered'], ['paid', 'Paid in full'], ['lost', 'Lost']];
+  STAGE_IDX = Object.fromEntries(this.STAGES.map(([id], i) => [id, i]));
+  STAGE_TAG = { lead: 'tag-neutral', brief: 'tag-outline', proposal: 'tag-outline', booked: 'tag-accent', active: 'tag-accent', delivered: 'tag-gold', paid: 'tag-gold', lost: 'tag-neutral' };
+  withStage(t, stage, force) {
+    const I = this.STAGE_IDX, cur = t.stage || 'lead';
+    if (!force && (cur === 'lost' || I[stage] <= I[cur])) return null;
+    const dates = Object.fromEntries(Object.entries(t.dates || {}).filter(([k]) => stage === 'lost' || I[k] <= I[stage]));
+    if (!dates[stage]) dates[stage] = this.today();
+    return { ...t, stage, dates };
+  }
+  clientRows() {
+    const st = this.state, ov = st.trackOver || {};
+    let rows = (st.saved || []).map(e => ov[e.id] && (ov[e.id].at || 0) >= (e.at || 0) ? ov[e.id] : e).map(e => e.id === st.cur ? { ...e, a: st.a } : e);
+    if (this.hasContent(st.a) && !rows.some(e => e.id === st.cur)) rows = [{ id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() }, ...rows];
+    return rows.filter(e => this.hasContent(e.a));
+  }
+  // fn gets the client's current track and returns the new one, or null for no change.
+  setTrack = (id, fn, wait) => {
+    const st = this.state;
+    if (id === st.cur) { this.setState(s => { const t = fn((s.a || {}).track || {}); return t ? { a: { ...s.a, track: t } } : null; }); return; }
+    const e = this.clientRows().find(x => x.id === id);
+    if (!e) return;
+    const t = fn((e.a || {}).track || {});
+    if (!t) return;
+    const a = { ...e.a, track: t }, entry = { ...e, a, at: Date.now(), sum: this.sumOf(a) };
+    if (this.db) this.put('intakes/' + id, this.clean(entry), wait);
+    this.setState(s => ({ trackOver: { ...(s.trackOver || {}), [id]: entry }, ...(this.db ? {} : { saved: (s.saved || []).map(x => x.id === id ? entry : x) }) }));
+  };
+  markSent = kind => {
+    const q = this.curQuote || {};
+    this.setTrack(this.state.cur, t => {
+      const n = this.withStage(t, kind) || { ...t };
+      if (kind === 'proposal') n.quote = { total: q.total || 0, dep: q.dep || 0 };
+      n.mailed = { ...(t.mailed || {}), [kind]: this.today() };
+      return n;
+    });
+  };
+  opts = (cf, a) => ({ rounds: cf.rounds, dep: cf.dep, fix: cf.fix, hourly: cf.hourly, kickoff: ((a || {}).track || {}).kickoff || '' });
+  pkItems = pk => [...pk.prep, ...pk.make, ...pk.ship].map(id => this.F[id].name).concat(pk.ongoing ? ['Then a monthly retainer'] : []);
+  pickPkg(r) {
+    const showPkgs = r.make.length > 0 && this.pkItems(r.pkgs.essential).join() !== this.pkItems(r.pkgs.full).join();
+    return { showPkgs, sp: showPkgs ? r.pkgs[r.pkgSel] : r.pkgs.full };
+  }
+  estMemo = new WeakMap();
+  estOf(a, cf) {
+    const hit = this.estMemo.get(a);
+    if (hit && hit.s === this.state.settings && hit.p === this.props) return hit.v;
+    const r = this.rec(a, this.opts(cf, a)), { showPkgs, sp } = this.pickPkg(r), v = { r, sp, showPkgs, qt: this.quote(a, r, sp, cf) };
+    this.estMemo.set(a, { s: this.state.settings, p: this.props, v });
+    return v;
+  }
+  emailOf = a => { const c = ((a.client || {}).contact || '').trim(); return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c) ? c : ''; };
+  finalDate = r => (r.timeline.find(x => x.final) || {}).date || '';
+  sumOf(a) {
+    const cf = this.cfg(), { r, sp, qt } = this.estOf(a, cf), ci = a.client || {}, t = a.track || {}, d = t.dates || {};
+    return { name: ci.name || '', business: ci.business || '', email: this.emailOf(a), stage: t.stage || 'lead',
+      total: t.quote ? t.quote.total : qt.total, deposit: t.quote ? t.quote.dep : Math.round(qt.dep), turnaround: sp.turn,
+      roundsIncluded: cf.rounds, roundsUsed: t.rounds || 0, kickoff: t.kickoff || '', note: t.note || '',
+      due: { proposalExpires: d.proposal ? this.addDays(d.proposal, cf.valid) : '', finalFiles: this.finalDate(r), freeFixesEnd: d.delivered ? this.addDays(d.delivered, cf.fix) : '' } };
+  }
+  // What needs attention for one client, most urgent first: 'due', 'soon', then 'info'.
+  remind(e, cf, today) {
+    const a = e.a || {}, t = a.track || {}, d = t.dates || {}, stage = t.stage || 'lead', { r, qt } = this.estOf(a, cf), out = [];
+    const add = (lvl, text) => out.push({ lvl, text }), since = s => s ? this.daysBetween(s, today) : 0, days = n => n + (n === 1 ? ' day' : ' days');
+    const total = t.quote ? t.quote.total : qt.total, dep = t.quote ? t.quote.dep : Math.round(qt.dep);
+    const when = (left, s) => left === 0 ? 'today' : left === 1 ? 'tomorrow' : this.fmtDate(s, true);
+    if (stage === 'lead') {
+      const n = since(d.lead || this.ymd(new Date(e.created || e.at || Date.now())));
+      if (!qt.lines.length) add('info', 'Finish the intake to get the brief and a price.');
+      else if (n >= 2) add('due', 'Send the brief. The call was ' + days(n) + ' ago.');
+      else add('info', 'Send the brief while the call is fresh.');
+    }
+    if (stage === 'brief') { const n = since(d.brief); if (n >= 3) add('due', 'Send the proposal. The brief went out ' + days(n) + ' ago.'); else add('info', 'Send the proposal next.'); }
+    if (stage === 'proposal' && d.proposal) {
+      const exp = this.addDays(d.proposal, cf.valid), left = this.daysBetween(today, exp);
+      if (left < 0) add('due', 'The proposal expired ' + this.fmtDate(exp) + '. Follow up, or mark it lost.');
+      else if (left <= 3) add('soon', 'The proposal expires ' + when(left, exp) + '. A good day to follow up.');
+      else add('info', 'Proposal valid until ' + this.fmtDate(exp) + '.');
+    }
+    if (stage === 'booked') {
+      const n = t.kickoff ? since(t.kickoff) : null;
+      if (n === null) add('due', 'Set the kickoff date so the timeline gets real dates.');
+      else if (n > 0) add('soon', 'Kickoff was ' + this.fmtDate(t.kickoff) + '. Mark the work started.');
+      else if (n === 0) add('soon', 'Kickoff is today.');
+      else add('info', 'Kickoff ' + this.fmtDate(t.kickoff, true) + '.');
+    }
+    if (stage === 'active') {
+      const fin = this.finalDate(r), left = fin ? this.daysBetween(today, fin) : null;
+      if (left === null) add('soon', 'Add the kickoff date to see when the files are due.');
+      else if (left < 0) add('due', 'Past the delivery date in the timeline (' + this.fmtDate(fin) + ').');
+      else if (left <= 3) add('soon', 'Final files are due ' + when(left, fin) + '.');
+      else add('info', 'Final files due ' + this.fmtDate(fin) + '.');
+      if (cf.rounds > 0 && (t.rounds || 0) >= cf.rounds) add('soon', 'All ' + cf.rounds + ' revision rounds used. More are ' + this.money(qt.perRound) + ' each.');
+    }
+    if (stage === 'delivered' && d.delivered) {
+      const n = since(d.delivered), bal = Math.max(0, total - dep);
+      if (bal > 0) add(n >= 7 ? 'due' : 'soon', 'Collect the balance of ' + this.money(bal) + (n >= 7 ? '. Delivered ' + days(n) + ' ago.' : ', due on delivery.'));
+    }
+    if ((stage === 'delivered' || stage === 'paid') && d.delivered && cf.fix > 0) {
+      const end = this.addDays(d.delivered, cf.fix), left = this.daysBetween(today, end);
+      if (left >= 0 && left <= 7) add('info', 'Free fixes end ' + when(left, end) + '.');
+    }
+    const rank = { due: 0, soon: 1, info: 2 };
+    return out.sort((x, y) => rank[x.lvl] - rank[y.lvl]);
+  }
+
+  // Connectors (Gmail, Google Calendar) through the page's mcp capability.
+  async loadConn() {
+    const mcp = await this.cap('mcp');
+    if (this.dead) return;
+    if (!mcp) { this.setState({ conn: null }); return; }
+    try {
+      const res = await mcp.listTools(), m = {};
+      this.fileArgs = !!res.fileArgs;
+      (res.servers || []).forEach(sv => { m[sv.server] = sv.authStatus === 'connected' || sv.authStatus === 'needs_reauth' ? sv.authStatus : 'unknown'; });
+      this.setState({ conn: m });
+    } catch (e) { this.setState({ conn: {} }); }
+  }
+  // Error copy per code. Writes are never retried on their own: a timeout
+  // can still have gone through, so the copy says where to check first.
+  connErr(e, server, where) {
+    const c = e && e.code;
+    if (c === 'needs_reauth') return 'Reconnect ' + server + ' in claude.ai Settings → Connectors, then try again.';
+    if (c === 'server_not_connected' || c === 'server_not_found') return 'Add ' + server + ' in claude.ai Settings → Connectors, then try again.';
+    if (c === 'selection_required') return 'You have more than one ' + server + ' account connected. Pick one when claude.ai asks, then try again.';
+    if (c === 'approval_required' || c === 'consent_required') return 'This needs your OK. Try again and choose Allow when claude.ai asks.';
+    if (c === 'not_in_manifest') return server + ' is turned off for this page. Turn it on from the page’s Permissions, then try again.';
+    if (c === 'blocked_by_policy') return 'Your organization doesn’t allow ' + server + ' here.';
+    if (c === 'tool_error') return server + ' said no: ' + String(e.message || 'no reason given').slice(0, 200);
+    if (c === 'rate_limited') return 'Too many requests at once. Wait a few seconds and try again.';
+    if (c === 'not_granted' || c === 'capability_disabled' || c === 'capability_removed') return server + ' isn’t available in this view.';
+    return server + ' didn’t answer in time. It may still have gone through, so check ' + where + ' before you try again.';
+  }
+  docName(kind) {
+    const info = (this.state.a || {}).client || {}, who = (info.business || info.name || '').replace(/[^\w\- ]+/g, '').trim() || 'client';
+    return (kind === 'brief' ? 'Brief' : 'Proposal') + ' - ' + who;
+  }
+  ATTACH_LINE = { brief: 'The full brief is attached as a PDF.', proposal: 'The full proposal is attached as a PDF, ready to sign.' };
+  openMail = kind => {
+    const d = (this.mailDrafts || {})[kind];
+    if (!d) return;
+    this.setState({ mail: { kind, to: d.to, subject: d.subject, body: d.body, attach: true, busy: '', err: '', done: '' } });
+  };
+  editMail = patch => this.setState(s => s.mail ? { mail: { ...s.mail, ...patch } } : null);
+  toggleAttach = () => this.setState(s => {
+    const m = s.mail; if (!m) return null;
+    const line = this.ATTACH_LINE[m.kind], lines = m.body.split('\n'), at = lines.indexOf(line);
+    if (m.attach && at >= 0) lines.splice(at, 1);
+    else if (!m.attach && at < 0) lines.splice(Math.min(3, lines.length), 0, line);
+    return { mail: { ...m, attach: !m.attach, body: lines.join('\n') } };
+  });
+  copyMail = () => {
+    const m = this.state.mail; if (!m) return;
+    const txt = (m.to ? 'To: ' + m.to + '\n' : '') + 'Subject: ' + m.subject + '\n\n' + m.body;
+    const ok = () => this.editMail({ done: 'copied', err: '' });
+    try { navigator.clipboard.writeText(txt).then(ok, () => this.setState({ mail: null, copyBox: { text: txt } })); } catch (e) { this.setState({ mail: null, copyBox: { text: txt } }); }
+  };
+  blobB64 = blob => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.onerror = () => rej(fr.error); fr.readAsDataURL(blob); });
+  sendMail = async asDraft => {
+    const m = this.state.mail;
+    if (!m || m.busy) return;
+    const to = m.to.split(/[,;\s]+/).map(x => x.trim()).filter(Boolean), bad = to.find(x => !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x));
+    if (!asDraft && !to.length) { this.editMail({ err: 'Add the email address it goes to.' }); return; }
+    if (bad) { this.editMail({ err: 'Check this address: ' + bad }); return; }
+    this.editMail({ busy: asDraft ? 'draft' : 'send', err: '', done: '' });
+    const fail = err => this.editMail({ busy: '', err });
+    const mcp = await this.cap('mcp');
+    if (!mcp) { fail('Sending from Gmail works in the published hub. Copy the email instead.'); return; }
+    const input = { to, subject: m.subject, body: m.body };
+    if (m.attach) {
+      let blob;
+      try { blob = await this.makePdf(m.kind); } catch (e) { fail('Couldn’t make the PDF here. Untick “Attach the PDF” to send without it.'); return; }
+      const name = this.docName(m.kind) + '.pdf';
+      if (!this.fileArgs && blob.size >= 700000) { try { blob = await this.makePdf(m.kind, true); } catch (e) {} }
+      if (this.fileArgs) input.attachments = [{ content: { $file: { data: blob, name, type: 'application/pdf' } }, filename: name, mimeType: 'application/pdf' }];
+      else if (blob.size < 700000) input.attachments = [{ content: await this.blobB64(blob), filename: name, mimeType: 'application/pdf' }];
+      else { fail('The PDF is too big to attach from here. Untick “Attach the PDF”, then attach the downloaded file in Gmail.'); return; }
+    }
+    try {
+      await mcp.callTool('Gmail', asDraft ? 'create_draft' : 'send_message', input);
+    } catch (e) { fail(this.connErr(e, 'Gmail', asDraft ? 'your Gmail drafts' : 'your Sent folder')); return; }
+    if (asDraft) { this.editMail({ busy: '', done: 'draft' }); return; }
+    this.markSent(m.kind);
+    this.setState({ mail: null });
+    this.showToast('Sent to ' + to.join(', ') + '.');
+  };
+  calEvents(e, cf) {
+    const a = e.a || {}, t = a.track || {}, ci = a.client || {}, who = ci.business || ci.name || 'Client', have = t.cal || [];
+    if (!t.kickoff) return [];
+    return this.estOf(a, cf).r.timeline.filter(x => x.date).map(x => ({ key: x.date + '|' + x.what, date: x.date, what: x.what, title: who + ': ' + x.what })).filter(x => !have.includes(x.key));
+  }
+  addCal = async () => {
+    const c = this.state.cal;
+    if (!c || c.busy) return;
+    const e = this.clientRows().find(x => x.id === c.id), evs = e ? this.calEvents(e, this.cfg()) : [];
+    if (!evs.length) { this.setState({ cal: null }); return; }
+    this.setState({ cal: { ...c, busy: true, err: '' } });
+    const mcp = await this.cap('mcp');
+    if (!mcp) { this.setState({ cal: { ...c, busy: false, err: 'Adding to Google Calendar works in the published hub.' } }); return; }
+    const done = [];
+    let failed = null;
+    for (const ev of evs) {
+      try {
+        await mcp.callTool('Google Calendar', 'create_event', { summary: ev.title, startTime: ev.date + 'T00:00:00', endTime: this.addDays(ev.date, 1) + 'T00:00:00', allDay: true, availability: 'AVAILABILITY_FREE', description: 'From the ' + this.cfg().studio + ' Design Hub timeline.' });
+        done.push(ev.key);
+      } catch (err) { failed = err; break; }
+    }
+    if (done.length) this.setTrack(e.id, t => ({ ...t, cal: [...(t.cal || []), ...done].slice(-60) }));
+    if (failed) { this.setState({ cal: { ...c, busy: false, err: (done.length ? 'Added ' + done.length + ' of ' + evs.length + '. ' : '') + this.connErr(failed, 'Google Calendar', 'your calendar') } }); return; }
+    this.setState({ cal: null });
+    this.showToast('Added ' + done.length + (done.length === 1 ? ' date' : ' dates') + ' to Google Calendar.');
+  };
+
+  // PDFs: html2pdf (html2canvas + jsPDF), loaded the first time it's needed.
+  PDF_JS = ['https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js', 'https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'];
+  // Light tokens as plain colors: html2canvas can't read color-mix().
+  PDF_VARS = '--color-bg:#ffffff;--color-surface:#f1ece3;--color-text:#15121c;--color-accent:#241773;--color-accent-2:#c79a2c;--color-gold:#c79a2c;--color-gold-text:#7d611c;--color-divider:rgba(21,18,28,0.16);'
+    + '--color-neutral-100:#f6f3ec;--color-neutral-200:#ebe6dc;--color-neutral-300:#d9d3c6;--color-neutral-400:#bab3a5;--color-neutral-500:#9a9386;--color-neutral-600:#7b756a;--color-neutral-700:#5c574f;--color-neutral-800:#403c36;--color-neutral-900:#2a2723;'
+    + '--color-accent-100:#ecebf6;--color-accent-200:#d9d5ee;--color-accent-300:#bdb5e0;--color-accent-400:#9488c9;--color-accent-500:#6a5cae;--color-accent-600:#3b2c94;--color-accent-700:#241773;--color-accent-800:#1c125c;--color-accent-900:#140d42;'
+    + '--color-accent-2-100:#f6eedb;--color-accent-2-800:#5e4815;--color-warn-bg:#fbeee0;--color-warn-text:#7a3d0c;--shadow-sm:none;--shadow-md:none;--shadow-lg:none;';
+  loadPdfLib() {
+    if (window.html2pdf) return Promise.resolve(window.html2pdf);
+    if (!this.pdfLib) {
+      const tryAt = i => new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = this.PDF_JS[i]; s.async = true;
+        s.onload = () => window.html2pdf ? res(window.html2pdf) : rej(new Error('html2pdf missing'));
+        s.onerror = () => { s.remove(); i + 1 < this.PDF_JS.length ? tryAt(i + 1).then(res, rej) : rej(new Error('html2pdf failed to load')); };
+        document.head.appendChild(s);
+      });
+      this.pdfLib = tryAt(0).catch(e => { this.pdfLib = null; throw e; });
+    }
+    return this.pdfLib;
+  }
+  async makePdf(kind, small) {
+    const src = (kind === 'brief' ? this.briefRef : this.propRef).current;
+    if (!src) throw new Error('nothing to render');
+    const lib = await this.loadPdfLib(), cf = this.cfg(), label = kind === 'brief' ? 'Brief' : 'Proposal';
+    const info = (this.state.a || {}).client || {}, who = info.business || info.name || 'New client';
+    try { await document.fonts.ready; } catch (e) {}
+    // html2pdf copies `sheet` into its own page-width container, so the sheet
+    // carries its own tokens and is never added to the page.
+    const sheet = document.createElement('div');
+    sheet.style.cssText = 'background:#ffffff;color:#15121c;font-family:var(--font-body);font-size:15px;line-height:1.55;' + this.PDF_VARS;
+    sheet.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:0 0 18px"><svg width="30" height="30" viewBox="-4 0 108 100" aria-hidden="true"><path fill="#c79a2c" d="M-1.36 46 L50 6.31 L101.36 46 L86.64 46 L50 17.69 L13.36 46 Z"></path><rect fill="#241773" x="22" y="52" width="11" height="44"></rect><rect fill="#241773" x="67" y="52" width="11" height="44"></rect><rect fill="#241773" x="22" y="69" width="56" height="9"></rect></svg>'
+      + '<span style="font-family:var(--font-heading);font-weight:700;font-size:22px;letter-spacing:0.02em;color:#241773">' + this.esc(cf.studio) + '</span></div>';
+    const clone = src.cloneNode(true);
+    clone.querySelectorAll('[data-noprint]').forEach(n => n.remove());
+    clone.querySelectorAll('.print-only').forEach(n => n.classList.remove('print-only'));
+    clone.querySelectorAll('.corner').forEach(n => n.remove());
+    clone.classList.remove('blueprint');
+    clone.style.border = '0'; clone.style.padding = '0';
+    sheet.appendChild(clone);
+    const worker = lib().set({ margin: [14, 14, 16, 14], image: { type: 'jpeg', quality: small ? 0.72 : 0.92 }, html2canvas: { scale: small ? 1.25 : 2, backgroundColor: '#ffffff', useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all', 'css'] } }).from(sheet).toPdf();
+    const pdf = await worker.get('pdf'), n = pdf.internal.getNumberOfPages(), w = pdf.internal.pageSize.getWidth(), h = pdf.internal.pageSize.getHeight();
+    pdf.setProperties({ title: label + ' · ' + who, author: cf.studio });
+    for (let i = 1; i <= n; i++) { pdf.setPage(i); pdf.setFontSize(8); pdf.setTextColor(92, 87, 79); pdf.text(cf.studio + '  ·  ' + label + ' for ' + who + '  ·  ' + i + ' of ' + n, w / 2, h - 7, { align: 'center' }); }
+    return pdf.output('blob');
+  }
+  savePdf = async kind => {
+    if (this.state.pdfBusy) return;
+    this.setState({ pdfBusy: kind });
+    let blob;
+    try { blob = await this.makePdf(kind); } catch (e) {
+      this.setState({ pdfBusy: '' });
+      this.showToast('Couldn’t make a PDF here, so this is the page as HTML. Open it and print to PDF.');
+      return this.saveDoc(kind);
+    }
+    this.setState({ pdfBusy: '' });
+    const filename = this.docName(kind) + '.pdf', dl = await this.cap('downloads');
+    if (dl) {
+      try { await dl.save({ filename, data: blob }); this.showToast('PDF saved.'); }
+      catch (e) { if (!e || e.code !== 'declined') this.showToast('Couldn’t save the file here.'); }
+      return;
+    }
+    try {
+      const url = URL.createObjectURL(blob), link = document.createElement('a');
+      link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch (e) { this.showToast('Couldn’t save the file here.'); }
+  };
+
   // Settings and the price list. Saved settings override these defaults.
   DEF = { studio: 'Housemade Studio', email: '', bookingUrl: '', payUrl: '', rounds: 2, dep: 50, fix: 30, valid: 14, hourly: 75, rush: 25, rushHard: 50, bundle: 10, roundPct: 15, roundMin: 75, perPage: 75, perFormat: 25, showTips: true, showMarket: false };
   TIERS = [['s', 'Simple'], ['m', 'Standard'], ['c', 'Complex']];
@@ -1328,7 +1760,7 @@ class Component extends DCLogic {
     const total = Math.max(0, work + extras.reduce((x, e) => x + e.amount, 0));
     const rt = tierOf('retainer'), retainer = sp.ongoing ? { t: rt, amount: cf.prices.retainer[T[rt]] } : null;
     const band = this.BANDS[a.budget], fit = band && lines.length ? (total > band[1] ? 'over' : total < band[0] ? 'under' : 'fits') : '';
-    return { lines, work, extras, total, dep: total * cf.dep / 100, retainer, fit };
+    return { lines, work, extras, total, dep: total * cf.dep / 100, retainer, fit, perRound: Math.max(cf.roundMin, Math.round(work * cf.roundPct / 100)) };
   }
   chatPlans = [];
   meOpen(hh) { this.setState(s => ({ tab: 'me', showSaved: false, meRec: hh.rec, meText: hh.text || '', meA: hh.ans || {}, meCur: hh.id, meErr: '', meStep: 'plan', meSeen: hh.fromChat ? { ...(s.meSeen || {}), [hh.id]: hh.at || Date.now() } : s.meSeen })); window.scrollTo({ top: 0 }); }
@@ -1337,20 +1769,29 @@ class Component extends DCLogic {
       const c = this.chatPlans.find(x => x.id === this.state.meCur), o = (this.state.meOver || {})[this.state.meCur];
       if (c && (!o || (o.at || 0) < c.at)) this.setState({ meRec: c.rec, meA: c.ans || this.state.meA || {} }); }).catch(() => {});
     const st = this.state;
-    if (this.hasContent(st.a) && !(st.saved || []).some(x => x.id === st.cur)) this.setState({ saved: [{ id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() }, ...(st.saved || [])] });
+    if (this.hasContent(st.a) && !(st.saved || []).some(x => x.id === st.cur)) this.setState({ saved: [this.entryOf(st), ...(st.saved || [])] });
+    this.lastA = this.state.a; this.lastCur = this.state.cur;
     this.connect();
+    this.loadConn();
+    this.onKey = e => { if (e.key === 'Escape' && ((this.state.mail && !this.state.mail.busy) || (this.state.cal && !this.state.cal.busy))) this.setState({ mail: null, cal: null }); };
+    window.addEventListener('keydown', this.onKey);
   }
-  componentWillUnmount() { this.dead = true; this.unsubs.forEach(u => { try { u(); } catch (e) {} }); }
-  componentDidUpdate(pp, ps) {
-    const st = this.state;
+  componentWillUnmount() { this.dead = true; window.removeEventListener('keydown', this.onKey); this.unsubs.forEach(u => { try { u(); } catch (e) {} }); }
+  TRANSIENT = ['saved', 'toast', 'copyBox', 'confirmDel', 'navMore', 'setDraft', 'store', 'mail', 'cal', 'conn', 'trackOver', 'noteDraft', 'pendingMail', 'pdfBusy'];
+  // The runtime passes only prevProps here, so the last answers are kept on
+  // the instance to spot an edit (opening another intake isn't one).
+  componentDidUpdate() {
+    const st = this.state, changed = this.lastA !== st.a && this.lastCur === st.cur;
+    this.lastA = st.a; this.lastCur = st.cur;
     if (st.tab === 'brief' && !st.seenBrief) this.setState({ seenBrief: true });
     if (st.tab === 'proposal' && !st.seenProp) this.setState({ seenProp: true });
-    if (ps && ps.a !== st.a && this.hasContent(st.a)) {
-      const entry = { id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() };
+    if (st.pendingMail) { const k = st.pendingMail; this.setState({ pendingMail: null }); this.openMail(k); }
+    if (changed && this.hasContent(st.a)) {
+      const entry = this.entryOf(st);
       if (this.db) this.put('intakes/' + st.cur, this.clean(entry), 700);
-      else { const rest = (st.saved || []).filter(x => x.id !== st.cur); this.setState({ saved: [entry, ...rest].slice(0, 40) }); }
+      else { const rest = (st.saved || []).filter(x => x.id !== st.cur); this.setState({ saved: [entry, ...rest].slice(0, 60) }); }
     }
-    try { const { saved, toast, copyBox, confirmDel, navMore, setDraft, store, ...cur } = st; localStorage.setItem(this.KEY, JSON.stringify(cur)); if (!this.db) localStorage.setItem(this.KEY_SAVED, JSON.stringify(saved || [])); } catch (e) {}
+    try { const cur = { ...st }; this.TRANSIENT.forEach(k => delete cur[k]); localStorage.setItem(this.KEY, JSON.stringify(cur)); if (!this.db) localStorage.setItem(this.KEY_SAVED, JSON.stringify(st.saved || [])); } catch (e) {}
   }
 
   GROUPS = [['start', 'Start or change'], ['customers', 'Get customers'], ['money', 'Raise money and report'], ['run', 'Run the business']];
@@ -1711,7 +2152,7 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
       }
     };
   }
-  TABS = [['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal'], ['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats'], ['looks', 'Looks'], ['me', 'For me'], ['settings', 'Settings']];
+  TABS = [['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal'], ['clients', 'Clients'], ['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats'], ['looks', 'Looks'], ['me', 'For me'], ['settings', 'Settings']];
 
   CORE = ['client', 'type', 'goal', 'use', 'needs', 'host', 'brand', 'when', 'budget'];
   FEAT = ['launch', 'rebrand', 'found', 'book', 'pitch', 'report', 'organize', 'onboard'];
@@ -1776,17 +2217,20 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
   money = n => '$' + Math.round(n).toLocaleString('en-US');
   num = v => parseFloat(String(v || '').replace(/[^0-9.]/g, '')) || 0;
   span(ids, wd) { let lo = 0, hi = 0; ids.forEach(f => { const d = this.F[f].days || [0, 0], m = this.F[f].lane === 'make'; lo += d[0] + (m ? wd[0] : 0); hi += d[1] + (m ? wd[1] : 0); }); return [lo, hi]; }
+  // Working days from kickoff. With a kickoff date set, each step gets a real date.
   timeline(prepIds, make, shipIds, wd, ongoing, o) {
     const F = this.F, mid = f => Math.ceil((F[f].days[0] + F[f].days[1]) / 2), wk = d => 'Week ' + Math.max(1, Math.ceil(d / 5));
-    if (!make.length) return [{ when: '—', what: 'Set once the path is clear', dot: 'transparent' }];
-    const tl = [[wk(1), 'Kickoff call and deposit', true]]; let t = 1;
-    prepIds.forEach(id => { t += mid(id); tl.push([wk(t), F[id].name + ' approved', false]); });
+    if (!make.length) return [{ when: '—', what: 'Set once the path is clear', dot: 'transparent', date: '' }];
+    const tl = [[1, 'Kickoff call and deposit', true]]; let t = 1;
+    prepIds.forEach(id => { t += mid(id); tl.push([t, F[id].name + ' approved', false]); });
     const mk = make.reduce((x, f) => x + mid(f) + wd[1], 0);
-    tl.push([wk(t + Math.ceil(mk * 0.6)), 'First drafts: ' + make.map(f => F[f].name).join(', '), false]);
-    tl.push([wk(t + Math.ceil(mk * 0.85)), 'Revisions, up to ' + o.rounds + ' rounds', false]);
-    t += mk; tl.push([wk(t), 'Final files delivered' + (shipIds.length ? ': ' + shipIds.map(x => F[x].name).join(', ') : ''), true]);
-    if (ongoing) tl.push(['Monthly', 'New posts, emails and updates on retainer', false]);
-    return tl.map(([when, what, key]) => ({ when, what, dot: key ? 'var(--color-accent)' : 'transparent' }));
+    tl.push([t + Math.ceil(mk * 0.6), 'First drafts: ' + make.map(f => F[f].name).join(', '), false]);
+    tl.push([t + Math.ceil(mk * 0.85), 'Revisions, up to ' + o.rounds + ' rounds', false]);
+    t += mk; tl.push([t, 'Final files delivered' + (shipIds.length ? ': ' + shipIds.map(x => F[x].name).join(', ') : ''), true, true]);
+    const out = tl.map(([d, what, key, final]) => { const date = o.kickoff ? this.addWorkdays(o.kickoff, d - 1) : '';
+      return { when: date ? this.fmtDate(date) : wk(d), date, what, final: !!final, dot: key ? 'var(--color-accent)' : 'transparent' }; });
+    if (ongoing) out.push({ when: 'Monthly', date: '', what: 'New posts, emails and updates on retainer', dot: 'transparent' });
+    return out;
   }
   visibleQs(a, r, mode) {
     const has = f => r.make.some(x => x.id === f);
@@ -1924,11 +2368,90 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     if (el) { const rc = el.getBoundingClientRect(); if (rc.top > window.innerHeight * 0.6) window.scrollTo({ top: rc.top + window.scrollY - 16, behavior: 'smooth' }); }
   };
 
+  clientVals(cf, tab) {
+    const st = this.state, today = this.today(), I = this.STAGE_IDX, money = this.money;
+    const rows = this.clientRows().map(e => {
+      const a = e.a || {}, t = a.track || {}, stage = this.STAGE_IDX[t.stage] !== undefined ? t.stage : 'lead', { sp, qt } = this.estOf(a, cf);
+      return { e, a, t, stage, sp, qt, total: t.quote ? t.quote.total : qt.total, dep: t.quote ? t.quote.dep : Math.round(qt.dep), rem: this.remind(e, cf, today) };
+    });
+    const nameOf = a => { const ci = a.client || {}; return ci.business || ci.name || 'Untitled client'; };
+    const isOpen = x => x.stage !== 'paid' && x.stage !== 'lost', urgent = x => x.rem.filter(rm => rm.lvl !== 'info');
+    const openEntry = (e, to, mailKind) => { this.setState({ a: e.a, mode: e.mode || 'quick', pos: e.pos || 'start', cur: e.id, tab: to, showSaved: false, seenBrief: false, seenProp: false, pendingMail: mailKind || null }); window.scrollTo({ top: 0 }); };
+    const move = (x, stage) => this.setTrack(x.e.id, t => this.withStage(t, stage, true));
+    const show = x => { if (!inF(x)) this.setState({ clFilter: 'all' }); setTimeout(() => { const el = document.getElementById('client-' + x.e.id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' }); }, 60); };
+    const nextOf = x => {
+      if (x.stage === 'lead') return x.qt.lines.length ? ['Email the brief', () => openEntry(x.e, 'brief', 'brief')] : ['Finish the intake', () => openEntry(x.e, 'intake')];
+      if (x.stage === 'brief') return ['Email the proposal', () => openEntry(x.e, 'proposal', 'proposal')];
+      if (x.stage === 'lost') { const back = this.STAGES.map(([id]) => id).filter(id => id !== 'lost' && (x.t.dates || {})[id]).pop() || 'lead'; return ['Reopen', () => move(x, back)]; }
+      const to = { proposal: ['Mark booked', 'booked'], booked: ['Start the work', 'active'], active: ['Mark delivered', 'delivered'], delivered: ['Mark paid in full', 'paid'] }[x.stage];
+      return to ? [to[0], () => move(x, to[1])] : null;
+    };
+    const LBL = { due: ['Now', 'tag-warn'], soon: ['Soon', 'tag-gold'], info: ['Note', 'tag-outline'] }, rank = { due: 0, soon: 1, info: 2 };
+    const due = rows.flatMap(x => urgent(x).map(rm => ({ x, rm }))).sort((p, q) => rank[p.rm.lvl] - rank[q.rm.lvl]);
+    const flt = st.clFilter || 'open', inF = x => flt === 'all' || (flt === 'open' ? isOpen(x) : x.stage === flt);
+    const list = rows.filter(inF).sort((p, q) => (rank[(p.rem[0] || {}).lvl] ?? 3) - (rank[(q.rem[0] || {}).lvl] ?? 3) || (q.e.at || 0) - (p.e.at || 0));
+    const add = xs => xs.reduce((n, x) => n + x.total, 0);
+    const out = rows.filter(x => x.stage === 'proposal'), booked = rows.filter(x => x.stage === 'booked' || x.stage === 'active'), owed = rows.filter(x => ['booked', 'active', 'delivered'].includes(x.stage));
+    const unpaid = rows.filter(x => x.stage === 'delivered'), nowN = due.filter(d => d.rm.lvl === 'due').length;
+    const calOn = st.conn !== null, F = this.F;
+    const cards = list.map(x => {
+      const { e, a, t, stage, sp, qt } = x, ci = a.client || {}, id = e.id, d = t.dates || {}, nx = nextOf(x);
+      const hist = this.STAGES.filter(([sid]) => sid !== 'lead' && d[sid]).map(([sid, label]) => label.replace(' sent', '') + ' ' + this.fmtDate(d[sid])).join(' · ');
+      const evs = t.kickoff && (stage === 'booked' || stage === 'active') ? this.calEvents(e, cf) : null;
+      const draft = (st.noteDraft || {})[id];
+      return { domId: 'client-' + id, name: nameOf(a), sub: [ci.business ? ci.name : '', ci.contact].filter(Boolean).join(' · ') || 'No contact details yet',
+        stage, stageName: this.STAGES[I[stage]][1], stageTag: this.STAGE_TAG[stage],
+        stageOpts: this.STAGES.map(([sid, label]) => ({ id: sid, label })),
+        onStage: ev => { const v = ev.target.value; this.setTrack(id, tr => this.withStage(tr, v, true)); },
+        bar: this.STAGES.slice(0, 7).map(([sid]) => ({ bg: stage === 'lost' ? 'var(--color-divider)' : sid === stage ? 'var(--color-text)' : I[sid] < I[stage] ? 'var(--color-accent)' : 'var(--color-divider)' })),
+        facts: [
+          ['Price', qt.lines.length || t.quote ? money(x.total) + (t.quote ? ' quoted' : ' estimate') + ' · ' + money(x.dep) + ' deposit' : 'Not priced yet'],
+          ...(sp.make.length ? [['Work', sp.make.map(f => F[f].name).join(', ') + ' · ' + sp.turn]] : []),
+          ...(t.kickoff ? [['Kickoff', this.fmtDate(t.kickoff, true)]] : []),
+          ...(hist ? [['So far', hist]] : [])
+        ].map(([k, v]) => ({ k, v })),
+        hasRem: x.rem.length > 0, rem: x.rem.map(rm => ({ text: rm.text, label: LBL[rm.lvl][0], tag: LBL[rm.lvl][1] })),
+        showKick: ['proposal', 'booked', 'active', 'delivered'].includes(stage), kickoff: t.kickoff || '',
+        onKickoff: ev => { const v = ev.target.value; this.setTrack(id, tr => ({ ...tr, kickoff: /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '' })); },
+        showRounds: stage === 'active' || stage === 'delivered', rounds: String(t.rounds || 0), roundsLabel: 'Rounds used of ' + cf.rounds,
+        roundInc: () => this.setTrack(id, tr => ({ ...tr, rounds: Math.min(20, (tr.rounds || 0) + 1) })), roundDec: () => this.setTrack(id, tr => ({ ...tr, rounds: Math.max(0, (tr.rounds || 0) - 1) })),
+        note: draft !== undefined ? draft : t.note || '',
+        onNote: ev => { const v = ev.target.value; this.setState(s2 => ({ noteDraft: { ...(s2.noteDraft || {}), [id]: v } })); },
+        saveNote: () => { const v = ((this.state.noteDraft || {})[id]); if (v === undefined) return; this.setState(s2 => { const nd = { ...(s2.noteDraft || {}) }; delete nd[id]; return { noteDraft: nd }; }); if (v.trim() !== (t.note || '')) this.setTrack(id, tr => ({ ...tr, note: v.trim().slice(0, 300) })); },
+        hasNext: !!nx, nextLabel: nx ? nx[0] : '', next: nx ? nx[1] : () => {},
+        open: () => openEntry(e, qt.lines.length ? 'brief' : 'intake'),
+        canCal: calOn && !!evs, calDone: !!evs && !evs.length, calLabel: evs && evs.length ? 'Add ' + evs.length + (evs.length === 1 ? ' date' : ' dates') + ' to Calendar' : 'On your calendar ✓',
+        cal: () => this.setState({ cal: { id, busy: false, err: '' } }),
+        canLose: isOpen(x), loseLabel: st.confirmDel === 'l:' + id ? 'Tap to confirm' : 'Mark lost', lose: () => this.confirmThen('l:' + id, () => move(x, 'lost')) };
+    });
+    const c = st.cal, ce = c && rows.find(x => x.e.id === c.id), evs = ce ? this.calEvents(ce.e, cf) : [];
+    return {
+      clientsTab: { go: () => { this.setState({ tab: 'clients', navMore: false }); window.scrollTo({ top: 0 }); }, bd: tab === 'clients' ? 'var(--color-accent)' : 'transparent', col: tab === 'clients' ? 'var(--color-text)' : 'var(--color-neutral-700)', hasDue: due.length > 0, dueN: String(due.length), dueAria: due.length + ' need you' },
+      cl: {
+        tiles: [
+          { label: 'Needs you', value: String(due.length), sub: due.length ? nowN + ' now, ' + (due.length - nowN) + ' soon' : 'All clear' },
+          { label: 'Proposals out', value: money(add(out)), sub: out.length + (out.length === 1 ? ' proposal' : ' proposals') + ' waiting on a yes' },
+          { label: 'Booked work', value: money(add(booked)), sub: booked.length + ' booked or in progress' },
+          { label: 'Balance to collect', value: money(owed.reduce((n, x) => n + Math.max(0, x.total - x.dep), 0)), sub: unpaid.length ? unpaid.length + ' delivered, not paid in full' : 'Due on delivery' }
+        ],
+        hasDue: due.length > 0,
+        due: due.slice(0, 12).map(({ x, rm }) => { const nx = (x.stage === 'lead' || x.stage === 'brief') && nextOf(x); return { who: nameOf(x.a), text: rm.text, label: LBL[rm.lvl][0], tag: LBL[rm.lvl][1], goLabel: nx ? nx[0] : 'Show', go: nx ? nx[1] : () => show(x) }; }),
+        filters: [['open', 'Open', rows.filter(isOpen).length], ['paid', 'Paid', rows.filter(x => x.stage === 'paid').length], ['lost', 'Lost', rows.filter(x => x.stage === 'lost').length], ['all', 'All', rows.length]].map(([fid, label, n]) => { const on = flt === fid;
+          return { label: label + ' (' + n + ')', pressed: on ? 'true' : 'false', go: () => this.setState({ clFilter: fid }), bd: on ? 'var(--color-accent)' : 'var(--color-divider)', bg: on ? 'var(--color-accent-100)' : 'transparent', col: on ? 'var(--color-accent-800)' : 'var(--color-text)' }; }),
+        isEmpty: !cards.length, emptyNote: rows.length ? 'No clients in this list.' : 'No clients yet. Start an intake on a call; once it has a name or a goal, it shows here.',
+        list: cards
+      },
+      cal: ce && evs.length ? { open: true, sub: nameOf(ce.a) + ': ' + evs.length + ' all-day ' + (evs.length === 1 ? 'event' : 'events') + ' from the timeline, shown as free time so they don’t block your day.',
+        events: evs.map(ev => ({ when: this.fmtDate(ev.date, true), what: ev.what })), hasErr: !!c.err, err: c.err || '', busy: !!c.busy,
+        addLabel: c.busy ? 'Adding…' : 'Add ' + evs.length + (evs.length === 1 ? ' date' : ' dates'), add: this.addCal, close: () => { if (!c.busy) this.setState({ cal: null }); } } : { open: false }
+    };
+  }
+
   renderVals() {
     const { Q, F, P } = this, a = this.state.a || {}, tab = this.state.tab, mode = this.state.mode || 'quick';
     const cf = this.cfg(), showTips = cf.showTips, dim = cf.dim, showMarket = cf.showMarket;
     const studio = cf.studio, email = cf.email, bookingUrl = cf.bookingUrl, validDays = cf.valid;
-    const o = { rounds: cf.rounds, dep: cf.dep, fix: cf.fix, hourly: cf.hourly };
+    const o = this.opts(cf, a);
     const r = this.rec(a, o), guide = this.guide(r, a, o);
     const V = this.visibleQs(a, r, mode), ids = V.map(x => x.id);
     let pos = this.state.pos || 'start';
@@ -2000,15 +2523,14 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
       hasNotes: !!(a.notes && a.notes.trim()), notes: a.notes || ''
     };
     const PK = { essential: ['Essential', 'The core piece, to start fast.'], full: ['Full', 'Everything recommended, planned together.'] };
-    const pkItems = pk => [...pk.prep, ...pk.make, ...pk.ship].map(id => F[id].name).concat(pk.ongoing ? ['Then a monthly retainer'] : []);
+    const pkItems = this.pkItems;
     const pkgs = ['essential', 'full'].map(k => { const pk = r.pkgs[k], on = r.pkgSel === k; return { name: PK[k][0], line: PK[k][1], on, go: () => this.setA('pkg', k), turn: pk.turn, items: pkItems(pk), bd: on ? 'var(--color-accent)' : 'var(--color-divider)', sh: on ? 'inset 0 0 0 1px var(--color-accent)' : 'none', bg: on ? 'var(--color-accent-100)' : 'transparent' }; });
-    const showPkgs = r.make.length > 0 && pkItems(r.pkgs.essential).join() !== pkItems(r.pkgs.full).join();
-    const sp = showPkgs ? r.pkgs[r.pkgSel] : r.pkgs.full;
-    const to = (info.contact || '').includes('@') ? info.contact.trim() : '';
+    const { showPkgs, sp } = this.pickPkg(r);
+    const to = this.emailOf(a);
     const hi = info.name ? 'Hi ' + info.name.trim().split(' ')[0] + ',' : 'Hi,';
     const sign = ['', '— ' + studio + (email ? ' · ' + email : '') + (bookingUrl ? '\n' + bookingUrl : '')];
-    const mailText = (subj, lines) => (to ? 'To: ' + to + '\n' : '') + 'Subject: ' + subj + '\n\n' + lines.join('\n');
-    const briefEmail = mailText('Project brief: ' + b.business, [hi, '', 'Thanks for the call. Here is a summary of the brief.', '',
+    const mailText = (subject, lines) => ({ to, subject, body: lines.join('\n') });
+    const briefEmail = mailText('Project brief: ' + b.business, [hi, '', 'Thanks for the call. Here is a summary of the brief.', this.ATTACH_LINE.brief, '',
       'Goal: ' + b.facts[0].value, 'Recommended path: ' + pkItems(sp).join(' → '), 'Look: ' + r.look.name, 'Turnaround: ' + sp.turn + ', after kickoff', '',
       'What we need from you:', ...r.supplies.map(x => '- ' + x), '', r.nextLine, ...sign]);
     const qt = this.quote(a, r, sp, cf), T = this.TIER_IDX, tierName = t => this.TIERS.find(x => x[0] === t)[1];
@@ -2037,17 +2559,21 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const ret = rt ? { price: this.money(rt.amount), tierName: tierName(rt.t), what: this.PRICES.retainer[T[rt.t]][1], tiers: this.TIERS.map(([k, label]) => ({ label: label + ' · ' + this.money(cf.prices.retainer[T[k]]), pressed: k === rt.t ? 'true' : 'false', go: () => setMap('tiers', 'retainer', k) })) } : { price: '', tierName: '', what: '', tiers: [] };
     const addons = [...r.addons];
     if (sp.make.some(f => ['website', 'flier', 'deck', 'email', 'doc'].includes(f))) addons.push('Brand photos by Pomare Portraits, quoted separately');
+    const sentOn = ((a.track || {}).dates || {}).proposal, validLine = sentOn ? 'Valid until ' + this.fmtDate(this.addDays(sentOn, validDays)) : 'Valid for ' + validDays + ' days';
+    this.mailDrafts = { brief: briefEmail };
+    this.curQuote = { total: qt.total, dep: Math.round(qt.dep) };
     const lineText = [...items.map(x => '- ' + x.name + ' (' + x.tierName + '): ' + x.amountLabel), ...qt.extras.filter(x => x.amount).map(x => '- ' + x.label + ': ' + (x.amount < 0 ? '−' : '') + this.money(Math.abs(x.amount)))];
-    const proposalEmail = mailText('Proposal: ' + b.business, [hi, '', 'Here is the proposal for ' + pkItems(sp).join(', ') + '.', '', ...lineText, '',
+    const proposalEmail = mailText('Proposal: ' + b.business, [hi, '', 'Here is the proposal for ' + pkItems(sp).join(', ') + '.', this.ATTACH_LINE.proposal, '', ...lineText, '',
       'Total: ' + this.money(qt.total), 'Deposit (' + o.dep + '%) to start: ' + this.money(qt.dep), 'Balance on delivery: ' + this.money(qt.total - qt.dep), ...(rt ? ['Then monthly: ' + ret.price + ' a month (' + ret.what + ')'] : []), '',
-      'Turnaround: ' + sp.turn + ' after kickoff. Valid for ' + validDays + ' days.', cf.payUrl ? 'Pay the deposit here to book the kickoff: ' + cf.payUrl : 'Reply to accept and I will send the deposit details.', ...sign]);
+      'Turnaround: ' + sp.turn + ' after kickoff. ' + validLine + '.', cf.payUrl ? 'Pay the deposit here to book the kickoff: ' + cf.payUrl : 'Reply to accept and I will send the deposit details.', ...sign]);
     const pr = {
       pkgName: (showPkgs ? PK[r.pkgSel][0] : 'Recommended') + ' package', pkgLine: sp.make.length ? pkItems(sp).join(' → ') + ' · ' + sp.turn + ' after kickoff' : '',
       items, extras, noItems: !items.length, subtotal: this.money(qt.total), deposit: this.money(qt.dep), balance: this.money(qt.total - qt.dep), depLabel: 'Deposit (' + o.dep + '%) to start',
-      retainer: !!rt, ret, addons: addons.length ? addons : ['None suggested'], valid: 'Valid for ' + validDays + ' days', signs: ['Client signature', 'Name', 'Date'],
+      retainer: !!rt, ret, addons: addons.length ? addons : ['None suggested'], valid: validLine, signs: ['Client signature', 'Name', 'Date'],
       hasPay: !!cf.payUrl, payUrl: cf.payUrl, budget,
-      copyEmail: () => this.copyText(proposalEmail, 'Proposal email copied. Paste it into a new email.'), copyLabel: 'Copy email', save: () => this.saveDoc('proposal')
+      email: () => this.openMail('proposal'), save: () => this.savePdf('proposal')
     };
+    this.mailDrafts.proposal = proposalEmail;
     const est = { has: qt.lines.length > 0, total: this.money(qt.total), fit: qt.fit === 'over' ? 'Over budget' : qt.fit === 'under' ? 'Under budget' : qt.fit === 'fits' ? 'Fits budget' : 'No budget given', fitTag: qt.fit === 'over' ? 'tag-warn' : qt.fit ? 'tag-accent' : 'tag-neutral' };
 
     const sel = F[this.state.sel] ? this.state.sel : 'website', n = F[sel], rowsDef = this.ROWS[n.lane];
@@ -2100,13 +2626,36 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const lid = r.look.id;
     const mv = this.meVals(tab);
     const navGo = id => { this.setState({ tab: id, navMore: false }); window.scrollTo({ top: 0 }); };
-    const refIds = ['guide', 'playbooks', 'formats', 'settings'];
+    const cv = this.clientVals(cf, tab);
+    const moreIds = ['me', 'guide', 'playbooks', 'formats', 'settings'];
     const bottomTabs = [
       ...[['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal']].map(([id, label], i) => ({ label, n: doneT[id] && tab !== id ? '✓' : String(i + 1), current: tab === id ? 'page' : undefined, go: () => navGo(id) })),
-      { label: 'Library', n: '⋯', current: refIds.includes(tab) ? 'page' : undefined, go: () => this.setState(s2 => ({ navMore: !s2.navMore })) },
-      { label: 'For me', n: mv.meTab.hasNew ? String(mv.meTab.newN) : '·', current: tab === 'me' ? 'page' : undefined, go: () => navGo('me') }
+      { label: 'Clients', n: cv.clientsTab.hasDue ? String(cv.clientsTab.dueN) : '·', current: tab === 'clients' ? 'page' : undefined, go: () => navGo('clients') },
+      { label: 'More', n: mv.meTab.hasNew ? String(mv.meTab.newN) : '⋯', current: moreIds.includes(tab) ? 'page' : undefined, go: () => this.setState(s2 => ({ navMore: !s2.navMore })) }
     ];
-    const moreSheet = { open: !!this.state.navMore, close: () => this.setState({ navMore: false }), items: [['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats & looks'], ['settings', 'Settings']].map(([id, label]) => ({ label, go: () => navGo(id) })) };
+    const moreSheet = { open: !!this.state.navMore, close: () => this.setState({ navMore: false }),
+      items: [['me', 'For me' + (mv.meTab.hasNew ? ' (' + mv.meTab.newN + ' new)' : '')], ['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats & looks'], ['settings', 'Settings']].map(([id, label]) => ({ label, go: () => navGo(id) })) };
+    const m = this.state.mail, conn = this.state.conn, gm = conn ? conn.Gmail : undefined, noMcp = conn === null;
+    const mail = m ? {
+      open: true, title: m.kind === 'brief' ? 'Email the brief' : 'Email the proposal', to: m.to, subject: m.subject, body: m.body, attach: !!m.attach,
+      fileName: this.docName(m.kind) + '.pdf', busy: !!m.busy, hasErr: !!m.err, err: m.err || '', canSend: !noMcp,
+      hasNote: noMcp || gm === 'needs_reauth' || (!!conn && !gm),
+      note: noMcp ? 'Sending from Gmail works in the published hub. Here you can copy the email instead.' : gm === 'needs_reauth' ? 'Gmail needs reconnecting: claude.ai Settings → Connectors.' : 'Gmail isn’t connected to your claude.ai account yet. Add it in Settings → Connectors, or copy the email instead.',
+      sendLabel: m.busy === 'send' ? (m.attach ? 'Making the PDF and sending…' : 'Sending…') : 'Send from Gmail', draftLabel: m.busy === 'draft' ? 'Saving…' : 'Save as draft',
+      isDone: !!m.done, doneMsg: m.done === 'draft' ? 'Saved to your Gmail drafts. Once you send it, mark it sent so Clients stays current.' : 'Copied. Paste it into a new email, then mark it sent.',
+      markLabel: m.kind === 'brief' ? 'Mark the brief sent' : 'Mark the proposal sent',
+      markSent: () => { this.markSent(m.kind); this.setState({ mail: null }); this.showToast(m.kind === 'brief' ? 'Brief marked sent.' : 'Proposal marked sent.'); },
+      close: () => { if (!m.busy) this.setState({ mail: null }); },
+      onTo: e => this.editMail({ to: e.target.value, err: '' }), onSubject: e => this.editMail({ subject: e.target.value }), onBody: e => this.editMail({ body: e.target.value }),
+      onAttach: this.toggleAttach, copy: this.copyMail, send: () => this.sendMail(false), draft: () => this.sendMail(true)
+    } : { open: false };
+    const connRow = (name, use) => { const v = conn ? conn[name] : undefined;
+      const [status, tag, help] = noMcp ? ['Online only', 'tag-neutral', 'Works in the published hub.'] : conn === undefined ? ['Checking…', 'tag-neutral', '']
+        : v === 'connected' ? ['Connected', 'tag-accent', use] : v === 'needs_reauth' ? ['Reconnect', 'tag-warn', 'Reconnect it in claude.ai Settings → Connectors.']
+        : v ? ['Ready', 'tag-outline', use + ' Asks the first time.'] : ['Not added', 'tag-neutral', 'Add it in claude.ai Settings → Connectors.'];
+      return { name, status, tag, help }; };
+    const connVals = { rows: [connRow('Gmail', 'Sends briefs and proposals with the PDF attached.'), connRow('Google Calendar', 'Adds the kickoff and timeline dates.')], canManage: !noMcp && conn !== undefined,
+      manage: async () => { const pm = await this.cap('permissions'); try { if (pm && pm.manage) await pm.manage(); else throw 0; } catch (e) { this.showToast('Open the Permissions menu at the top of this page in claude.ai.'); } this.loadConn(); } };
     const store = this.db ? 'account' : this.state.store === 'lost' ? 'lost' : 'local';
     const storeNote = store === 'account' ? 'Saved to your account, so your phone and computer see the same work. To bring in work from the old hub, press Copy backup there, then Restore here.'
       : store === 'lost' ? 'Lost the connection to your account. New work stays on this device until you reload.'
@@ -2148,9 +2697,12 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     return {
       ...mv, studio, email, hasEmail: !!email, bookingUrl, hasBooking: !!bookingUrl, noBooking: !bookingUrl,
       est, bottomTabs, moreSheet, set: setVals, storeNote, noSavedNote, hasToast: !!this.state.toast, toast: this.state.toast || '',
+      ...cv, mail, conn: connVals,
+      emailBrief: () => this.openMail('brief'), pdfBusy: { brief: this.state.pdfBusy === 'brief', proposal: this.state.pdfBusy === 'proposal' },
+      pdfLabel: { brief: this.state.pdfBusy === 'brief' ? 'Making the PDF…' : 'Download PDF', proposal: this.state.pdfBusy === 'proposal' ? 'Making the PDF…' : 'Download PDF' },
       copyBox: { open: !!this.state.copyBox, text: (this.state.copyBox || {}).text || '', close: () => this.setState({ copyBox: null }) },
       goSettings: () => goTab('settings'), briefRef: this.briefRef, propRef: this.propRef,
-      copyBriefEmail: () => this.copyText(briefEmail, 'Brief email copied. Paste it into a new email.'), copyBriefLabel: 'Copy email', saveBrief: () => this.saveDoc('brief'),
+      saveBrief: () => this.savePdf('brief'),
       callTabs: [['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal']].map(([id, label], i) => { const on = tab === id, dn = doneT[id] && !on; return { label, n: dn ? '✓' : String(i + 1), arrow: i < 2, go: () => goTab(id), bd: on ? 'var(--color-accent)' : 'transparent', col: on ? 'var(--color-text)' : 'var(--color-neutral-700)', numBg: on || dn ? 'var(--color-accent-700)' : 'transparent', numCol: on || dn ? 'var(--color-bg)' : 'var(--color-accent-700)' }; }),
       refTabs: [['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats & looks']].map(([id, label]) => ({ label, go: () => goTab(id), bd: tab === id ? 'var(--color-accent)' : 'transparent', col: tab === id ? 'var(--color-text)' : 'var(--color-neutral-700)' })),
       askList, briefRefs, hasBriefRefs: briefRefs.length > 0,

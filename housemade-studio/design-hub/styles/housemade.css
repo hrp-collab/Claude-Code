@@ -216,6 +216,29 @@ textarea.input { min-height: 90px; resize: vertical; }
 }
 @media (min-width: 721px) { .more-sheet, .sheet-backdrop { display: none !important; } }
 
+/* dialogs: email and calendar */
+.modal-backdrop { position: fixed; inset: 0; z-index: 80; background: rgba(0, 0, 0, 0.45); }
+.modal.blueprint {
+  position: fixed; z-index: 81; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(640px, calc(100vw - 32px)); max-height: calc(100vh - 48px); overflow: auto;
+  background: var(--color-bg); padding: clamp(18px, 3vw, 26px); box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.modal.blueprint > .corner.tl { top: 5px; left: 5px; }
+.modal.blueprint > .corner.tr { top: 5px; right: 5px; }
+.modal.blueprint > .corner.bl { bottom: 5px; left: 5px; }
+.modal.blueprint > .corner.br { bottom: 5px; right: 5px; }
+@media (max-width: 720px) {
+  .modal.blueprint {
+    top: auto; bottom: 0; transform: translateX(-50%); width: 100vw; max-height: 92vh;
+    border-width: 2px 0 0; border-color: var(--color-gold);
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* html2pdf lays the page out in an overlay while it draws; keep it out of sight */
+.html2pdf__overlay { clip-path: inset(100%); }
+
 /* price list */
 .tiers { display: inline-flex; border: 1px solid var(--color-divider); }
 .tiers button {
@@ -231,6 +254,6 @@ textarea.input { min-height: 90px; resize: vertical; }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
 @media print {
-  [data-noprint], .bottom-nav, .more-sheet, .sheet-backdrop { display: none !important; }
+  [data-noprint], .bottom-nav, .more-sheet, .sheet-backdrop, .modal, .modal-backdrop { display: none !important; }
   body { background: #fff; }
 }
