@@ -8,25 +8,28 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="_ds/industry-c8c3a855-2426-4837-a0f1-4d7baaefce83/styles.css">
-<script src="_ds/industry-c8c3a855-2426-4837-a0f1-4d7baaefce83/_ds_bundle.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400&family=Inter:wght@500&family=Cormorant+Garamond:wght@500&family=Lora&family=Barlow+Condensed:wght@700&display=swap">
-<style>body{margin:0}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-900)}@media print{[data-noprint]{display:none!important}body{background:#fff}main{padding:0!important;max-width:none!important}}</style>
+<link rel="stylesheet" href="styles/housemade.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Caprasimo&family=Figtree:wght@400&family=Inter:wght@500&family=Cormorant+Garamond:wght@500&family=Lora&display=swap">
+<style>body{margin:0}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-900)}.print-only{display:none}@media print{[data-noprint]{display:none!important}.print-only{display:inline!important}body{background:#fff}main{padding:0!important;max-width:none!important}}</style>
 </helmet>
-<main style="max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px) 96px;display:flex;flex-direction:column;gap:36px">
+<main class="hub-main" style="max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px) 96px;display:flex;flex-direction:column;gap:36px">
 
 <header data-noprint="" style="display:flex;flex-direction:column;gap:6px;padding:16px 0 0;border-bottom:1px solid var(--color-text)">
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
-    <span style="font-family:var(--font-heading);font-weight:600;font-size:24px;letter-spacing:0.04em;text-transform:uppercase;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ studio }}</span>
-    <div style="display:flex;gap:8px;flex:none">
+  <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px">
+    <div class="hub-brand">
+      <svg viewBox="-4 0 108 100" aria-hidden="true"><path class="roof" d="M-1.36 46 L50 6.31 L101.36 46 L86.64 46 L50 17.69 L13.36 46 Z"></path><rect class="house" x="22" y="52" width="11" height="44"></rect><rect class="house" x="67" y="52" width="11" height="44"></rect><rect class="house" x="22" y="69" width="56" height="9"></rect></svg>
+      <span class="hub-title">{{ studio }}</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
       <button class="btn btn-ghost" onClick="{{ toggleSaved }}" style="white-space:nowrap">{{ savedLabel }}</button>
+      <button class="btn btn-ghost" onClick="{{ goSettings }}" style="white-space:nowrap">Settings</button>
       <button class="btn btn-secondary" onClick="{{ reset }}" style="white-space:nowrap">New intake</button>
     </div>
   </div>
   <sc-if value="{{ showSaved }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;flex-direction:column;border:1px solid var(--color-divider);padding:4px 14px 10px;max-height:380px;overflow:auto;margin-bottom:8px">
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 12px;align-items:center;padding:10px 0">
-        <span style="font-size:13px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">Saved in this browser only. Work from your phone or another browser stays there: press Copy backup on that device, then Restore here.</span>
+        <span style="font-size:13px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">{{ storeNote }}</span>
         <div style="display:flex;flex-wrap:wrap;gap:6px">
           <button class="btn btn-ghost" onClick="{{ bk.copy }}" style="min-height:40px;white-space:nowrap">{{ bk.copyLabel }}</button>
           <button class="btn btn-ghost" onClick="{{ bk.toggle }}" style="min-height:40px;white-space:nowrap">Restore</button>
@@ -39,14 +42,14 @@
         </div>
       </sc-if>
       <span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-text);padding:6px 0 8px">Intakes</span>
-      <sc-if value="{{ noSaved }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:var(--color-neutral-700);padding:10px 0;border-top:1px solid var(--color-divider);text-wrap:pretty">None in this browser yet. An intake saves once it has a client name or goal.</span></sc-if>
+      <sc-if value="{{ noSaved }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:var(--color-neutral-700);padding:10px 0;border-top:1px solid var(--color-divider);text-wrap:pretty">{{ noSavedNote }}</span></sc-if>
       <sc-for list="{{ savedList }}" as="sv" hint-placeholder-count="2">
         <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--color-divider)">
           <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:500;font-size:15px">{{ sv.name }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ sv.meta }}</span></div>
           <div style="display:flex;gap:6px;align-items:center">
             <sc-if value="{{ sv.isCur }}" hint-placeholder-val="{{ false }}"><span class="tag tag-accent">Open now</span></sc-if>
             <sc-if value="{{ sv.notCur }}" hint-placeholder-val="{{ true }}"><button class="btn btn-secondary" onClick="{{ sv.open }}" style="min-height:40px">Open</button></sc-if>
-            <button class="btn btn-ghost" onClick="{{ sv.del }}" style="min-height:40px">Delete</button>
+            <button class="btn btn-ghost" onClick="{{ sv.del }}" style="min-height:40px;white-space:nowrap">{{ sv.delLabel }}</button>
           </div>
         </div>
       </sc-for>
@@ -57,14 +60,14 @@
             <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center"><span style="font-weight:500;font-size:15px">{{ hp.name }}</span><sc-if value="{{ hp.fromChat }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="white-space:nowrap;flex:none">From chat</span></sc-if><sc-if value="{{ hp.isNew }}" hint-placeholder-val="{{ false }}"><span class="tag tag-accent" style="white-space:nowrap;flex:none">{{ hp.newLabel }}</span></sc-if></div><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ hp.meta }}</span></div>
             <div style="display:flex;gap:6px;align-items:center">
               <button class="btn btn-secondary" onClick="{{ hp.open }}" style="min-height:40px">Open</button>
-              <button class="btn btn-ghost" onClick="{{ hp.del }}" style="min-height:40px">Delete</button>
+              <button class="btn btn-ghost" onClick="{{ hp.del }}" style="min-height:40px;white-space:nowrap">{{ hp.delLabel }}</button>
             </div>
           </div>
         </sc-for>
       </sc-if>
     </div>
   </sc-if>
-  <nav style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:0 18px">
+  <nav class="top-nav" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:0 18px">
     <div style="display:flex;flex-wrap:wrap;align-items:center">
       <sc-for list="{{ callTabs }}" as="t" hint-placeholder-count="3">
         <button onClick="{{ t.go }}" style="font:inherit;font-size:15px;font-weight:500;padding:10px 10px;min-height:44px;display:flex;align-items:center;gap:8px;white-space:nowrap;background:transparent;border:0;border-bottom:3px solid {{ t.bd }};color:{{ t.col }};cursor:pointer" style-hover="color:var(--color-accent-700)"><span style="width:22px;height:22px;display:grid;place-items:center;box-sizing:border-box;font-size:12px;font-weight:600;border:1px solid var(--color-accent-700);background:{{ t.numBg }};color:{{ t.numCol }}">{{ t.n }}</span>{{ t.label }}</button>
@@ -82,6 +85,30 @@
     </div>
   </nav>
 </header>
+
+<nav class="bottom-nav" data-noprint="" aria-label="Sections">
+  <sc-for list="{{ bottomTabs }}" as="bt" hint-placeholder-count="5">
+    <button onClick="{{ bt.go }}" aria-current="{{ bt.current }}"><span class="num">{{ bt.n }}</span>{{ bt.label }}</button>
+  </sc-for>
+</nav>
+<sc-if value="{{ moreSheet.open }}" hint-placeholder-val="{{ false }}">
+  <div class="sheet-backdrop" data-noprint="" onClick="{{ moreSheet.close }}"></div>
+  <div class="more-sheet" data-noprint="" role="dialog" aria-label="More sections">
+    <span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:var(--color-gold-text);padding:0 0 6px">Reference</span>
+    <sc-for list="{{ moreSheet.items }}" as="mi" hint-placeholder-count="4"><button class="btn btn-secondary" onClick="{{ mi.go }}">{{ mi.label }}</button></sc-for>
+  </div>
+</sc-if>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+  <div data-noprint="" role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom, 0px));z-index:70;width:max-content;max-width:min(92vw,520px);padding:12px 18px;background:var(--color-accent);color:var(--color-bg);font-size:15px;font-weight:500;box-shadow:var(--shadow-md);text-wrap:pretty">{{ toast }}</div>
+</sc-if>
+<sc-if value="{{ copyBox.open }}" hint-placeholder-val="{{ false }}">
+  <div data-noprint="" class="blueprint" style="padding:16px;display:flex;flex-direction:column;gap:10px">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">Copy this text</span><button class="btn btn-ghost" onClick="{{ copyBox.close }}" style="min-height:40px">Close</button></div>
+    <span style="font-size:14px;color:var(--color-neutral-700)">Copying was blocked here. Select the text below and copy it yourself.</span>
+    <textarea id="copy-box" class="input" readonly="" value="{{ copyBox.text }}" style="min-height:220px;font-size:14px"></textarea>
+  </div>
+</sc-if>
 
 <sc-if value="{{ chatNew.has }}" hint-placeholder-val="{{ false }}">
 <div data-noprint="" class="blueprint" style="border:1px solid var(--color-accent);padding:14px clamp(14px,2.5vw,20px);display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:-12px">
@@ -135,7 +162,7 @@
               <div style="display:flex;gap:6px;align-items:center">
                 <sc-if value="{{ hp.isCur }}" hint-placeholder-val="{{ false }}"><span class="tag tag-accent">Showing</span></sc-if>
                 <sc-if value="{{ hp.notCur }}" hint-placeholder-val="{{ true }}"><button class="btn btn-secondary" onClick="{{ hp.open }}" style="min-height:40px">Open</button></sc-if>
-                <button class="btn btn-ghost" onClick="{{ hp.del }}" style="min-height:40px">Delete</button>
+                <button class="btn btn-ghost" onClick="{{ hp.del }}" style="min-height:40px;white-space:nowrap">{{ hp.delLabel }}</button>
               </div>
             </div>
           </sc-for>
@@ -195,6 +222,9 @@
               <button class="btn btn-secondary" onClick="{{ me.copyChat }}" style="min-height:44px;white-space:nowrap;flex:none;background:var(--color-bg)">{{ me.copyChatLabel }}</button>
             </div>
           </sc-if>
+          <sc-if value="{{ me.savedToAccount }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:13px;color:var(--color-neutral-700);padding-top:10px">Saved to your account. Claude can read and update this plan from chat.</span>
+          </sc-if>
           <sc-if value="{{ me.hasChanges }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex;flex-direction:column;gap:8px;padding:16px 18px;margin:14px 0 4px;border:1px dashed var(--color-accent)">
               <span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-text)">{{ me.verLabel }}</span>
@@ -235,7 +265,7 @@
                 <sc-if value="{{ me.hasOpen }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center">
                     <button class="btn btn-primary" onClick="{{ me.update }}" disabled="{{ me.cantUpdate }}" style="min-height:44px">Update the plan →</button>
-                    <span style="font-size:13px;color:var(--color-neutral-700);max-width:44ch;text-wrap:pretty">Answered in chat instead? Reload the Hub and the new version shows here.</span>
+                    <span style="font-size:13px;color:var(--color-neutral-700);max-width:44ch;text-wrap:pretty">{{ me.gapHint }}</span>
                   </div>
                 </sc-if>
               </div>
@@ -442,6 +472,7 @@
           <span style="color:var(--color-neutral-700)">Look</span><span>{{ r.look.name }}</span>
           <span style="color:var(--color-neutral-700)">Turnaround</span><span>{{ pkgTurn }}</span>
           <span style="color:var(--color-neutral-700)">Budget</span><span>{{ r.budget }}</span>
+          <sc-if value="{{ est.has }}" hint-placeholder-val="{{ false }}"><span style="color:var(--color-neutral-700)">Estimate</span><span><strong class="money">{{ est.total }}</strong> <span class="tag {{ est.fitTag }}" style="margin-left:4px">{{ est.fit }}</span></span></sc-if>
         </div>
         <sc-if value="{{ r.hasFlags }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--color-divider);padding-top:8px"><sc-for list="{{ r.flags }}" as="fl" hint-placeholder-count="1"><div style="display:flex;flex-direction:column;gap:3px;font-size:13px"><span class="tag {{ fl.tag }}" style="align-self:flex-start">{{ fl.label }}</span><span style="text-wrap:pretty">{{ fl.text }}</span></div></sc-for></div></sc-if>
         <sc-if value="{{ showMarketLine }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px;font-size:13px;border-top:1px solid var(--color-divider);padding-top:8px"><span style="color:var(--color-neutral-700)">Market ref (US freelance)</span><span style="text-wrap:pretty">{{ r.marketLine }}</span></div></sc-if>
@@ -490,7 +521,7 @@
 <section data-screen-label="Brief" style="display:flex;flex-direction:column;gap:18px">
   <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center">
     <span style="font-size:14px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">Remove steps with × or add with + Add. Pick a package, then print, email, or turn it into a proposal. Budget and market prices stay off.</span>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ editAnswers }}" style="min-height:44px">Edit answers</button><a class="btn btn-secondary" href="{{ mailBrief }}" style="min-height:44px;box-sizing:border-box;text-decoration:none;color:var(--color-text)">Email brief</a><button class="btn btn-secondary" onClick="{{ printBrief }}" style="min-height:44px">Print</button><button class="btn btn-primary" onClick="{{ toProposal }}" style="min-height:44px">Make proposal →</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ editAnswers }}" style="min-height:44px">Edit answers</button><button class="btn btn-secondary" onClick="{{ copyBriefEmail }}" style="min-height:44px">{{ copyBriefLabel }}</button><button class="btn btn-secondary" onClick="{{ saveBrief }}" style="min-height:44px">Download</button><button class="btn btn-primary" onClick="{{ toProposal }}" style="min-height:44px">Make proposal →</button></div>
   </div>
   <sc-if value="{{ hasBriefRefs }}" hint-placeholder-val="{{ false }}">
   <div data-noprint="" style="display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:1px dashed var(--color-accent-400)">
@@ -501,7 +532,7 @@
   </div>
   </sc-if>
 
-  <article class="blueprint" style="padding:clamp(20px,4vw,44px);display:flex;flex-direction:column;gap:34px">
+  <article ref="{{ briefRef }}" class="blueprint" style="padding:clamp(20px,4vw,44px);display:flex;flex-direction:column;gap:34px">
     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
     <header style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end;border-bottom:1px solid var(--color-text);padding-bottom:18px">
       <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
@@ -641,7 +672,7 @@
       <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
         <sc-if value="{{ hasEmail }}" hint-placeholder-val="{{ false }}"><a href="mailto:{{ email }}" style="font-size:15px">{{ email }}</a></sc-if>
         <sc-if value="{{ hasBooking }}" hint-placeholder-val="{{ false }}"><a class="btn btn-primary" href="{{ bookingUrl }}" target="_blank" rel="noopener" style="color:var(--color-bg);text-decoration:none;min-height:44px;box-sizing:border-box">Book the kickoff call</a></sc-if>
-        <sc-if value="{{ noBooking }}" hint-placeholder-val="{{ true }}"><span data-noprint="" style="font-size:13px;color:var(--color-neutral-700)">Add your booking link and email in Tweaks.</span></sc-if>
+        <sc-if value="{{ noBooking }}" hint-placeholder-val="{{ true }}"><button data-noprint="" class="btn btn-ghost" onClick="{{ goSettings }}" style="min-height:40px">Add your booking link and email in Settings</button></sc-if>
       </div>
     </div>
   </article>
@@ -651,10 +682,17 @@
 <sc-if value="{{ tabIs.proposal }}" hint-placeholder-val="{{ false }}">
 <section data-screen-label="Proposal" style="display:flex;flex-direction:column;gap:18px">
   <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center">
-    <span style="font-size:14px;color:var(--color-neutral-700);max-width:60ch">Type a price for each line. The total and deposit update as you go.</span>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ toBrief }}" style="min-height:44px">← Brief</button><a class="btn btn-secondary" href="{{ pr.mail }}" style="min-height:44px;box-sizing:border-box;text-decoration:none;color:var(--color-text)">Email proposal</a><button class="btn btn-primary" onClick="{{ printBrief }}" style="min-height:44px">Print proposal</button></div>
+    <span style="font-size:14px;color:var(--color-neutral-700);max-width:60ch;text-wrap:pretty">Pick Simple, Standard or Complex for each line. Prices come from your price list in Settings; type over one to change it for this client.</span>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ toBrief }}" style="min-height:44px">← Brief</button><button class="btn btn-secondary" onClick="{{ pr.copyEmail }}" style="min-height:44px">{{ pr.copyLabel }}</button><button class="btn btn-primary" onClick="{{ pr.save }}" style="min-height:44px">Download proposal</button></div>
   </div>
-  <article class="blueprint" style="padding:clamp(20px,4vw,44px);display:flex;flex-direction:column;gap:32px">
+  <sc-if value="{{ pr.budget.show }}" hint-placeholder-val="{{ false }}">
+    <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:12px 16px;background:{{ pr.budget.bg }};color:{{ pr.budget.col }}">
+      <span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700">{{ pr.budget.label }}</span>
+      <span style="font-size:15px;text-wrap:pretty;flex:1 1 280px;min-width:0">{{ pr.budget.text }}</span>
+      <sc-if value="{{ pr.budget.canEssential }}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary" onClick="{{ pr.budget.useEssential }}" style="min-height:40px;background:var(--color-bg)">Switch to Essential</button></sc-if>
+    </div>
+  </sc-if>
+  <article ref="{{ propRef }}" class="blueprint" style="padding:clamp(20px,4vw,44px);display:flex;flex-direction:column;gap:32px">
     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
     <header style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end;border-bottom:1px solid var(--color-text);padding-bottom:18px">
       <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
@@ -666,21 +704,54 @@
     </header>
     <div style="display:flex;flex-direction:column;gap:6px"><h3 style="margin:0;font-size:34px;font-weight:700">{{ pr.pkgName }}</h3><p style="margin:0;font-size:15px;color:var(--color-neutral-700)">{{ pr.pkgLine }}</p></div>
     <div style="display:flex;flex-direction:column">
-      <div style="display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:16px;padding-bottom:6px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;color:var(--color-accent-700)"><span>Work</span><span style="text-align:right">Price</span></div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:16px;padding-bottom:6px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700)"><span>Work</span><span style="text-align:right">Price</span></div>
       <sc-if value="{{ pr.noItems }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:var(--color-neutral-700);padding:12px 0;border-top:1px solid var(--color-divider)">Finish the intake to list the work.</span></sc-if>
       <sc-for list="{{ pr.items }}" as="li" hint-placeholder-count="3">
-        <div style="display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:16px;align-items:center;padding:12px 0;border-top:1px solid var(--color-divider)">
-          <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:500;font-size:17px">{{ li.name }}</span><span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ li.desc }}</span></div>
-          <label style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><span style="font-size:16px">$</span><input class="input" inputmode="decimal" value="{{ li.price }}" onChange="{{ li.onPrice }}" placeholder="0" style="width:110px;text-align:right;font-size:16px;min-height:40px"></label>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:10px 16px;align-items:start;padding:14px 0;border-top:1px solid var(--color-divider)">
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <div style="display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline"><span style="font-family:var(--font-heading);font-weight:600;font-size:22px;line-height:1.1">{{ li.name }}</span><span style="font-size:14px;font-weight:500;color:var(--color-accent-700)">{{ li.tierName }}: {{ li.tierWhat }}</span></div>
+            <span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ li.desc }}</span>
+            <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center">
+              <div class="tiers" role="group" aria-label="Level"><sc-for list="{{ li.tiers }}" as="tr" hint-placeholder-count="3"><button onClick="{{ tr.go }}" aria-pressed="{{ tr.pressed }}">{{ tr.label }} · {{ tr.price }}</button></sc-for></div>
+              <sc-if value="{{ li.isCustom }}" hint-placeholder-val="{{ false }}"><button class="btn btn-ghost" onClick="{{ li.resetPrice }}" style="min-height:36px">Use list price</button></sc-if>
+              <sc-if value="{{ li.hasMarket }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">Market: {{ li.market }}</span></sc-if>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <label data-noprint="" style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><span style="font-size:16px">$</span><input class="input money" inputmode="decimal" aria-label="{{ li.priceAria }}" value="{{ li.price }}" onChange="{{ li.onPrice }}" placeholder="0" style="width:104px;text-align:right;font-size:16px;min-height:40px"></label>
+            <span class="print-only money" style="font-size:17px;font-weight:600">{{ li.amountLabel }}</span>
+            <sc-if value="{{ li.isCustom }}" hint-placeholder-val="{{ false }}"><span data-noprint="" class="tag tag-gold">Custom price</span></sc-if>
+          </div>
         </div>
       </sc-for>
-      <div style="display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:8px 16px;padding-top:12px;border-top:1px solid var(--color-text);font-size:15px;align-items:baseline">
-        <span style="font-weight:600">Total</span><span style="text-align:right;font-family:var(--font-heading);font-weight:600;font-size:26px">{{ pr.subtotal }}</span>
-        <span style="color:var(--color-neutral-700)">{{ pr.depLabel }}</span><span style="text-align:right">{{ pr.deposit }}</span>
-        <span style="color:var(--color-neutral-700)">Balance on delivery</span><span style="text-align:right">{{ pr.balance }}</span>
+      <sc-for list="{{ pr.extras }}" as="ex" hint-placeholder-count="0">
+        <div data-noprint="{{ ex.np }}" style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:10px 16px;align-items:center;padding:12px 0;border-top:1px solid var(--color-divider);opacity:{{ ex.op }}">
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <span style="font-weight:500;font-size:16px">{{ ex.label }}</span>
+            <span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ ex.note }}</span>
+            <div data-noprint="" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+              <sc-if value="{{ ex.isStep }}" hint-placeholder-val="{{ false }}"><div class="stepper"><button onClick="{{ ex.dec }}" aria-label="Fewer">−</button><span>{{ ex.count }}</span><button onClick="{{ ex.inc }}" aria-label="More">+</button></div></sc-if>
+              <sc-if value="{{ ex.isToggle }}" hint-placeholder-val="{{ false }}"><button class="btn btn-ghost" onClick="{{ ex.toggle }}" style="min-height:36px">{{ ex.toggleLabel }}</button></sc-if>
+            </div>
+          </div>
+          <span class="money" style="text-align:right;font-size:16px;font-weight:500">{{ ex.amount }}</span>
+        </div>
+      </sc-for>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:8px 16px;padding-top:12px;border-top:1px solid var(--color-text);font-size:15px;align-items:baseline">
+        <span style="font-weight:600">Total</span><span class="money" style="text-align:right;font-family:var(--font-heading);font-weight:700;font-size:30px;color:var(--color-accent-700)">{{ pr.subtotal }}</span>
+        <span style="color:var(--color-neutral-700)">{{ pr.depLabel }}</span><span class="money" style="text-align:right">{{ pr.deposit }}</span>
+        <span style="color:var(--color-neutral-700)">Balance on delivery</span><span class="money" style="text-align:right">{{ pr.balance }}</span>
       </div>
     </div>
-    <sc-if value="{{ pr.retainer }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:14px">The monthly retainer is quoted separately, per month.</p></sc-if>
+    <sc-if value="{{ pr.retainer }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:14px 16px;border:1px dashed var(--color-accent)">
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:0;flex:1 1 280px">
+          <span style="font-family:var(--font-heading);font-weight:600;font-size:20px">Then, monthly: {{ pr.ret.price }}/month</span>
+          <span style="font-size:14px;color:var(--color-neutral-700);text-wrap:pretty">{{ pr.ret.tierName }}: {{ pr.ret.what }}. Starts after delivery and isn't part of the total above.</span>
+        </div>
+        <div data-noprint="" class="tiers" role="group" aria-label="Retainer level"><sc-for list="{{ pr.ret.tiers }}" as="tr" hint-placeholder-count="3"><button onClick="{{ tr.go }}" aria-pressed="{{ tr.pressed }}">{{ tr.label }}</button></sc-for></div>
+      </div>
+    </sc-if>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><h3 style="margin:0;font-size:34px;font-weight:700">Timeline</h3><span style="font-size:14px;line-height:1.4;color:var(--color-neutral-700);text-wrap:pretty">When each piece lands.</span></div>
@@ -707,7 +778,7 @@
       </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px;border-top:1px solid var(--color-text);padding-top:20px">
-      <div style="display:flex;flex-direction:column;gap:4px"><h3 style="margin:0;font-size:34px;font-weight:700">Acceptance</h3><span style="font-size:14px;color:var(--color-neutral-700)">Sign and return with the deposit to book the kickoff.</span></div>
+      <div style="display:flex;flex-direction:column;gap:4px"><h3 style="margin:0;font-size:34px;font-weight:700">Acceptance</h3><span style="font-size:14px;color:var(--color-neutral-700)">Sign and return with the deposit to book the kickoff.</span><sc-if value="{{ pr.hasPay }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px;text-wrap:pretty">Pay the deposit at <a href="{{ pr.payUrl }}" target="_blank" rel="noopener">{{ pr.payUrl }}</a></span></sc-if></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
         <sc-for list="{{ pr.signs }}" as="sgn" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:6px"><span style="height:40px;border-bottom:1px solid var(--color-text)"></span><span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;color:var(--color-accent-700)">{{ sgn }}</span></div></sc-for>
       </div>
@@ -998,44 +1069,288 @@
   </div>
 </section>
 </sc-if>
+
+<sc-if value="{{ tabIs.settings }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Settings" style="display:flex;flex-direction:column;gap:28px">
+  <div style="display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-end">
+    <div style="display:flex;flex-direction:column;gap:6px;max-width:66ch">
+      <h6 style="margin:0;color:var(--color-gold-text)">Settings</h6>
+      <h2 style="margin:0;font-size:clamp(34px,4.5vw,52px)">Your details, terms and prices</h2>
+      <p style="margin:0;font-size:16px;color:var(--color-neutral-700);text-wrap:pretty">{{ set.storeLine }}</p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><span role="status" style="font-size:14px;color:var(--color-neutral-700)">{{ set.status }}</span><button class="btn btn-primary" onClick="{{ set.save }}" disabled="{{ set.clean }}" style="min-height:44px;padding-inline:20px">Save settings</button></div>
+  </div>
+
+  <div class="blueprint" style="padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:18px">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;flex-direction:column;gap:4px"><h3 style="margin:0;font-size:30px">On every brief and proposal</h3><span style="font-size:14px;color:var(--color-neutral-700)">Clients see these.</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px 20px">
+      <sc-for list="{{ set.fields }}" as="sf" hint-placeholder-count="4">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">{{ sf.label }}</span><input class="input" id="{{ sf.id }}" type="{{ sf.type }}" value="{{ sf.value }}" onChange="{{ sf.onChange }}" placeholder="{{ sf.ph }}" style="min-height:44px;font-size:16px"><span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ sf.help }}</span></label>
+      </sc-for>
+    </div>
+  </div>
+
+  <div class="blueprint" style="padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:18px">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;flex-direction:column;gap:4px"><h3 style="margin:0;font-size:30px">Terms and price rules</h3><span style="font-size:14px;color:var(--color-neutral-700)">Used in "How we work", the timeline and the proposal math.</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:18px 20px">
+      <sc-for list="{{ set.nums }}" as="sn" hint-placeholder-count="8">
+        <label style="display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-size:13px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">{{ sn.label }}</span><span style="display:flex;align-items:center;gap:8px"><input class="input money" id="{{ sn.id }}" inputmode="decimal" value="{{ sn.value }}" onChange="{{ sn.onChange }}" style="min-height:44px;font-size:16px;max-width:120px"><span style="font-size:14px;color:var(--color-neutral-700)">{{ sn.unit }}</span></span><span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ sn.help }}</span></label>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--color-divider);padding-top:14px">
+      <sc-for list="{{ set.toggles }}" as="tg" hint-placeholder-count="2">
+        <label style="display:flex;gap:12px;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" id="{{ tg.id }}" checked="{{ tg.on }}" onChange="{{ tg.onChange }}" style="width:20px;height:20px;accent-color:var(--color-accent)"><span style="display:flex;flex-direction:column"><span style="font-weight:500">{{ tg.label }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ tg.help }}</span></span></label>
+      </sc-for>
+    </div>
+  </div>
+
+  <div class="blueprint" style="padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:16px">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div style="display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:flex-end">
+      <div style="display:flex;flex-direction:column;gap:4px;max-width:62ch"><h3 style="margin:0;font-size:30px">Price list</h3><span style="font-size:14px;color:var(--color-neutral-700);text-wrap:pretty">Proposals start from these. Simple sits near the US freelance average; Standard and Complex go up with size and difficulty.</span></div>
+      <button class="btn btn-ghost" onClick="{{ set.resetPrices }}" style="min-height:40px">Reset to the starting list</button>
+    </div>
+    <div style="overflow-x:auto">
+      <div style="min-width:560px;display:grid;grid-template-columns:minmax(170px,1.5fr) repeat(3,minmax(100px,1fr));gap:0 12px;align-items:center">
+        <span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700);padding-bottom:6px">Item</span><span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700);padding-bottom:6px">Simple</span><span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700);padding-bottom:6px">Standard</span><span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-neutral-700);padding-bottom:6px">Complex</span>
+        <sc-for list="{{ set.prices }}" as="pl" hint-placeholder-count="14">
+          <div style="display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--color-divider);align-self:stretch"><span style="font-family:var(--font-heading);font-weight:600;font-size:18px;line-height:1.1">{{ pl.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ pl.unit }}</span></div>
+          <sc-for list="{{ pl.cells }}" as="pc" hint-placeholder-count="3">
+            <label style="display:flex;flex-direction:column;gap:3px;padding:10px 0;border-top:1px solid var(--color-divider);align-self:stretch"><span style="display:flex;align-items:center;gap:4px"><span>$</span><input class="input money" inputmode="decimal" aria-label="{{ pc.aria }}" value="{{ pc.value }}" onChange="{{ pc.onChange }}" style="min-height:40px;font-size:15px;width:100%"></span><span style="font-size:11px;line-height:1.3;color:var(--color-neutral-700);text-wrap:pretty">{{ pc.what }}</span></label>
+          </sc-for>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
 </main>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;studioName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Design hub&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Studio&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Studio&quot;},&quot;bookingUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Studio&quot;},&quot;revisionRounds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;min&quot;:1,&quot;max&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;depositPct&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:50,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;fixDays&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;min&quot;:0,&quot;max&quot;:90,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;validDays&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:14,&quot;min&quot;:1,&quot;max&quot;:90,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;showTips&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intake&quot;},&quot;showMarket&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intake&quot;},&quot;dimOthers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Formats&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;studioName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Housemade Studio&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Studio&quot;},&quot;contactEmail&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Studio&quot;},&quot;bookingUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Studio&quot;},&quot;revisionRounds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;min&quot;:1,&quot;max&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;depositPct&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:50,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;fixDays&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;min&quot;:0,&quot;max&quot;:90,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;validDays&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:14,&quot;min&quot;:1,&quot;max&quot;:90,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Terms&quot;},&quot;showTips&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intake&quot;},&quot;showMarket&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intake&quot;},&quot;dimOthers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Formats&quot;}}">
 class Component extends DCLogic {
-  KEY = 'designHub.v6';
+  KEY = 'housemade.hub.v1';
+  KEY_SAVED = 'housemade.hub.saved';
   state = this.load();
-  asideRef = React.createRef(); looksRef = React.createRef(); sitesRef = React.createRef();
-  KEY_SAVED = 'designHub.saved';
+  asideRef = React.createRef(); looksRef = React.createRef(); sitesRef = React.createRef(); briefRef = React.createRef(); propRef = React.createRef();
   newId = () => 'i' + Date.now().toString(36);
   hasContent = a => !!(a && ((a.client && (a.client.name || a.client.business)) || (a.goal && a.goal.length) || a.pb));
   jumpTo = ref => { const el = ref.current; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' }); };
   load() {
-    const def = { a: {}, pos: 'start', mode: 'quick', tab: 'intake', sel: 'website', pbFilter: 'all', open: {}, more: {}, startMore: false, ask: -1, seenBrief: false, term: -1, showSaved: false, cur: 'i' + Date.now().toString(36), saved: [], meText: '', meRec: null, meHist: [], meCur: '', meErr: '', meA: {}, meStep: 'sum', meTicks: {} };
-    let saved = [];
-    try { saved = JSON.parse(localStorage.getItem('designHub.saved') || '[]') || []; } catch (e) {}
-    def.saved = saved;
-    try { const s = JSON.parse(localStorage.getItem('designHub.v6') || localStorage.getItem('designHub.v5') || localStorage.getItem('designHub.v4') || localStorage.getItem('designHub.v3') || 'null'); if (s && s.a) return { ...def, ...s, saved, meErr: '', tab: s.tab === 'looks' ? 'formats' : (s.tab || 'intake'), cur: s.cur || def.cur }; } catch (e) {}
-    try { const s = JSON.parse(localStorage.getItem('designHub.v2') || 'null'); if (s && s.a) return { ...def, a: s.a, pos: 'client' }; } catch (e) {}
-    return def;
+    const def = { a: {}, pos: 'start', mode: 'quick', tab: 'intake', sel: 'website', pbFilter: 'all', open: {}, more: {}, startMore: false, ask: -1, seenBrief: false, seenProp: false, term: -1, showSaved: false, cur: 'i' + Date.now().toString(36), saved: [], meText: '', meRec: null, meHist: [], meCur: '', meErr: '', meA: {}, meStep: 'sum', meTicks: {}, settings: {} };
+    const fresh = { store: 'local', toast: '', copyBox: null, confirmDel: '', navMore: false, setDraft: null, meErr: '' };
+    const read = k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+    const saved = read(this.KEY_SAVED) || read('designHub.saved');
+    def.saved = Array.isArray(saved) ? saved : [];
+    const s = read(this.KEY) || read('designHub.v6') || read('designHub.v5') || read('designHub.v4') || read('designHub.v3');
+    if (s && s.a) return { ...def, ...s, ...fresh, saved: def.saved, tab: s.tab === 'looks' ? 'formats' : (s.tab || 'intake'), cur: s.cur || def.cur };
+    const v2 = read('designHub.v2');
+    if (v2 && v2.a) return { ...def, ...fresh, a: v2.a, pos: 'client' };
+    return { ...def, ...fresh };
+  }
+
+  // Online, everything saves to the account (the artifact's db), so phone
+  // and computer share it. Without it (a local copy), browser storage.
+  db = null; unsubs = []; pend = {}; wBusy = {}; wTimers = {};
+  cap = async name => { const c = window.claude; if (!c || typeof c.use !== 'function') return null; try { return await c.use(name); } catch (e) { return null; } };
+  clean = o => JSON.parse(JSON.stringify(o));
+  async connect() {
+    const db = await this.cap('db');
+    if (!db || this.dead) return;
+    this.db = db;
+    const lost = () => { this.db = null; this.setState({ store: 'lost' }); };
+    const rows = snap => snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    try {
+      this.unsubs.push(db.collection('intakes').onSnapshot(snap => this.setState({ saved: rows(snap).sort((x, y) => (y.at || 0) - (x.at || 0)), store: 'account' }), lost));
+      this.unsubs.push(db.collection('plans').onSnapshot(snap => {
+        const all = rows(snap).map(x => ({ ...x, at: typeof x.at === 'number' ? x.at : Date.parse(x.at) || 0 }));
+        this.chatPlans = all.filter(x => x.fromChat);
+        this.setState({ meHist: all.filter(x => !x.fromChat), store: 'account' });
+      }, lost));
+      this.unsubs.push(db.doc('hub/settings').onSnapshot(d => this.setState({ settings: (d.exists && d.data()) || {}, store: 'account' }), lost));
+    } catch (e) { lost(); return; }
+    const st = this.state;
+    if (this.hasContent(st.a)) this.put('intakes/' + st.cur, this.clean({ id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() }));
+  }
+  put(path, data, wait) {
+    if (!this.db) return;
+    this.pend[path] = data; clearTimeout(this.wTimers[path]);
+    this.wTimers[path] = setTimeout(() => this.flush(path), wait || 0);
+  }
+  async flush(path, retried) {
+    if (!this.db || this.wBusy[path] || !(path in this.pend)) return;
+    const data = this.pend[path]; delete this.pend[path]; this.wBusy[path] = true;
+    try {
+      if (data === null) await this.db.doc(path).delete(); else await this.db.doc(path).set(data);
+    } catch (e) {
+      const code = e && e.code;
+      if (code === 'unavailable' && !retried) {
+        if (!(path in this.pend)) this.pend[path] = data;
+        this.wBusy[path] = false; setTimeout(() => this.flush(path, true), 800 + Math.random() * 1200); return;
+      }
+      this.showToast(code === 'quota_exceeded' ? 'The hub storage is full. Delete some old intakes or plans.' : "Couldn't save that change. Check your connection and try again.");
+    }
+    this.wBusy[path] = false;
+    if (path in this.pend) this.flush(path);
+  }
+  showToast = msg => { clearTimeout(this.toastT); this.setState({ toast: msg }); this.toastT = setTimeout(() => this.setState({ toast: '' }), 3200); };
+  copyText = (txt, okMsg) => {
+    const fail = () => this.setState({ copyBox: { text: txt } });
+    try { navigator.clipboard.writeText(txt).then(() => this.showToast(okMsg || 'Copied'), fail); } catch (e) { fail(); }
+  };
+  confirmThen = (key, fn) => {
+    clearTimeout(this.delT);
+    if (this.state.confirmDel === key) { this.setState({ confirmDel: '' }); fn(); return; }
+    this.setState({ confirmDel: key }); this.delT = setTimeout(() => this.setState({ confirmDel: '' }), 4000);
+  };
+  esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  docHtml(el, title) {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll('[data-noprint]').forEach(n => n.remove());
+    clone.querySelectorAll('.print-only').forEach(n => n.classList.remove('print-only'));
+    clone.querySelectorAll('[data-dc-tpl]').forEach(n => n.removeAttribute('data-dc-tpl'));
+    const css = [...document.styleSheets].map(sh => { try { return [...sh.cssRules].map(r => r.cssText).filter(t => !/^@import/.test(t)).join('\n'); } catch (e) { return ''; } }).join('\n');
+    return '<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + this.esc(title) + '</title>'
+      + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">'
+      + '<style>' + css + '\nbody{padding:32px 24px;max-width:1040px;margin:0 auto}@page{margin:12mm}@media print{body{padding:0}}</style></head><body>' + clone.outerHTML + '</body></html>';
+  }
+  saveDoc = async kind => {
+    const el = (kind === 'brief' ? this.briefRef : this.propRef).current;
+    if (!el) return;
+    const info = (this.state.a || {}).client || {}, who = info.business || info.name || 'New client';
+    const label = kind === 'brief' ? 'Brief' : 'Proposal', filename = label + ' - ' + (who.replace(/[^\w\- ]+/g, '').trim() || 'client') + '.html';
+    const html = this.docHtml(el, label + ' · ' + who);
+    const dl = await this.cap('downloads');
+    if (dl) {
+      try { await dl.save({ filename, data: html }); this.showToast('Saved. Open the file and print it to PDF if you need one.'); }
+      catch (e) { if (!e || e.code !== 'declined') this.showToast("Couldn't save the file here."); }
+      return;
+    }
+    try {
+      const url = URL.createObjectURL(new Blob([html], { type: 'text/html' })), link = document.createElement('a');
+      link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch (e) { this.showToast("Couldn't save the file here."); }
+  };
+  askClaude = async (system, user) => {
+    const c = window.claude;
+    if (c && typeof c.complete === 'function') {
+      const body = { system, max_tokens: 3000, messages: [{ role: 'user', content: user }] };
+      try { return await c.complete({ ...body, model: 'claude-sonnet-4-5' }); } catch (e) { return await c.complete(body); }
+    }
+    const sample = await this.cap('sample');
+    if (!sample) throw { code: 'unavailable' };
+    const res = await sample(system + '\n\n---\n\n' + user, { modelTier: 'default' });
+    return res.text;
+  };
+  askErr = (e, what) => {
+    const code = e && e.code;
+    if (code === 'not_granted') return 'Allow Claude for this page to ' + what + '.';
+    if (code === 'rate_limited') return 'Too many requests right now. Try again in a minute.';
+    if (code === 'unavailable') return "Claude isn't available on this page right now.";
+    return "Couldn't " + what + '. Try again in a moment.';
+  };
+
+  // Settings and the price list. Saved settings override these defaults.
+  DEF = { studio: 'Housemade Studio', email: '', bookingUrl: '', payUrl: '', rounds: 2, dep: 50, fix: 30, valid: 14, hourly: 75, rush: 25, rushHard: 50, bundle: 10, roundPct: 15, roundMin: 75, perPage: 75, perFormat: 25, showTips: true, showMarket: false };
+  TIERS = [['s', 'Simple'], ['m', 'Standard'], ['c', 'Complex']];
+  TIER_IDX = { s: 0, m: 1, c: 2 };
+  BANDS = { b1: [0, 500], b2: [500, 2000], b3: [2000, 5000], b4: [5000, Infinity] };
+  PRICES = {
+    wireframe: [[150, '1 page, 2–3 layouts'], [400, 'Up to 5 pages'], [900, '6–12 screens or flows']],
+    brand: [[450, 'Tidy their logo, set colors and fonts, 1-page guide'], [1200, 'New logo and a short brand guide'], [2500, 'Logo set, full guide, starter templates']],
+    codebase: [[250, 'Pull colors and fonts from their site'], [500, 'Plus parts: buttons, cards, forms'], [900, 'Full system from their code']],
+    flier: [[95, 'One piece'], [225, 'Two-sided flier or a 3-post set'], [450, 'Campaign set, 6+ pieces']],
+    map: [[150, 'One simple map'], [350, 'Styled map with labels and key'], [750, 'Illustrated, or a set of maps']],
+    email: [[250, 'One designed email'], [500, 'Reusable template and first issue'], [950, 'Template with several section types, 3 issues']],
+    doc: [[350, 'Up to 8 pages'], [850, 'Up to 20 pages, set page types'], [1800, '40+ pages, charts, fillable']],
+    deck: [[450, 'Up to 10 slides'], [1100, '15–20 slides and a template'], [2200, '25+ slides, story and charts']],
+    website: [[750, 'One-page site'], [2200, 'Up to 5 pages'], [4200, '6–10 pages, booking or blog']],
+    video: [[400, '15–30 s social clip'], [1500, '30–60 s motion graphics'], [3500, '60–90 s with a storyboard']],
+    model: [[300, 'One simple model'], [750, 'Detailed model with materials'], [1800, 'Several models or a turntable video']],
+    prototype: [[800, '3–5 screens, one flow'], [2000, '8–15 screens'], [4500, '20+ screens, several flows']],
+    handoff: [[300, 'Notes and files for one page or flow'], [600, 'Full site or app screens'], [1200, 'Plus a call with their developer']],
+    retainer: [[500, '8 posts and 1 newsletter'], [950, '12 posts, 2 newsletters, small updates'], [1800, '20 posts, 4 newsletters, page updates, first in line']]
+  };
+  SET_TEXT = ['studio', 'email', 'bookingUrl', 'payUrl'];
+  SET_NUM = { rounds: [0, 10], dep: [0, 100], fix: [0, 365], valid: [1, 365], hourly: [0, 1000], rush: [0, 200], rushHard: [0, 300], bundle: [0, 90], roundPct: [0, 100], roundMin: [0, 5000], perPage: [0, 5000], perFormat: [0, 5000] };
+  cfg() {
+    const p = this.props || {}, s = this.state.settings || {}, D = this.DEF;
+    const out = { ...D, studio: p.studioName || D.studio, email: p.contactEmail || '', bookingUrl: p.bookingUrl || '', rounds: p.revisionRounds ?? D.rounds, dep: p.depositPct ?? D.dep, fix: p.fixDays ?? D.fix, valid: p.validDays ?? D.valid, showTips: p.showTips ?? D.showTips, showMarket: p.showMarket ?? D.showMarket };
+    Object.keys(D).forEach(k => { if (s[k] !== undefined && s[k] !== null && !(k === 'studio' && !s[k])) out[k] = s[k]; });
+    const own = s.prices || {};
+    out.prices = {};
+    Object.keys(this.PRICES).forEach(id => { const row = Array.isArray(own[id]) ? own[id] : []; out.prices[id] = this.PRICES[id].map((d, i) => typeof row[i] === 'number' && row[i] >= 0 ? row[i] : d[0]); });
+    out.dim = p.dimOthers ?? true;
+    return out;
+  }
+  draftFrom(cf) {
+    const d = {};
+    this.SET_TEXT.forEach(k => { d[k] = cf[k] || ''; });
+    Object.keys(this.SET_NUM).forEach(k => { d[k] = String(cf[k]); });
+    d.showTips = !!cf.showTips; d.showMarket = !!cf.showMarket;
+    d.prices = Object.fromEntries(Object.keys(cf.prices).map(id => [id, cf.prices[id].map(String)]));
+    return d;
+  }
+  editDraft = fn => this.setState(s => { const cur = s.setDraft || this.draftFrom(this.cfg()); return { setDraft: fn({ ...cur, prices: { ...cur.prices } }) }; });
+  saveSettings = () => {
+    const d = this.state.setDraft;
+    if (!d) return;
+    const out = {};
+    this.SET_TEXT.forEach(k => { let v = String(d[k] || '').trim(); if (v && (k === 'bookingUrl' || k === 'payUrl') && !/^https?:\/\//i.test(v)) v = 'https://' + v; out[k] = v; });
+    Object.entries(this.SET_NUM).forEach(([k, [lo, hi]]) => { out[k] = Math.min(hi, Math.max(lo, this.num(d[k]))); });
+    out.showTips = !!d.showTips; out.showMarket = !!d.showMarket;
+    out.prices = Object.fromEntries(Object.entries(d.prices).map(([id, row]) => [id, row.map(v => Math.max(0, Math.round(this.num(v))))]));
+    if (!out.studio) out.studio = this.DEF.studio;
+    if (this.db) this.put('hub/settings', out);
+    this.setState({ settings: out, setDraft: null });
+    this.showToast(this.db ? 'Settings saved to your account' : 'Settings saved in this browser');
+  };
+  // One quote for the proposal and the intake's running estimate.
+  quote(a, r, sp, cf) {
+    const tiers = a.tiers || {}, custom = a.prices || {}, T = this.TIER_IDX;
+    const tierOf = id => T[tiers[id]] !== undefined ? tiers[id] : 'm';
+    const ids = [...sp.prep, ...sp.make, ...(sp.ship.includes('handoff') ? ['handoff'] : [])].filter(id => cf.prices[id]);
+    const lines = ids.map(id => { const t = tierOf(id), list = cf.prices[id][T[t]], has = custom[id] !== undefined && custom[id] !== null; return { id, t, list, isCustom: has, amount: has ? this.num(custom[id]) : list }; });
+    const work = lines.reduce((x, l) => x + l.amount, 0), extras = [];
+    if (lines.length) {
+      const d = this.DL[a.when], hi = sp.hi || 0;
+      const rushPct = !a.when || a.when === 'flex' || !hi ? 0 : d < hi / 2 ? cf.rushHard : d < hi ? cf.rush : 0;
+      if (rushPct) extras.push({ key: 'noRush', label: 'Rush (+' + rushPct + '%)', note: 'They need it ' + this.lab('when', a.when).toLowerCase() + '; this usually takes ' + sp.turn.toLowerCase() + '.', amount: a.noRush ? 0 : Math.round(work * rushPct / 100), off: !!a.noRush, toggle: 'Waive it' });
+      if (r.pkgSel === 'full' && lines.length >= 2 && cf.bundle > 0) extras.push({ key: 'noBundle', label: 'Full package (−' + cf.bundle + '%)', note: 'For taking the whole recommended path together.', amount: a.noBundle ? 0 : -Math.round(work * cf.bundle / 100), off: !!a.noBundle, toggle: 'Remove it' });
+      const perRound = Math.max(cf.roundMin, Math.round(work * cf.roundPct / 100));
+      extras.push({ key: 'extraRounds', step: true, count: a.extraRounds || 0, label: 'Extra revision rounds', note: cf.rounds + ' rounds are included. Each extra round is ' + this.money(perRound) + '.', amount: (a.extraRounds || 0) * perRound });
+      const noWords = a.words === 'ai' || a.words === 'mix';
+      extras.push({ key: 'writePages', step: true, count: a.writePages || 0, label: 'Writing the words', note: (noWords ? "They don't have all the words yet. " : '') + this.money(cf.perPage) + ' per page or section written from scratch.', amount: (a.writePages || 0) * cf.perPage });
+      extras.push({ key: 'extraFormats', step: true, count: a.extraFormats || 0, label: 'Extra sizes or formats', note: 'The first format of each piece is included. Each extra size or format is ' + this.money(cf.perFormat) + '.', amount: (a.extraFormats || 0) * cf.perFormat });
+    }
+    const total = Math.max(0, work + extras.reduce((x, e) => x + e.amount, 0));
+    const rt = tierOf('retainer'), retainer = sp.ongoing ? { t: rt, amount: cf.prices.retainer[T[rt]] } : null;
+    const band = this.BANDS[a.budget], fit = band && lines.length ? (total > band[1] ? 'over' : total < band[0] ? 'under' : 'fits') : '';
+    return { lines, work, extras, total, dep: total * cf.dep / 100, retainer, fit };
   }
   chatPlans = [];
   meOpen(hh) { this.setState(s => ({ tab: 'me', showSaved: false, meRec: hh.rec, meText: hh.text || '', meA: hh.ans || {}, meCur: hh.id, meErr: '', meStep: 'plan', meSeen: hh.fromChat ? { ...(s.meSeen || {}), [hh.id]: hh.at || Date.now() } : s.meSeen })); window.scrollTo({ top: 0 }); }
   componentDidMount() {
-    fetch('for-me-plans.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).then(list => { this.chatPlans = (Array.isArray(list) ? list : []).filter(x => x && x.rec).map(x => ({ ...x, at: typeof x.at === 'number' ? x.at : Date.parse(x.at) || 0, fromChat: true })); this.forceUpdate();
+    fetch('for-me-plans.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).then(list => { if (this.db) return; this.chatPlans = (Array.isArray(list) ? list : []).filter(x => x && x.rec).map(x => ({ ...x, at: typeof x.at === 'number' ? x.at : Date.parse(x.at) || 0, fromChat: true })); this.forceUpdate();
       const c = this.chatPlans.find(x => x.id === this.state.meCur), o = (this.state.meOver || {})[this.state.meCur];
       if (c && (!o || (o.at || 0) < c.at)) this.setState({ meRec: c.rec, meA: c.ans || this.state.meA || {} }); }).catch(() => {});
     const st = this.state;
     if (this.hasContent(st.a) && !(st.saved || []).some(x => x.id === st.cur)) this.setState({ saved: [{ id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() }, ...(st.saved || [])] });
+    this.connect();
   }
+  componentWillUnmount() { this.dead = true; this.unsubs.forEach(u => { try { u(); } catch (e) {} }); }
   componentDidUpdate(pp, ps) {
     const st = this.state;
     if (st.tab === 'brief' && !st.seenBrief) this.setState({ seenBrief: true });
+    if (st.tab === 'proposal' && !st.seenProp) this.setState({ seenProp: true });
     if (ps && ps.a !== st.a && this.hasContent(st.a)) {
       const entry = { id: st.cur, a: st.a, mode: st.mode, pos: st.pos, at: Date.now() };
-      const rest = (st.saved || []).filter(x => x.id !== st.cur);
-      this.setState({ saved: [entry, ...rest].slice(0, 40) });
+      if (this.db) this.put('intakes/' + st.cur, this.clean(entry), 700);
+      else { const rest = (st.saved || []).filter(x => x.id !== st.cur); this.setState({ saved: [entry, ...rest].slice(0, 40) }); }
     }
-    try { const { saved, ...cur } = st; localStorage.setItem(this.KEY, JSON.stringify(cur)); localStorage.setItem(this.KEY_SAVED, JSON.stringify(saved || [])); } catch (e) {}
+    try { const { saved, toast, copyBox, confirmDel, navMore, setDraft, store, ...cur } = st; localStorage.setItem(this.KEY, JSON.stringify(cur)); if (!this.db) localStorage.setItem(this.KEY_SAVED, JSON.stringify(saved || [])); } catch (e) {}
   }
 
   GROUPS = [['start', 'Start or change'], ['customers', 'Get customers'], ['money', 'Raise money and report'], ['run', 'Run the business']];
@@ -1129,18 +1444,18 @@ class Component extends DCLogic {
     { id: 'notes', type: 'text', title: 'Notes', prompt: 'Anything else?', tip: 'Competitors they like, must-haves, dislikes.', ph: "e.g. Likes how a competitor's site feels. Must show prices. No stock photos." }
   ];
   F = {
-    wireframe: { lane: 'prep', name: 'Wireframe', short: 'Rough layouts to compare', what: 'Rough layouts for comparing directions while changes are cheap.', use: 'It could go two or more ways', skip: 'The job is small and settled', days: [2, 3], feeds: [['website', 'Compare 2–3 layouts'], ['prototype', 'Map the screens'], ['deck', 'Storyboard the slides'], ['video', 'Storyboard the scenes']] },
+    wireframe: { lane: 'prep', name: 'Wireframe', short: 'Rough layouts to compare', what: 'Rough layouts for comparing directions while changes are cheap.', use: 'It could go two or more ways', skip: 'The job is small and settled', days: [2, 3], market: '$50–$200 per screen', feeds: [['website', 'Compare 2–3 layouts'], ['prototype', 'Map the screens'], ['deck', 'Storyboard the slides'], ['video', 'Storyboard the scenes']] },
     brand: { lane: 'prep', name: 'Brand system', short: 'Their look, set once', what: 'Colors, fonts and parts built from their logo or taste, so every piece matches.', use: 'There is no brand yet, or several pieces must match', skip: 'They already have a clear look', days: [5, 10], market: '$500–$5,000', feeds: [['website', ''], ['deck', ''], ['doc', ''], ['flier', ''], ['email', '']] },
     codebase: { lane: 'prep', name: 'Connect their code', short: 'Build from what exists', what: 'Link their GitHub repo or code folder, so new work uses their real parts and styles.', use: 'They already have a site or app in code', skip: "There's no code yet, or it's on Wix or Squarespace", days: [1, 2], feeds: [['website', 'Match their real styles'], ['prototype', 'Use their real components']] },
-    flier: { lane: 'make', level: 1, name: 'Flier or social post', short: 'One page or post', what: 'One fixed-size design: poster, one-sheet, social post or print art.', great: 'Events, offers, announcements, job posts, merch art', use: 'One message, read at a glance', days: [1, 2], market: '$50–$250', up: [['doc', 'It needs more than one page'], ['deck', 'Several points, shown in order']], ship: ['pdf', 'image'] },
+    flier: { lane: 'make', level: 1, name: 'Flier or social post', short: 'One page or post', what: 'One fixed-size design: poster, one-sheet, social post or print art.', great: 'Events, offers, announcements, job posts, merch art', use: 'One message, read at a glance', days: [1, 2], market: '$25–$500; posts $40–$150 each', up: [['doc', 'It needs more than one page'], ['deck', 'Several points, shown in order']], ship: ['pdf', 'image'] },
     map: { lane: 'make', level: 1, name: 'Map', short: 'Where, drawn accurately', what: 'An accurate map from real geography: service areas, locations or routes.', great: 'Service areas, venues, delivery zones, tour routes', use: 'Where matters as much as what', days: [1, 3], up: [['website', 'It belongs on their site']], ship: ['image', 'pdf'] },
-    email: { lane: 'make', level: 2, name: 'HTML email', short: 'Ready to send', what: 'A newsletter or announcement, ready to send.', great: 'Launches, offers, welcome emails', use: 'It has to land in an inbox', days: [2, 3], market: '$100–$500', up: [['website', 'It needs a permanent home']], down: [['flier', 'One image says it all']], ship: ['offline'] },
-    doc: { lane: 'make', level: 2, name: 'Doc', short: 'Pages that print cleanly', what: 'Pages that print and export cleanly.', great: 'Plans, proposals, guides, reports, welcome packets', use: "It's read, signed or filed", days: [3, 5], up: [['deck', 'Someone has to present it'], ['website', 'People need to find it online'], ['prototype', "They'd use it daily, not read it"]], down: [['flier', 'It fits on one page']], ship: ['pdf'] },
-    deck: { lane: 'make', level: 3, name: 'Deck', short: 'Slides you click through', what: 'Slides you click through, live or sent.', great: 'Pitches, sales meetings, training, webinars', use: 'Someone presents it', days: [3, 6], market: '$500–$3,000', up: [['website', 'People browse it on their own']], down: [['doc', "Nobody presents it; it's read"], ['flier', "It's one message"]], first: [['brand', 'It has to match their brand']], ship: ['pptx', 'pdf'] },
+    email: { lane: 'make', level: 2, name: 'HTML email', short: 'Ready to send', what: 'A newsletter or announcement, ready to send.', great: 'Launches, offers, welcome emails', use: 'It has to land in an inbox', days: [2, 3], market: '$150–$600', up: [['website', 'It needs a permanent home']], down: [['flier', 'One image says it all']], ship: ['offline'] },
+    doc: { lane: 'make', level: 2, name: 'Doc', short: 'Pages that print cleanly', what: 'Pages that print and export cleanly.', great: 'Plans, proposals, guides, reports, welcome packets', use: "It's read, signed or filed", days: [3, 5], market: '$50–$150 per page', up: [['deck', 'Someone has to present it'], ['website', 'People need to find it online'], ['prototype', "They'd use it daily, not read it"]], down: [['flier', 'It fits on one page']], ship: ['pdf'] },
+    deck: { lane: 'make', level: 3, name: 'Deck', short: 'Slides you click through', what: 'Slides you click through, live or sent.', great: 'Pitches, sales meetings, training, webinars', use: 'Someone presents it', days: [3, 6], market: '$500–$2,000 for 15–20 slides', up: [['website', 'People browse it on their own']], down: [['doc', "Nobody presents it; it's read"], ['flier', "It's one message"]], first: [['brand', 'It has to match their brand']], ship: ['pptx', 'pdf'] },
     website: { lane: 'make', level: 3, name: 'Website', short: 'Reflows on any screen', what: 'A site that reflows on any screen. The client hosts it.', great: 'Landing, service, sales and careers pages', use: 'People need to find them online', days: [7, 14], market: '$1,000–$5,000', up: [['prototype', 'It needs logins, bookings or saved data']], down: [['deck', "It's for one room, not the public"], ['flier', 'One message, no scrolling']], first: [['wireframe', 'Compare 2–3 layouts'], ['brand', 'It has to look like them']], ship: ['offline', 'handoff'] },
-    video: { lane: 'make', level: 3, name: 'Animated video', short: 'Motion for social and screens', what: 'A short animation, exported as a video file.', great: 'Event teasers, product reveals, social reels, explainers', use: 'It has to move to get noticed', days: [3, 6], down: [['flier', 'One still image says it all']], first: [['wireframe', 'Storyboard the scenes'], ['brand', 'It has to match their brand']], ship: ['mp4'] },
+    video: { lane: 'make', level: 3, name: 'Animated video', short: 'Motion for social and screens', what: 'A short animation, exported as a video file.', great: 'Event teasers, product reveals, social reels, explainers', use: 'It has to move to get noticed', days: [3, 6], market: '$500–$5,000 for 60 seconds', down: [['flier', 'One still image says it all']], first: [['wireframe', 'Storyboard the scenes'], ['brand', 'It has to match their brand']], ship: ['mp4'] },
     model: { lane: 'make', level: 3, name: '3D object', short: 'A model you can spin', what: 'A 3D model of a product, logo or object. It turns in the browser and downloads as a 3D file.', great: 'Product previews, 3D logos, packaging', use: 'They need to see it from every side', days: [3, 6], up: [['prototype', 'People need to customize or order it']], down: [['flier', 'One angle is enough']], ship: ['file3d', 'image'] },
-    prototype: { lane: 'make', level: 4, name: 'Interactive prototype', short: 'A clickable app that works', what: "A clickable app that works, for testing an idea before it's built.", great: 'App ideas, booking flows, internal tools', use: 'They need to try it before paying to build it', days: [10, 20], market: '$500–$15,000, by screen count', down: [['website', 'Nothing needs to save or respond'], ['doc', "It's a plan to read, not a tool to use"]], first: [['wireframe', 'Map the screens']], ship: ['handoff', 'offline'], top: 'Top of the ladder. Going live with real users needs a developer.' },
+    prototype: { lane: 'make', level: 4, name: 'Interactive prototype', short: 'A clickable app that works', what: "A clickable app that works, for testing an idea before it's built.", great: 'App ideas, booking flows, internal tools', use: 'They need to try it before paying to build it', days: [10, 20], market: '$500–$5,000+', down: [['website', 'Nothing needs to save or respond'], ['doc', "It's a plan to read, not a tool to use"]], first: [['wireframe', 'Map the screens']], ship: ['handoff', 'offline'], top: 'Top of the ladder. Going live with real users needs a developer.' },
     pdf: { lane: 'ship', name: 'PDF', short: 'Print-ready pages', what: 'Print-ready pages.', use: "It's printed, signed or sent read-only" },
     pptx: { lane: 'ship', name: 'PowerPoint', short: 'Editable slides', what: 'Editable slides. Also opens in Google Slides.', use: 'They will edit the slides themselves' },
     image: { lane: 'ship', name: 'Image (PNG)', short: 'For social posts', what: 'Sized for social and messaging.', use: "It's posted, not printed" },
@@ -1148,7 +1463,7 @@ class Component extends DCLogic {
     file3d: { lane: 'ship', name: '3D file (GLB or OBJ)', short: 'Opens in 3D apps', what: 'A 3D file for web viewers, AR and 3D software.', use: 'They need the model itself, not just pictures' },
     offline: { lane: 'ship', name: 'Standalone HTML', short: 'One file, opens anywhere', what: 'One file that opens anywhere and uploads to their host.', use: 'They host it themselves' },
     handoff: { lane: 'ship', name: 'Developer handoff', short: 'For a developer to build', what: 'A package a developer builds the live version from.', use: 'It needs payments, accounts or data' },
-    retainer: { lane: 'ongoing', name: 'Monthly retainer', short: 'Posts, emails, updates', what: 'New design work every month: social posts, newsletter issues and small updates to delivered pieces.', use: 'They need fresh content every month', skip: "It's a one-time project", market: 'Design subscriptions start near $700/mo', covers: [['flier', 'New posts each month'], ['email', 'A new issue each month'], ['website', 'Small updates to delivered pages']] }
+    retainer: { lane: 'ongoing', name: 'Monthly retainer', short: 'Posts, emails, updates', what: 'New design work every month: social posts, newsletter issues and small updates to delivered pieces.', use: 'They need fresh content every month', skip: "It's a one-time project", market: '$500–$2,500 a month', covers: [['flier', 'New posts each month'], ['email', 'A new issue each month'], ['website', 'Small updates to delivered pages']] }
   };
   ROWS = {
     make: [['Step up when it outgrows this', 'up', 'Step up'], ["Step down when it's too much", 'down', 'Step down'], ['Plan first', 'first', 'Plan first'], ['Ships as', 'ship', 'Ships as']],
@@ -1236,7 +1551,7 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
   meBusy = false;
   meCopy = (txt, which) => {
     const done = () => { this.setState({ meCopied: which }); clearTimeout(this.meT); this.meT = setTimeout(() => this.setState({ meCopied: '' }), 1600); };
-    try { navigator.clipboard.writeText(txt).then(done, () => window.prompt('Copy this:', txt)); } catch (e) { window.prompt('Copy this:', txt); }
+    try { navigator.clipboard.writeText(txt).then(done, () => this.setState({ copyBox: { text: txt } })); } catch (e) { this.setState({ copyBox: { text: txt } }); }
   };
   mePlanText = (j, ma) => {
     const A = v => Array.isArray(v) ? v : (v ? [v] : []), b = j.build || {}, lk = j.look || {}, f = j.full || {}, su = j.setup || {}, ctx = this.meCtx(ma || {});
@@ -1258,13 +1573,13 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     this.meBusy = true; this.setState({ meErr: '', meStep: 'plan' }); window.scrollTo({ top: 0 });
     const body = { system: this.meSys(ma), max_tokens: 3000, messages: [{ role: 'user', content: 'Summary:\n' + (text || '(none)') + (ctx.length ? '\n\nAnswers:\n' + ctx.map(c => '- ' + c).join('\n') : '') }] };
     try {
-      let out;
-      try { out = await window.claude.complete({ ...body, model: 'claude-sonnet-4-5' }); } catch (e) { out = await window.claude.complete(body); }
+      const out = await this.askClaude(body.system, body.messages[0].content);
       const j = JSON.parse(out.slice(out.indexOf('{'), out.lastIndexOf('}') + 1));
       const entry = { id: 'r' + Date.now().toString(36), at: Date.now(), text, ans: ma, rec: j };
       this.meBusy = false;
+      if (this.db) this.put('plans/' + entry.id, this.clean(entry));
       this.setState(s => ({ meRec: j, meCur: entry.id, meHist: [entry, ...(s.meHist || [])].slice(0, 20) }));
-    } catch (e) { this.meBusy = false; this.setState({ meErr: "Couldn't get a recommendation. Try again in a moment.", meStep: this.state.meRec ? 'plan' : 'q' }); }
+    } catch (e) { this.meBusy = false; this.setState({ meErr: this.askErr(e, 'get a plan'), meStep: this.state.meRec ? 'plan' : 'q' }); }
   };
   meAnswered(j) {
     const A = v => Array.isArray(v) ? v : (v ? [v] : []);
@@ -1286,15 +1601,15 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const user = 'Summary:\n' + (st.meText || '(none)') + (ctx.length ? '\n\nAnswers:\n' + ctx.map(c => '- ' + c).join('\n') : '') + '\n\nPrevious plan (JSON):\n' + JSON.stringify(prev) + '\n\nAnswers to its gaps:\n' + answered.map(x => '- ' + x.q + ' -> ' + x.a).join('\n') + '\n\nRevise the plan to reflect these answers. Fill "changes" with what changed. In "gaps", list only questions still open or newly raised.';
     const body = { system: this.meSys(ma), max_tokens: 3000, messages: [{ role: 'user', content: user }] };
     try {
-      let out;
-      try { out = await window.claude.complete({ ...body, model: 'claude-sonnet-4-5' }); } catch (e) { out = await window.claude.complete(body); }
+      const out = await this.askClaude(body.system, body.messages[0].content);
       const nj = JSON.parse(out.slice(out.indexOf('{'), out.lastIndexOf('}') + 1));
       nj.answered = answered; nj.version = (j.version || 1) + 1;
       const base = [...this.chatPlans, ...(st.meHist || [])].find(x => x.id === id) || {};
       const entry = { ...base, id, at: Date.now(), text: st.meText || base.text || '', ans: ma, rec: nj };
+      if (this.db) this.put('plans/' + id, this.clean(entry));
       this.meBusy = false;
       this.setState(s => ({ meRec: nj, meOver: { ...(s.meOver || {}), [id]: entry }, meGapDraft: { ...(s.meGapDraft || {}), [id]: {} } }));
-    } catch (e) { this.meBusy = false; this.setState({ meErr: "Couldn't update the plan. Try again in a moment." }); }
+    } catch (e) { this.meBusy = false; this.setState({ meErr: this.askErr(e, 'update the plan') }); }
   };
   meVals(tab) {
     const st = this.state, j = st.meRec, busy = this.meBusy, ma = st.meA || {}, P = this.P;
@@ -1335,7 +1650,7 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const allHist = Object.values([...this.chatPlans.filter(x => !hidden.includes(x.id)).map(pick), ...(st.meHist || []).map(pick)].reduce((m, x) => { if (!m[x.id] || (m[x.id].at || 0) < (x.at || 0)) m[x.id] = x; return m; }, {})).sort((x, y) => (y.at || 0) - (x.at || 0));
     const curEntry = allHist.find(x => x.id === st.meCur);
     const chatE = this.chatPlans.find(x => x.id === st.meCur), localE = [over[st.meCur], (st.meHist || []).find(x => x.id === st.meCur)].filter(Boolean).sort((x, y) => (y.at || 0) - (x.at || 0))[0];
-    const needsSync = !!j && !busy && !!localE && (!chatE || (localE.at || 0) > (chatE.at || 0));
+    const needsSync = !this.db && !!j && !busy && !!localE && (!chatE || (localE.at || 0) > (chatE.at || 0));
     const ansList = j ? this.meAnswered(j) : [], openGaps = j ? this.meOpenGaps(j) : [], drafts = (st.meGapDraft || {})[st.meCur] || {};
     const changes = j ? A(j.changes).filter(Boolean) : [], hasGapBlock = ansList.length + openGaps.length > 0;
     const seen = st.meSeen || {}, newOf = x => x.fromChat && (seen[x.id] || 0) < (x.at || 0) && !(over[x.id] && (over[x.id].at || 0) >= (x.at || 0));
@@ -1369,6 +1684,8 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
         hasPrompt: !!prompt, prompt: filled, promptParts, hasBlanks: tokens.length > 0, blanks,
         promptLabel: 'First prompt to paste' + (tokens.length ? ' · ' + fillN + ' of ' + tokens.length + ' blanks filled' : ''),
         needsSync, syncMsg: (chatE ? 'Changed here, not in chat yet.' : 'Made here, not in chat yet.') + ' Copy it and paste in chat to save it to the plans file.',
+        savedToAccount: !!this.db && !!j && !busy,
+        gapHint: this.db ? 'Answered in chat instead? The new version shows here once Claude saves it.' : 'Answered in chat instead? Reload the Hub and the new version shows here.',
         copyChatLabel: st.meCopied === 'chat' ? 'Copied ✓' : 'Copy for chat',
         copyChat: () => { if (!localE) return; const r = localE.rec || {}, { fromChat, ...base } = localE;
           const e = { ...base, at: new Date().toISOString(), text: localE.text || st.meText || '', ans: localE.ans || ma, rec: { ...r, version: r.version || 1, answered: r.answered || [], changes: r.changes || [] } };
@@ -1376,7 +1693,7 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
         copyPlan: () => j && this.meCopy(this.mePlanText(j, ma), 'plan'), copyPlanLabel: st.meCopied === 'plan' ? 'Copied ✓' : 'Copy plan',
         copyPrompt: () => this.meCopy(filled, 'prompt'), copyPromptLabel: st.meCopied === 'prompt' ? 'Copied ✓' : 'Copy prompt',
         isClient, hasPb: !!pbId,
-        runIntake: () => { this.setState({ a: pbId ? { pb: pbId, goal: [pbId] } : {}, pos: pbId ? 'client' : 'start', tab: 'intake', cur: this.newId(), seenBrief: false, showSaved: false }); window.scrollTo({ top: 0 }); },
+        runIntake: () => { this.setState({ a: pbId ? { pb: pbId, goal: [pbId] } : {}, pos: pbId ? 'client' : 'start', tab: 'intake', cur: this.newId(), seenBrief: false, seenProp: false, showSaved: false }); window.scrollTo({ top: 0 }); },
         openPb: () => { const g = P[pbId].grp; this.setState(s => ({ tab: 'playbooks', pbFilter: 'all', open: { ...(s.open || {}), [pbId]: true }, more: { ...(s.more || {}), [g]: true } })); window.scrollTo({ top: 0 }); },
         seeLooks: () => { this.setState({ tab: 'formats' }); setTimeout(() => this.jumpTo(this.looksRef), 80); },
         seeFormats: () => { this.setState({ tab: 'formats' }); window.scrollTo({ top: 0 }); },
@@ -1386,14 +1703,15 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
           name: (hh.rec && hh.rec.title) || (hh.text || '').slice(0, 60) || 'Untitled plan', meta: [new Date(hh.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), hh.rec && hh.rec.version > 1 ? 'v' + hh.rec.version + ', ' + this.meAnswered(hh.rec).length + ' answered' : '', (hh.text || '') ? hh.text.slice(0, 90) + (hh.text.length > 90 ? '…' : '') : ''].filter(Boolean).join(' · '),
           isCur: hh.id === st.meCur, notCur: hh.id !== st.meCur,
           open: () => this.meOpen(hh),
-          del: () => this.setState(s => ({ ...(hh.fromChat ? { meHidden: [...(s.meHidden || []), hh.id] } : { meHist: (s.meHist || []).filter(x => x.id !== hh.id) }), ...(s.meCur === hh.id ? { meRec: null, meCur: '' } : {}) }))
+          delLabel: st.confirmDel === 'p:' + hh.id ? 'Tap to confirm' : 'Delete',
+          del: () => this.confirmThen('p:' + hh.id, () => { if (this.db) this.put('plans/' + hh.id, null); this.setState(s => ({ ...(hh.fromChat ? { meHidden: [...(s.meHidden || []), hh.id] } : { meHist: (s.meHist || []).filter(x => x.id !== hh.id) }), ...(s.meCur === hh.id ? { meRec: null, meCur: '' } : {}) })); })
         })),
         homes: this.HOMES.map(([name, what, when]) => { const on = !!hp && hp === name.toLowerCase(); return { name, what, when, on, bd: on ? 'var(--color-accent)' : 'var(--color-divider)' }; }),
         order: order.map((t, i) => ({ n: String(i + 1), t, arrow: i < order.length - 1 }))
       }
     };
   }
-  TABS = [['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal'], ['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats'], ['looks', 'Looks'], ['me', 'For me']];
+  TABS = [['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal'], ['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats'], ['looks', 'Looks'], ['me', 'For me'], ['settings', 'Settings']];
 
   CORE = ['client', 'type', 'goal', 'use', 'needs', 'host', 'brand', 'when', 'budget'];
   FEAT = ['launch', 'rebrand', 'found', 'book', 'pitch', 'report', 'organize', 'onboard'];
@@ -1543,13 +1861,13 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const primary = make.length ? [...make].sort((x, y) => (sc[y] || 0) - (sc[x] || 0))[0] : null;
     const eShip = primary ? (F[primary].ship || []).filter(x => x !== 'handoff' || devOk).slice(0, 1) : [];
     const pkgs = { essential: { prep: [], make: primary ? [primary] : [], ship: eShip, ongoing: false }, full: { prep: prepIds, make, ship: shipIds, ongoing } };
-    Object.values(pkgs).forEach(pk => { const [l, h] = this.span([...pk.prep, ...pk.make], wd); pk.turn = this.fmtTurn(l, h); });
+    Object.values(pkgs).forEach(pk => { const [l, h] = this.span([...pk.prep, ...pk.make], wd); pk.turn = this.fmtTurn(l, h); pk.lo = l; pk.hi = h; });
     const pkgSel = a.pkg === 'essential' ? 'essential' : 'full', sp = pkgs[pkgSel];
     const words = { ready: 'They supply the final wording.', ai: 'I write first drafts with AI. They edit and approve every word.', mix: 'They supply what they have. I draft the rest with AI for them to edit and approve.' }[a.words] || 'To confirm on the kickoff call.';
     const terms = [
       ['Revisions', o.rounds + ' rounds included. A revision changes what was agreed: wording, colors, images, layout. New pages, formats or a new direction are new scope, quoted separately.'],
       ['Payment', o.dep + '% deposit to start, ' + (100 - o.dep) + '% on delivery.'],
-      ['After delivery', 'Fixes to delivered work are free for ' + o.fix + ' days, then quoted as needed. They own the files and hosting. No ongoing maintenance.'],
+      ['After delivery', 'Fixes to delivered work are free for ' + o.fix + ' days, then ' + this.money(o.hourly ?? 75) + ' an hour. They own the files and hosting. No ongoing maintenance.'],
       ['Words', words]
     ];
     if (sp.ongoing) terms.push(['Ongoing', 'A monthly retainer for new posts, emails and small updates, quoted per month.']);
@@ -1608,9 +1926,9 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
 
   renderVals() {
     const { Q, F, P } = this, a = this.state.a || {}, tab = this.state.tab, mode = this.state.mode || 'quick';
-    const showTips = this.props.showTips ?? true, dim = this.props.dimOthers ?? true, showMarket = this.props.showMarket ?? false;
-    const studio = this.props.studioName || 'Design hub', email = this.props.contactEmail || '', bookingUrl = this.props.bookingUrl || '', validDays = this.props.validDays ?? 14;
-    const o = { rounds: this.props.revisionRounds ?? 2, dep: this.props.depositPct ?? 50, fix: this.props.fixDays ?? 30 };
+    const cf = this.cfg(), showTips = cf.showTips, dim = cf.dim, showMarket = cf.showMarket;
+    const studio = cf.studio, email = cf.email, bookingUrl = cf.bookingUrl, validDays = cf.valid;
+    const o = { rounds: cf.rounds, dep: cf.dep, fix: cf.fix, hourly: cf.hourly };
     const r = this.rec(a, o), guide = this.guide(r, a, o);
     const V = this.visibleQs(a, r, mode), ids = V.map(x => x.id);
     let pos = this.state.pos || 'start';
@@ -1688,22 +2006,49 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
     const sp = showPkgs ? r.pkgs[r.pkgSel] : r.pkgs.full;
     const to = (info.contact || '').includes('@') ? info.contact.trim() : '';
     const hi = info.name ? 'Hi ' + info.name.trim().split(' ')[0] + ',' : 'Hi,';
-    const sign = ['', '— ' + studio + (email ? ' · ' + email : '')];
-    const mail = (subj, lines) => 'mailto:' + to + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(lines.join('\n'));
-    const mailBrief = mail('Project brief: ' + b.business, [hi, '', 'Thanks for the call. Here is a summary of the brief.', '',
+    const sign = ['', '— ' + studio + (email ? ' · ' + email : '') + (bookingUrl ? '\n' + bookingUrl : '')];
+    const mailText = (subj, lines) => (to ? 'To: ' + to + '\n' : '') + 'Subject: ' + subj + '\n\n' + lines.join('\n');
+    const briefEmail = mailText('Project brief: ' + b.business, [hi, '', 'Thanks for the call. Here is a summary of the brief.', '',
       'Goal: ' + b.facts[0].value, 'Recommended path: ' + pkItems(sp).join(' → '), 'Look: ' + r.look.name, 'Turnaround: ' + sp.turn + ', after kickoff', '',
       'What we need from you:', ...r.supplies.map(x => '- ' + x), '', r.nextLine, ...sign]);
-    const prices = a.prices || {}, prIds = [...sp.prep, ...sp.make];
-    const items = prIds.map(id => { const sh = (F[id].ship || []).filter(x => sp.ship.includes(x)).map(x => F[x].name); return { name: F[id].name, desc: F[id].what + (sh.length ? ' Delivered as ' + sh.join(', ') + '.' : ''), price: prices[id] || '', onPrice: e => { const v = e.target.value; this.setState(s2 => ({ a: { ...s2.a, prices: { ...(s2.a.prices || {}), [id]: v } } })); } }; });
-    const total = prIds.reduce((t2, id) => t2 + this.num(prices[id]), 0), dep = total * o.dep / 100;
+    const q = this.quote(a, r, sp, cf), T = this.TIER_IDX, tierName = t => this.TIERS.find(x => x[0] === t)[1];
+    const setA2 = (k, v) => this.setState(s2 => ({ a: { ...s2.a, [k]: v } }));
+    const setMap = (k, id, v) => this.setState(s2 => ({ a: { ...s2.a, [k]: { ...(s2.a[k] || {}), [id]: v } } }));
+    const items = q.lines.map(ln => {
+      const f = F[ln.id], sh = (f.ship || []).filter(x => sp.ship.includes(x)).map(x => F[x].name);
+      return { name: f.name, desc: f.what + (sh.length ? ' Delivered as ' + sh.join(', ') + '.' : ''), tierName: tierName(ln.t), tierWhat: this.PRICES[ln.id][T[ln.t]][1],
+        tiers: this.TIERS.map(([k, label]) => ({ label, price: this.money(cf.prices[ln.id][T[k]]), pressed: k === ln.t ? 'true' : 'false',
+          go: () => this.setState(s2 => ({ a: { ...s2.a, tiers: { ...(s2.a.tiers || {}), [ln.id]: k }, prices: { ...(s2.a.prices || {}), [ln.id]: undefined } } })) })),
+        price: ln.isCustom ? String(a.prices[ln.id]) : String(ln.list), isCustom: ln.isCustom, amountLabel: this.money(ln.amount), priceAria: 'Price for ' + f.name,
+        onPrice: e => setMap('prices', ln.id, e.target.value), resetPrice: () => setMap('prices', ln.id, undefined),
+        hasMarket: showMarket && !!f.market, market: f.market || '' };
+    });
+    const extras = q.extras.map(ex => ({ label: ex.label, note: ex.note, amount: (ex.amount < 0 ? '−' : '') + this.money(Math.abs(ex.amount)), op: ex.off ? 0.55 : 1, np: ex.amount === 0 ? '' : undefined,
+      isStep: !!ex.step, count: String(ex.count || 0), inc: () => setA2(ex.key, Math.min(30, (a[ex.key] || 0) + 1)), dec: () => setA2(ex.key, Math.max(0, (a[ex.key] || 0) - 1)),
+      isToggle: !!ex.toggle, toggleLabel: ex.off ? 'Add it back' : ex.toggle, toggle: () => setA2(ex.key, !ex.off) }));
+    const bandName = this.lab('budget', a.budget), canEss = showPkgs && r.pkgSel === 'full';
+    const budget = { show: !!q.fit, canEssential: q.fit === 'over' && canEss, useEssential: () => this.setA('pkg', 'essential'),
+      label: q.fit === 'over' ? 'Over budget' : q.fit === 'under' ? 'Under budget' : 'Fits budget',
+      text: q.fit === 'over' ? 'Their budget is ' + bandName + ' and this comes to ' + this.money(q.total) + '. ' + (canEss ? 'Try the Essential package or Simple levels.' : 'Try Simple levels, or move a piece to later.')
+        : q.fit === 'under' ? 'Their budget is ' + bandName + '. There is room for a higher level or an add-on.' : 'Their budget is ' + bandName + '. Only you see this.',
+      bg: q.fit === 'over' ? 'var(--color-warn-bg)' : q.fit === 'under' ? 'var(--color-accent-2-100)' : 'var(--color-accent-100)',
+      col: q.fit === 'over' ? 'var(--color-warn-text)' : q.fit === 'under' ? 'var(--color-accent-2-800)' : 'var(--color-accent-800)' };
+    const rt = q.retainer;
+    const ret = rt ? { price: this.money(rt.amount), tierName: tierName(rt.t), what: this.PRICES.retainer[T[rt.t]][1], tiers: this.TIERS.map(([k, label]) => ({ label: label + ' · ' + this.money(cf.prices.retainer[T[k]]), pressed: k === rt.t ? 'true' : 'false', go: () => setMap('tiers', 'retainer', k) })) } : { price: '', tierName: '', what: '', tiers: [] };
+    const addons = [...r.addons];
+    if (sp.make.some(f => ['website', 'flier', 'deck', 'email', 'doc'].includes(f))) addons.push('Brand photos by Pomare Portraits, quoted separately');
+    const lineText = [...items.map(x => '- ' + x.name + ' (' + x.tierName + '): ' + x.amountLabel), ...q.extras.filter(x => x.amount).map(x => '- ' + x.label + ': ' + (x.amount < 0 ? '−' : '') + this.money(Math.abs(x.amount)))];
+    const proposalEmail = mailText('Proposal: ' + b.business, [hi, '', 'Here is the proposal for ' + pkItems(sp).join(', ') + '.', '', ...lineText, '',
+      'Total: ' + this.money(q.total), 'Deposit (' + o.dep + '%) to start: ' + this.money(q.dep), 'Balance on delivery: ' + this.money(q.total - q.dep), ...(rt ? ['Then monthly: ' + ret.price + ' a month (' + ret.what + ')'] : []), '',
+      'Turnaround: ' + sp.turn + ' after kickoff. Valid for ' + validDays + ' days.', cf.payUrl ? 'Pay the deposit here to book the kickoff: ' + cf.payUrl : 'Reply to accept and I will send the deposit details.', ...sign]);
     const pr = {
       pkgName: (showPkgs ? PK[r.pkgSel][0] : 'Recommended') + ' package', pkgLine: sp.make.length ? pkItems(sp).join(' → ') + ' · ' + sp.turn + ' after kickoff' : '',
-      items, noItems: !items.length, subtotal: this.money(total), deposit: this.money(dep), balance: this.money(total - dep), depLabel: 'Deposit (' + o.dep + '%) to start',
-      retainer: sp.ongoing, addons: r.addons.length ? r.addons : ['None suggested'], valid: 'Valid for ' + validDays + ' days', signs: ['Client signature', 'Name', 'Date'],
-      mail: mail('Proposal: ' + b.business, [hi, '', 'Here is the proposal for ' + pkItems(sp).join(', ') + '.', '',
-        ...items.map(x => '- ' + x.name + ': ' + this.money(this.num(x.price))), '', 'Total: ' + this.money(total), 'Deposit (' + o.dep + '%) to start: ' + this.money(dep), 'Balance on delivery: ' + this.money(total - dep), '',
-        'Turnaround: ' + sp.turn + ' after kickoff. Valid for ' + validDays + ' days.', 'Reply to accept and I will send the deposit details.', ...sign])
+      items, extras, noItems: !items.length, subtotal: this.money(q.total), deposit: this.money(q.dep), balance: this.money(q.total - q.dep), depLabel: 'Deposit (' + o.dep + '%) to start',
+      retainer: !!rt, ret, addons: addons.length ? addons : ['None suggested'], valid: 'Valid for ' + validDays + ' days', signs: ['Client signature', 'Name', 'Date'],
+      hasPay: !!cf.payUrl, payUrl: cf.payUrl, budget,
+      copyEmail: () => this.copyText(proposalEmail, 'Proposal email copied. Paste it into a new email.'), copyLabel: 'Copy email', save: () => this.saveDoc('proposal')
     };
+    const est = { has: q.lines.length > 0, total: this.money(q.total), fit: q.fit === 'over' ? 'Over budget' : q.fit === 'under' ? 'Under budget' : q.fit === 'fits' ? 'Fits budget' : 'No budget given', fitTag: q.fit === 'over' ? 'tag-warn' : q.fit ? 'tag-accent' : 'tag-neutral' };
 
     const sel = F[this.state.sel] ? this.state.sel : 'website', n = F[sel], rowsDef = this.ROWS[n.lane];
     const linkList = key => key === 'ship' ? (n.ship || []).map(id => [id, F[id].use]) : key === 'from' ? Object.keys(F).filter(id => (F[id].ship || []).includes(sel)).map(id => [id, '']) : (n[key] || []);
@@ -1740,40 +2085,104 @@ Reply with ONLY a JSON object. No prose, no code fences. Shape:
 
     const briefRefs = [...r.prepIds, ...r.makeIds].map(id => ({ name: F[id].name, links: this.refsFor([id]) })).filter(x => x.links.length);
     const askList = guide.objections.map((ob, i) => { const op = this.state.ask === i; return { q: ob.q, a: ob.a, open: op, sign: op ? '−' : '+', toggle: () => this.setState({ ask: op ? -1 : i }) }; });
-    const doneT = { intake: r.make.length > 0, brief: !!this.state.seenBrief, proposal: total > 0 };
-    const goTab = id => { this.setState({ tab: id }); window.scrollTo({ top: 0 }); };
+    const doneT = { intake: r.make.length > 0, brief: !!this.state.seenBrief, proposal: !!this.state.seenProp && q.total > 0 };
+    const goTab = id => { this.setState({ tab: id, navMore: false }); window.scrollTo({ top: 0 }); };
     const savedList = (this.state.saved || []).map(e => {
       const ea = e.a || {}, ci = ea.client || {}, isCur = e.id === this.state.cur;
       const gl = (ea.goal || []).filter(g => P[g]).map(g => P[g].name).join(', ');
       return { name: ci.business || ci.name || 'Untitled intake', meta: [new Date(e.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), gl].filter(Boolean).join(' · '), isCur, notCur: !isCur,
-        open: () => { this.setState({ a: e.a, mode: e.mode || 'quick', pos: e.pos || 'start', cur: e.id, tab: 'intake', showSaved: false, seenBrief: false }); window.scrollTo({ top: 0 }); },
-        del: () => { if (!window.confirm('Delete ' + (ci.business || ci.name || 'this intake') + '?')) return; this.setState(s2 => ({ saved: s2.saved.filter(x => x.id !== e.id), ...(isCur ? { a: {}, pos: 'start', cur: this.newId(), tab: 'intake' } : {}) })); } };
+        open: () => { this.setState({ a: e.a, mode: e.mode || 'quick', pos: e.pos || 'start', cur: e.id, tab: 'intake', showSaved: false, seenBrief: false, seenProp: false }); window.scrollTo({ top: 0 }); },
+        delLabel: this.state.confirmDel === 'i:' + e.id ? 'Tap to confirm' : 'Delete',
+        del: () => this.confirmThen('i:' + e.id, () => { if (this.db) this.put('intakes/' + e.id, null); this.setState(s2 => ({ saved: (s2.saved || []).filter(x => x.id !== e.id), ...(isCur ? { a: {}, pos: 'start', cur: this.newId(), tab: 'intake' } : {}) })); }) };
     });
     const termI = this.state.term ?? -1, termSel = this.GLOSSARY[termI];
     const termList = this.GLOSSARY.map(([t2], i) => { const on = i === termI; return { t: t2, go: () => this.setState({ term: on ? -1 : i }), bd: on ? 'var(--color-accent)' : 'var(--color-divider)', bg: on ? 'var(--color-accent-100)' : 'transparent' }; });
     const lid = r.look.id;
+    const mv = this.meVals(tab);
+    const navGo = id => { this.setState({ tab: id, navMore: false }); window.scrollTo({ top: 0 }); };
+    const refIds = ['guide', 'playbooks', 'formats', 'settings'];
+    const bottomTabs = [
+      ...[['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal']].map(([id, label], i) => ({ label, n: doneT[id] && tab !== id ? '✓' : String(i + 1), current: tab === id ? 'page' : undefined, go: () => navGo(id) })),
+      { label: 'Library', n: '⋯', current: refIds.includes(tab) ? 'page' : undefined, go: () => this.setState(s2 => ({ navMore: !s2.navMore })) },
+      { label: 'For me', n: mv.meTab.hasNew ? String(mv.meTab.newN) : '·', current: tab === 'me' ? 'page' : undefined, go: () => navGo('me') }
+    ];
+    const moreSheet = { open: !!this.state.navMore, close: () => this.setState({ navMore: false }), items: [['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats & looks'], ['settings', 'Settings']].map(([id, label]) => ({ label, go: () => navGo(id) })) };
+    const store = this.db ? 'account' : this.state.store === 'lost' ? 'lost' : 'local';
+    const storeNote = store === 'account' ? 'Saved to your account, so your phone and computer see the same work. To bring in work from the old hub, press Copy backup there, then Restore here.'
+      : store === 'lost' ? 'Lost the connection to your account. New work stays on this device until you reload.'
+      : 'Saved in this browser only. Work from your phone or another browser stays there: press Copy backup on that device, then Restore here.';
+    const noSavedNote = store === 'account' ? 'None yet. An intake saves once it has a client name or goal.' : 'None in this browser yet. An intake saves once it has a client name or goal.';
+    const draft = this.state.setDraft || this.draftFrom(cf);
+    const textField = (k, label, ph, type, help) => ({ id: 'set-' + k, label, ph, type, help, value: draft[k] || '', onChange: e => { const v = e.target.value; this.editDraft(d => ({ ...d, [k]: v })); } });
+    const numField = (k, label, unit, help) => ({ id: 'set-' + k, label, unit, help, value: String(draft[k] ?? ''), onChange: e => { const v = e.target.value; this.editDraft(d => ({ ...d, [k]: v })); } });
+    const setVals = {
+      storeLine: store === 'account' ? 'Saved to your account, so your phone and computer share the same details and prices.' : store === 'lost' ? 'Lost the connection to your account. Changes stay on this device until you reload.' : 'Saved in this browser.',
+      status: this.state.setDraft ? 'Unsaved changes' : '', clean: !this.state.setDraft, save: this.saveSettings,
+      fields: [
+        textField('studio', 'Studio name', 'Housemade Studio', 'text', 'At the top of the hub and on every brief and proposal.'),
+        textField('email', 'Email', 'you@example.com', 'email', 'On briefs and in email sign-offs.'),
+        textField('bookingUrl', 'Booking link', 'https://calendly.com/your-name', 'url', 'Adds a "Book the kickoff call" button to briefs.'),
+        textField('payUrl', 'Deposit payment link', 'https://paypal.me/your-name', 'url', 'Shown on proposals so clients can pay the deposit.')
+      ],
+      nums: [
+        numField('rounds', 'Revision rounds included', 'rounds', 'Before extra rounds are charged.'),
+        numField('dep', 'Deposit', '%', 'Of the total, paid to start.'),
+        numField('fix', 'Free fixes after delivery', 'days', 'Fixes to delivered work cost nothing for this long.'),
+        numField('hourly', 'Small changes after that', '$ an hour', 'Quoted in "How we work".'),
+        numField('valid', 'Proposals valid for', 'days', ''),
+        numField('rush', 'Rush fee', '%', 'When their deadline is shorter than the usual turnaround.'),
+        numField('rushHard', 'Big rush fee', '%', 'When their deadline is under half the usual turnaround.'),
+        numField('bundle', 'Full package discount', '%', 'When they take the whole recommended path.'),
+        numField('roundPct', 'Extra revision round', '% of the work', ''),
+        numField('roundMin', 'Extra round minimum', '$', ''),
+        numField('perPage', 'Writing from scratch', '$ a page', 'Per page or section when they have no words yet.'),
+        numField('perFormat', 'Extra size or format', '$ each', '')
+      ],
+      toggles: [['showTips', 'Show "Listen for" tips in the intake', 'Short reminders under each question.'], ['showMarket', 'Show market prices', 'Only you see them, next to proposal lines and formats. They never go on a brief or proposal.']]
+        .map(([k, label, help]) => ({ id: 'set-' + k, label, help, on: !!draft[k], onChange: e => { const v = e.target.checked; this.editDraft(d => ({ ...d, [k]: v })); } })),
+      prices: Object.keys(this.PRICES).map(id => ({ name: F[id].name, unit: id === 'retainer' ? 'Per month' : F[id].lane === 'prep' ? 'Plan first' : F[id].lane === 'ship' ? 'Ship' : 'Make',
+        cells: this.PRICES[id].map(([, what], i) => ({ what, aria: F[id].name + ', ' + this.TIERS[i][1], value: (draft.prices[id] || [])[i] ?? '',
+          onChange: e => { const v = e.target.value; this.editDraft(d => { const row = [...(d.prices[id] || [])]; row[i] = v; return { ...d, prices: { ...d.prices, [id]: row } }; }); } })) })),
+      resetPrices: () => this.editDraft(d => ({ ...d, prices: Object.fromEntries(Object.keys(this.PRICES).map(id => [id, this.PRICES[id].map(x => String(x[0]))])) }))
+    };
     return {
-      ...this.meVals(tab), studio, email, hasEmail: !!email, bookingUrl, hasBooking: !!bookingUrl, noBooking: !bookingUrl,
+      ...mv, studio, email, hasEmail: !!email, bookingUrl, hasBooking: !!bookingUrl, noBooking: !bookingUrl,
+      est, bottomTabs, moreSheet, set: setVals, storeNote, noSavedNote, hasToast: !!this.state.toast, toast: this.state.toast || '',
+      copyBox: { open: !!this.state.copyBox, text: (this.state.copyBox || {}).text || '', close: () => this.setState({ copyBox: null }) },
+      goSettings: () => goTab('settings'), briefRef: this.briefRef, propRef: this.propRef,
+      copyBriefEmail: () => this.copyText(briefEmail, 'Brief email copied. Paste it into a new email.'), copyBriefLabel: 'Copy email', saveBrief: () => this.saveDoc('brief'),
       callTabs: [['intake', 'Intake'], ['brief', 'Brief'], ['proposal', 'Proposal']].map(([id, label], i) => { const on = tab === id, dn = doneT[id] && !on; return { label, n: dn ? '✓' : String(i + 1), arrow: i < 2, go: () => goTab(id), bd: on ? 'var(--color-accent)' : 'transparent', col: on ? 'var(--color-text)' : 'var(--color-neutral-700)', numBg: on || dn ? 'var(--color-accent-700)' : 'transparent', numCol: on || dn ? 'var(--color-bg)' : 'var(--color-accent-700)' }; }),
       refTabs: [['guide', 'Call guide'], ['playbooks', 'Playbooks'], ['formats', 'Formats & looks']].map(([id, label]) => ({ label, go: () => goTab(id), bd: tab === id ? 'var(--color-accent)' : 'transparent', col: tab === id ? 'var(--color-text)' : 'var(--color-neutral-700)' })),
       askList, briefRefs, hasBriefRefs: briefRefs.length > 0,
       tabIs: { ...Object.fromEntries(this.TABS.map(([id]) => [id, tab === id])), looks: tab === 'formats' },
-      reset: () => { this.setState({ a: {}, pos: 'start', tab: 'intake', cur: this.newId(), seenBrief: false, showSaved: false }); window.scrollTo({ top: 0 }); },
+      reset: () => { this.setState({ a: {}, pos: 'start', tab: 'intake', cur: this.newId(), seenBrief: false, seenProp: false, showSaved: false }); window.scrollTo({ top: 0 }); },
       showSaved: !!this.state.showSaved, toggleSaved: () => this.setState(s2 => ({ showSaved: !s2.showSaved })),
       bk: { open: !!this.state.bkOpen, text: this.state.bkText || '', msg: this.state.bkMsg || '', copyLabel: this.state.bkCopied ? 'Copied' : 'Copy backup',
         toggle: () => this.setState(s2 => ({ bkOpen: !s2.bkOpen, bkMsg: '' })), onText: e => this.setState({ bkText: e.target.value, bkMsg: '' }),
         copy: () => { const txt = JSON.stringify({ designHubBackup: 1, saved: this.state.saved || [], meHist: this.state.meHist || [] }); const done = () => { this.setState({ bkCopied: true }); setTimeout(() => this.setState({ bkCopied: false }), 1800); }; (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(done).catch(() => this.setState({ bkOpen: true, bkText: txt, bkMsg: 'Copy the text above.' })); },
-        restore: () => { try { const d = JSON.parse(this.state.bkText || ''); const merge = (cur, inc) => { const m = new Map((cur || []).map(x => [x.id, x])); (Array.isArray(inc) ? inc : []).forEach(x => { if (x && x.id && (!m.has(x.id) || (m.get(x.id).at || 0) < (x.at || 0))) m.set(x.id, x); }); return [...m.values()].sort((x, y) => (y.at || 0) - (x.at || 0)); };
-          const before = (this.state.saved || []).length + (this.state.meHist || []).length, saved = merge(this.state.saved, d.saved).slice(0, 60), meHist = merge(this.state.meHist, d.meHist);
-          this.setState({ saved, meHist, bkText: '', bkMsg: 'Added ' + Math.max(0, saved.length + meHist.length - before) + ' new, updated the rest.' }); } catch (e) { this.setState({ bkMsg: "That doesn't look like a backup. Copy it again." }); } } },
+        restore: async () => {
+          let d;
+          try { d = JSON.parse(this.state.bkText || ''); } catch (e) { this.setState({ bkMsg: "That doesn't look like a backup. Copy it again." }); return; }
+          const okId = x => x && typeof x.id === 'string' && /^[A-Za-z0-9_\-.~:@+]{1,200}$/.test(x.id);
+          const newer = (cur, inc) => (Array.isArray(inc) ? inc : []).filter(okId).filter(x => { const m = (cur || []).find(y => y.id === x.id); return !m || (m.at || 0) < (x.at || 0); });
+          const inS = newer(this.state.saved, d.saved), inP = newer(this.state.meHist, d.meHist);
+          if (this.db) {
+            let n = 0;
+            for (const [col, x] of [...inS.map(x => ['intakes', x]), ...inP.map(x => ['plans', x])]) { try { await this.db.doc(col + '/' + x.id).set(this.clean(x)); n++; } catch (e) {} }
+            this.setState({ bkText: '', bkMsg: 'Added or updated ' + n + ' in your account.' });
+            return;
+          }
+          const merge = (cur, inc) => { const m = new Map((cur || []).map(x => [x.id, x])); inc.forEach(x => m.set(x.id, x)); return [...m.values()].sort((x, y) => (y.at || 0) - (x.at || 0)); };
+          this.setState({ saved: merge(this.state.saved, inS).slice(0, 60), meHist: merge(this.state.meHist, inP), bkText: '', bkMsg: 'Added or updated ' + (inS.length + inP.length) + '.' });
+        } },
       noSaved: !(this.state.saved || []).length, savedList,
       termList, hasTerm: !!termSel, termName: termSel ? termSel[0] : '', termDef: termSel ? termSel[1] : '',
       looksRef: this.looksRef, sitesRef: this.sitesRef,
       jumpFormats: () => window.scrollTo({ top: 0, behavior: 'smooth' }), jumpLooks: () => this.jumpTo(this.looksRef), jumpSites: () => this.jumpTo(this.sitesRef),
       rail, progress, q, ix, guide, path, r: rv, b, showMarketLine: showMarket && r.hasMarket, back, next,
-      editAnswers: () => this.go(ids[0] || 'start'), printBrief: () => window.print(),
+      editAnswers: () => this.go(ids[0] || 'start'),
       toProposal: () => { this.setState({ tab: 'proposal' }); window.scrollTo({ top: 0 }); }, toBrief: () => { this.setState({ tab: 'brief' }); window.scrollTo({ top: 0 }); },
-      resetEdits: () => this.setA('edit', undefined), mailBrief, pkgs, showPkgs, pkgTurn: sp.turn, pr,
+      resetEdits: () => this.setA('edit', undefined), pkgs, showPkgs, pkgTurn: sp.turn, pr,
       lookIs: { organic: lid === 'organic', nocturne: lid === 'nocturne', classical: lid === 'classical', industry: lid === 'industry', own: lid === 'own' },
       prepCards: ['wireframe', 'brand'].map(card),
       ladder: [[1, '1 · Simplest'], [2, '2'], [3, '3'], [4, '4 · Most involved']].map(([lv, label]) => ({ label, items: Object.keys(F).filter(id => F[id].level === lv).map(card) })),

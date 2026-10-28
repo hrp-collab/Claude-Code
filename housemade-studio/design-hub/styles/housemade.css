@@ -1,0 +1,236 @@
+/* Housemade Studio: tokens and component classes for the Design Hub.
+   Ivory ground, Ravens purple type and buttons, antique gold corner marks,
+   Barlow Condensed headings over Barlow text. Same token names as the
+   Industry system it replaces, so the hub's inline styles pick it up. */
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap');
+
+:root {
+  --color-bg: #fbf9f3;          /* ivory */
+  --color-surface: #f1ece3;     /* stone */
+  --color-text: #15121c;
+  --color-accent: #241773;      /* Ravens purple */
+  --color-accent-2: #c79a2c;    /* antique gold */
+  --color-gold: #c79a2c;
+  --color-gold-text: #7d611c;   /* gold that reads on ivory */
+  --color-divider: color-mix(in srgb, #15121c 16%, transparent);
+
+  --color-neutral-100: #f6f3ec;
+  --color-neutral-200: #ebe6dc;
+  --color-neutral-300: #d9d3c6;
+  --color-neutral-400: #bab3a5;
+  --color-neutral-500: #9a9386;
+  --color-neutral-600: #7b756a;
+  --color-neutral-700: #5c574f;
+  --color-neutral-800: #403c36;
+  --color-neutral-900: #2a2723;
+
+  --color-accent-100: #ecebf6;
+  --color-accent-200: #d9d5ee;
+  --color-accent-300: #bdb5e0;
+  --color-accent-400: #9488c9;
+  --color-accent-500: #6a5cae;
+  --color-accent-600: #3b2c94;
+  --color-accent-700: #241773;
+  --color-accent-800: #1c125c;
+  --color-accent-900: #140d42;
+
+  --color-accent-2-100: #f6eedb;
+  --color-accent-2-800: #5e4815;
+
+  --color-warn-bg: #fbeee0;
+  --color-warn-text: #7a3d0c;
+
+  --font-heading: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-heading-weight: 600;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #15121c 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #15121c 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #15121c 22%, transparent);
+  color-scheme: light;
+}
+
+/* Dark: near-black purple ground, ivory type, gold takes over as the accent
+   because purple on a dark ground does not read. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #0e0b1a; --color-surface: #18132b; --color-text: #f3efe6;
+    --color-accent: #c79a2c; --color-gold-text: #dbb453;
+    --color-divider: color-mix(in srgb, #f3efe6 18%, transparent);
+    --color-neutral-100: #1d1830; --color-neutral-200: #262040; --color-neutral-300: #3a3356; --color-neutral-400: #5a5373;
+    --color-neutral-500: #7d7795; --color-neutral-600: #9b96b0; --color-neutral-700: #b6b1c6; --color-neutral-800: #d6d2e0; --color-neutral-900: #ece9f2;
+    --color-accent-100: #2a2147; --color-accent-200: #3a2e5e; --color-accent-300: #6b5527; --color-accent-400: #8a6d28;
+    --color-accent-500: #b08a2c; --color-accent-600: #d6ab45; --color-accent-700: #dbb453; --color-accent-800: #ead08b; --color-accent-900: #f5e6bd;
+    --color-accent-2-100: #2e2614; --color-accent-2-800: #ead08b;
+    --color-warn-bg: #3a2513; --color-warn-text: #f3c79a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-bg: #0e0b1a; --color-surface: #18132b; --color-text: #f3efe6;
+  --color-accent: #c79a2c; --color-gold-text: #dbb453;
+  --color-divider: color-mix(in srgb, #f3efe6 18%, transparent);
+  --color-neutral-100: #1d1830; --color-neutral-200: #262040; --color-neutral-300: #3a3356; --color-neutral-400: #5a5373;
+  --color-neutral-500: #7d7795; --color-neutral-600: #9b96b0; --color-neutral-700: #b6b1c6; --color-neutral-800: #d6d2e0; --color-neutral-900: #ece9f2;
+  --color-accent-100: #2a2147; --color-accent-200: #3a2e5e; --color-accent-300: #6b5527; --color-accent-400: #8a6d28;
+  --color-accent-500: #b08a2c; --color-accent-600: #d6ab45; --color-accent-700: #dbb453; --color-accent-800: #ead08b; --color-accent-900: #f5e6bd;
+  --color-accent-2-100: #2e2614; --color-accent-2-800: #ead08b;
+  --color-warn-bg: #3a2513; --color-warn-text: #f3c79a;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+
+/* Frames with gold corner marks: the studio's signature shape. */
+.blueprint { position: relative; border: 1px solid var(--color-divider); border-radius: 0; }
+.blueprint > .corner { position: absolute; width: 13px; height: 13px; color: var(--color-gold); }
+.blueprint > .corner::before, .blueprint > .corner::after { content: ""; position: absolute; background: currentColor; }
+.blueprint > .corner::before { left: 6px; top: 0; width: 2px; height: 100%; }
+.blueprint > .corner::after  { top: 6px; left: 0; width: 100%; height: 2px; }
+.blueprint > .corner.tl { top: -7px; left: -7px; }
+.blueprint > .corner.tr { top: -7px; right: -7px; }
+.blueprint > .corner.bl { bottom: -7px; left: -7px; }
+.blueprint > .corner.br { bottom: -7px; right: -7px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  line-height: 1.08; letter-spacing: 0; margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+img { display: block; max-width: 100%; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-gold) 35%, transparent); }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: 600; letter-spacing: 0.02em;
+  font-size: 16px; line-height: 1.2; color: var(--color-text);
+  background: transparent; border: 1px solid var(--color-divider);
+  padding: var(--space-2) var(--space-4); border-radius: 0;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-bg); }
+.btn-primary:hover { background: var(--color-accent-600); border-color: var(--color-accent-600); }
+.btn-primary:active { background: var(--color-accent-800); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
+.btn-ghost { color: var(--color-accent); border-color: transparent; padding-inline: var(--space-2); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-danger { color: var(--color-warn-text); border-color: var(--color-warn-text); }
+
+/* forms */
+.input {
+  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
+  font-size: 15px; color: var(--color-text); caret-color: var(--color-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider); border-radius: 0;
+}
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 90px; resize: vertical; }
+
+/* cards and tags */
+.card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); border-radius: 0; background: transparent; border: 1px solid var(--color-divider); }
+.card-kicker { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+.card-title { font-family: var(--font-heading); font-weight: 600; font-size: 17px; line-height: 1.2; }
+.tag { display: inline-flex; align-items: center; font-size: 12px; letter-spacing: 0.02em; padding: 3px 10px; border-radius: 0; }
+.tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-gold { background: var(--color-accent-2-100); color: var(--color-accent-2-800); }
+.tag-neutral { background: var(--color-neutral-200); color: var(--color-neutral-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+.tag-warn { background: var(--color-warn-bg); color: var(--color-warn-text); }
+
+/* header brand */
+.hub-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.hub-brand svg { flex: none; width: 34px; height: 34px; }
+.hub-brand .roof { fill: var(--color-gold); }
+.hub-brand .house { fill: var(--color-accent-700); }
+.hub-title {
+  font-family: var(--font-heading); font-weight: 700; font-size: 26px; line-height: 1;
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--color-accent-700);
+  min-width: 0; overflow-wrap: anywhere;
+}
+:root[data-theme="dark"] .hub-title { color: var(--color-text); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hub-title { color: var(--color-text); } }
+
+/* phone layout: the top tabs become a bottom bar */
+.bottom-nav { display: none; }
+.sheet-backdrop { position: fixed; inset: 0; z-index: 40; background: color-mix(in srgb, #000 40%, transparent); }
+@media (max-width: 720px) {
+  .top-nav { display: none !important; }
+  .hub-title { font-size: 21px; }
+  .hub-brand svg { width: 28px; height: 28px; }
+  main.hub-main { padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important; }
+  .bottom-nav {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: var(--color-bg); border-top: 1px solid var(--color-text);
+    padding: 4px max(8px, env(safe-area-inset-right, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+  }
+  .bottom-nav button {
+    font: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: var(--color-neutral-700);
+    background: transparent; border: 0; border-top: 3px solid transparent; min-height: 52px; padding: 6px 2px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer;
+  }
+  .bottom-nav button[aria-current="page"] { color: var(--color-text); border-top-color: var(--color-accent); }
+  .bottom-nav .num {
+    font-family: var(--font-heading); font-size: 15px; line-height: 1; min-width: 22px; height: 20px;
+    display: grid; place-items: center; border: 1px solid var(--color-accent-700); color: var(--color-accent-700);
+  }
+  .bottom-nav button[aria-current="page"] .num { background: var(--color-accent-700); color: var(--color-bg); }
+  .more-sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: var(--color-bg);
+    border-top: 2px solid var(--color-gold);
+    padding: 16px max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .more-sheet button { justify-content: flex-start; min-height: 52px; font-size: 18px; }
+}
+@media (min-width: 721px) { .more-sheet, .sheet-backdrop { display: none !important; } }
+
+/* price list */
+.tiers { display: inline-flex; border: 1px solid var(--color-divider); }
+.tiers button {
+  font: inherit; font-size: 13px; font-weight: 600; padding: 6px 10px; min-height: 36px; border: 0;
+  background: transparent; color: var(--color-text); cursor: pointer;
+}
+.tiers button + button { border-left: 1px solid var(--color-divider); }
+.tiers button[aria-pressed="true"] { background: var(--color-accent); color: var(--color-bg); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--color-divider); }
+.stepper button { font: inherit; font-size: 18px; width: 40px; min-height: 40px; border: 0; background: transparent; color: var(--color-text); cursor: pointer; }
+.stepper span { min-width: 32px; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; }
+.money { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+@media print {
+  [data-noprint], .bottom-nav, .more-sheet, .sheet-backdrop { display: none !important; }
+  body { background: #fff; }
+}
