@@ -20,7 +20,9 @@ don't apply here.
 
 See `design-hub/README.md`. Edit `hub.dc.html`, run `python3 design-hub/build.py`,
 publish `design-hub/dist/housemade-hub.html` to the same artifact URL.
-Published hub: https://claude.ai/artifact/ (set once published, see README)
+Published hub: https://claude.ai/artifact/58JiLBgbLriq1QhdyoRLyt (private; db, sample and downloads
+capabilities as listed in the README). Plans made in chat go to its `plans` collection with
+`fromChat: true` via ArtifactData.
 
 ## Voice
 
