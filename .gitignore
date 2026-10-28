@@ -9,3 +9,6 @@ out/
 __pycache__/
 *.pyc
 .DS_Store
+
+# Housemade hub build output (python housemade-studio/design-hub/build.py)
+housemade-studio/design-hub/dist/
